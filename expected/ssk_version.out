@@ -1,0 +1,8 @@
+-- Test ssk_version function
+CREATE EXTENSION ssk;
+SELECT ssk_version();
+ ssk_version 
+-------------
+ 1.0
+(1 row)
+

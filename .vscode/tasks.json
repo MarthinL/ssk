@@ -1,0 +1,34 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "make",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "Install",
+            "type": "shell",
+            "command": "make install",
+            "group": "build"
+        },
+        {
+            "label": "Test",
+            "type": "shell",
+            "command": "make installcheck",
+            "group": "test",
+            "dependsOn": ["Install"]
+        },
+        {
+            "label": "Clean Build Test",
+            "type": "shell",
+            "command": "make clean install installcheck",
+            "group": "test"
+        }
+    ]
+}

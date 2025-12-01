@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "PostgreSQL Extension",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/Applications/Postgres.app/Contents/Versions/16/include/postgresql/server",
+                "/Applications/Postgres.app/Contents/Versions/16/include/postgresql/internal",
+                "/Applications/Postgres.app/Contents/Versions/16/include",
+                "/Applications/Postgres.app/Contents/Versions/16/include/libxml2",
+                "/Applications/Postgres.app/Contents/Versions/16/share/icu",
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include"
+            ],
+            "defines": [
+                "PG_VERSION_NUM=160000",
+                "HAVE_LONG_LONG_INT=1",
+                "USE_ASSERT_CHECKING=1"
+            ],
+            "macFrameworkPath": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c99",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-x64"
+        }
+    ],
+    "version": 4
+}

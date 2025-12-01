@@ -1,0 +1,23 @@
+{
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.default.compilerPath": "/usr/bin/clang",
+    "C_Cpp.default.cStandard": "c99",
+    "C_Cpp.default.cppStandard": "c++17",
+    "C_Cpp.default.intelliSenseMode": "macos-clang-x64",
+    "files.associations": {
+        "sql/*.sql": "postgresql"
+    },
+    "postgres.diagnostics.enabled": false,
+    "ckolkman.vscode-postgres.diagnostics.enabled": false,
+    "[postgresql]": {
+        "editor.quickSuggestions": {
+            "comments": "off",
+            "strings": "off",
+            "other": "off"
+        }
+    },
+    "vscode-postgres.virtualFolders": [
+
+      "functions"
+    ]
+}
