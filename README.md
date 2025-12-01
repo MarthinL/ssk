@@ -1,49 +1,128 @@
-# SSK (SubSet Keys)
+# SSK - SubSet Keys
 
-## Introduction
+SSK (SubSet Key) is a novel scalar type for PostgreSQL, designed to invert the cornerstone of the relational database as we know it, where children store the parent key as one of its fields. SSK values allow the parent to store a field that nominates its children, in a very special way mathematicians refer to as a bijection, so that each possible subset of children gets a unique identity which endodes the set of children directly in the SSKs value.
 
-To SQL and Codd's RDM, which are like galaxies on opposite ends of the universe, SubSet Keys (SSKs) would live in the subspace by which they're unified.
+To achieve this, SSK implements a canonical encoding scheme for sparse bit vectors representing sets, designed to efficiently handle subsets of large ID spaces in relational databases. By exploiting unique structural opportunities, SSK overcomes traditional limitations in encoding sparse sets, enabling direct indexing, comparison, and set operations on encoded values without decoding.
 
-## The Traditional Relational Database Approach
+## The Problem and Opportunity
 
-It is common knowledge that Relational Database Management Systems (RDBMSs), a.k.a. Relational Databases, work on the fundamental principle where any relationship (one-to-one, one-to-many, and even the many-to-many workaround involving an associative table) works on one single principle - records of the "many" side store the key to the "one" side as an attribute. Simple and effective, easy to understand, once you get that pattern embedded into your thinking, that is.
+In Donald Knuth's seminal work on combinatorial algorithms, the encoding of sparse bit vectors for large sets is dismissed as impractical due to inefficiency. SSK challenges this by targeting a specific, high-value use case: representing subsets of database primary keys (IDs) as compact, canonical scalars. This allows:
 
-## The Mathematical Foundation: Codd's Relational Data Model
+- **Direct SQL Operations**: Use encoded SSKs in WHERE clauses, JOINs, and set operations without materializing the underlying bit vectors.
+- **Canonical Encoding**: Identical sets always produce identical encodings, enabling equality comparisons and indexing.
+- **Scalability**: Handles both tiny subsets (common case) and exceptionally large ones (rare but critical) with elegance.
+- **Performance**: Minimizes encode-decode cycles, crucial for PostgreSQL aggregates, CTEs, and user-defined functions.
 
-Most also know that Relational Databases were born out of mathematical set theory in the '70s by a man named Edward F. Codd, through what is called the Relational Data Model (RDM).
+SSK is not a general-purpose compression algorithm but a specialized codec for set representation in databases, where the encoded form must be indexable and comparable.
 
-## The Overlooked Alternative
+## Theoretical Foundation
 
-Yet almost nobody appreciates that the RDM's mathematical basis is entirely ambivalent about whether at the data level you store a parent key for each child or a set of children for each parent. To the maths, and as we will soon discover, in practice, there is no difference between the two. Yes, the one is 50 years ahead in development, but the original implementers could have chosen either mechanism, and then developments on the other would have been 50 years ahead.
+While SSK uses sparse bit vectors as its encoding mechanism, its purpose is fundamentally different: to provide a unique, canonical identity for any subset of a finite superset. This identity is not a hash (which may have collisions) but a bijection—a one-to-one correspondence—between subsets and scalar values.
 
-The two alternatives may be mathematically each other's equals, and technically the prevailing approach today has the overwhelming advantage, but in terms of the value it is able to deliver to data users, owners and investors, the situation is reversed. 
+Consider a finite superset $S$ with $n$ elements. The powerset $\mathcal{P}(S)$ contains all possible subsets of $S$, totaling $2^n$ subsets. SSK establishes a bijection $f: \mathcal{P}(S) \to \mathbb{N}$ (or a suitable scalar domain), where each subset $T \subseteq S$ maps to a unique SSK scalar that encodes exactly which elements of $S$ are in $T$.
 
-## SQL's Critical Omission
+This enables:
+- **Exact Membership Encoding**: The SSK scalar contains precise information about subset membership without needing to store or query individual elements.
+- **Canonical Representation**: Identical subsets produce identical SSKs, supporting direct equality and indexing.
+- **Relational Alignment**: In database terms, for a table $A$ with primary keys $K_A = \{k(x) \mid x \in A\}$, SSK allows representing any subset of $K_A$ as a single scalar, bridging SQL's limitations in set-based operations.
 
-That's because when the SQL language was being formulated, its formulators made a tiny but important, likely inadvertent, probably well-meaning, omission from its semantics. To represent the notion of a set, as required by the set theory roots, they represented sets as concrete things - tables, queries, views, anything that can be SELECTed from, even composites of those as the result of UNIONs, INTERSECT and MINUS. But that's it. They defined the identity of a row (or tuple as RDM had it), made a whole song and dance about it, but they never bothered to define what a set, or a subset's ID would be, beyond that table or view name and the name given in the SELECT statement as an alias. You could store a tuple's ID in a value or set of values, that was the whole point, but the identity of a subset of rows was considered out of bounds.
+SSK is tailored for database subsets (e.g., IDs in a table), not arbitrary mathematical sets.
 
-## Knuth's Contribution and Its Limitations
+### Practical Application in Databases
 
-Ironically, the key to choosing the alternative representation was already written down and proven by the time the SQL team had to make their choice, but to be fair, it was only published a few short years before the project started and Donald Knuth's seminal work "The Art of Computer Programming" which contained the solution was not yet seen as seminal and a source of anything of practical use. Plus, even though Knuth did spell out the principle, his own analysis of its applicability would have excluded it from consideration in any case. 
+SSK is designed for tables with auto-generated `BIGINT` primary keys, though applicable to other key types. In SQL, selections define subsets of rows based on attributes via `SELECT` statements. These subsets are dynamic: rows are added, modified, or deleted, requiring re-evaluation of complex queries each time.
 
-For the less-informed, I'm referring of course to the linked concepts of sets as described by Knuth, and the concept of bit vectors as a way to represent sets. The caveat being that though bit-vectors are ideal for representing sets, the register size of a processor renders their applicable domain to no more than the bit-size of the computer. Large and/or sparse sets were seen as placing impractical space demands on the processors of the day. 
+Traditionally, subsets lack stable identities:
+- Views or materialized views can persist results but require DBA intervention for naming and updates.
+- Runtime subset creation is possible but inefficient, with no native support for indexing or manipulating subsets as entities.
 
-## My Discovery: Breaking Through the Perceived Limitations
+SSK transforms this by assigning each possible subset of a table's primary keys a unique, stable scalar identity. For a table with $n$ rows, the powerset includes $2^n$ subsets—from the empty set to the full table. SSK encodes each subset as a canonical scalar, enabling:
 
-Luckily for me, I knew nothing about the limitations Knuth placed on bit-vectors representing sets, or even that he made such a connection. So when I was faced with a burning need to deal with many-to-many data in a much, much more effective manner, I wasn't being held back by the presumed impossibilities the old masters attached to the problem I needed solving. I didn't know I was proving anyone wrong when I evolved a solution making full advantage of what I knew about my specific datasets and eventually of all such datasets in general. They say many things are impossible only until you've done them, but by my own experience, it's even better when you have no inkling about the theoretical impossibility you're facing. 
+- **Stable Subset Storage**: Capture complex selections as indexable SSKs, avoiding repeated query execution.
+- **Efficient Operations**: Perform set unions, intersections, and differences directly on SSKs; add/remove IDs without re-querying.
+- **Optimized Retrieval**: Read table attributes via primary key lookups instead of re-running intricate `SELECT` statements.
+- **Semantic Clarity**: SSKs represent predictable, updatable subsets for data that evolves predictably, complementing SQL's strength in handling unpredictable changes.
 
-## What Are SubSet Keys?
+By embodying subsets as scalars, SSK empowers databases to treat selections as first-class, manipulable objects, reducing redundant computation and enhancing relational analytics.
 
-So I came up with a way to build an indexable variable length byte array which is a canonical representation of any specific subset of a particular table, and called that value a SubSet Key. It is, at a logical level, one gigantic logical bit vector, squashed opportunistically into a very small series of bytes.
+## Encoding Scheme
 
-## The Problem with Many-to-Many Relationships
+An SSK encodes a sparse bit vector using a hybrid approach:
 
-Having spent a large portion of my life designing and building innovative databases, I know a thing or two about how (and why) to avoid many-to-many relationships. Among other things, they are an absolute pain to present to users in a sensible manner, but an even bigger pain to try and make analytical sense of. Sufficient domain knowledge had always been key to turning associative tables into real tables that serve a business purpose, and using those to ease all those pains. Yet I found myself faced with a situation where I didn't merely lack the domain knowledge to follow the established pattern, such domain knowledge could not be determined beforehand. 
+1. **Raw Bit Segments**: Direct encoding of contiguous bit runs where the pattern is chaotic or dense.
+2. **Run-Length Encoded (RLE) Exceptions**: Efficient representation of long runs of zeros or ones relative to a variable base.
+4. **Format Version**: Embedded version number ensures forward compatibility and prevents misinterpretation of encoded data.
 
-A real impasse, but I got creative and found a way to get the job done. But it left me somewhat apprehensive about what the cost would be. I assumed there would be a substantial price to pay for the enormous analytical benefits my solution brought with it, so I had to do the sums to determine if I could afford it. 
+The encoding is partitioned for 64-bit ID spaces, with segments ordered by partition ID. Empty partitions are omitted.
 
-## The Shocking Performance Results
+### Example Structure
+- **Header**: Format version and partition metadata.
+- **Segments**: Alternating raw bits and RLE blocks, each with VLQ-P encoded parameters.
+- **Canonical Property**: The encoding is deterministic, ensuring `encode(set A) == encode(set B)` iff `A == B`.
 
-What I found was unfathomable, left me speechless and reeling, forcing me to go back time after time to check my facts and consult with others to check my math. Turns out, if you take a standard associative table, the space it requires exceeds the space you'd need to store the same information in SSKs in the worst case, by a factor close to 8. That's right. SSKs take up, at worst, around 1/8th of the space FKR (Foreign Key Referencing) takes. I was prepared to live with it if the ratio was 2:8 the other way around, so this was a bonus of epic proportions. 
+For detailed encoding specifications and format registry, see `ENCODING.md`.
 
+## PostgreSQL Integration
 
+SSK is designed as a PostgreSQL User-Defined Type (UDT), presenting externally as a variable-length binary string (VARBINARY or BYTEA-like scalar). This allows SSKs to be stored, indexed, and compared directly in SQL.
+
+- **UDT Functions and Operators**: Full implementation of PostgreSQL UDT specifications, including input/output functions, comparison operators, and type-specific operations.
+- **User-Defined Aggregates**: Support functions for aggregates where the result is an SSK UDT, enabling efficient construction from sets of IDs.
+- **Outer Codec**: Handles serialization/deserialization of SSK binary strings to/from memory structures conducive to interpretation and manipulation. This outer layer decodes the opaque binary into internal representations for normalization and canonical re-encoding, while the inner VLQ-P codec manages the compact encoding of lengths, offsets, and values.
+
+## Project Goals
+
+SSK is released into the public domain as a standalone PostgreSQL extension, with aspirations for broader adoption:
+
+- **PostgreSQL Extension**: Implements SSK as a UDT with full operator and function support, plus User-Defined Aggregate support functions for aggregate construction.
+- **Relational Data Model Alignment**: Bridge SQL's practical limitations with Ted Codd's original relational model, enabling true set-based operations.
+- **Community Adoption**: Invite postgres-hackers and the broader database community to embrace SSK as a standard for set representation.
+
+This project represents a critical component of a larger vision for advanced relational analytics, donated early to foster independent development and widespread benefit.
+
+## Testing
+
+SSK uses PostgreSQL's standard testing frameworks: **pg_regress** for SQL tests and **TAP** for complex scenarios.
+
+**Quick start:**
+```bash
+make USE_PGXS=1
+sudo make install USE_PGXS=1
+cd test && make installcheck USE_PGXS=1
+```
+
+(Requires PostgreSQL superuser privileges to create test databases. See `TESTING.md` for alternatives.)
+
+**For complete testing documentation**, see `TESTING.md` which covers:
+- How PostgreSQL's testing frameworks work (pg_regress, TAP, make check vs installcheck)
+- What tests exist and their purposes
+- How to run specific tests
+- How to add new tests
+- Debugging test failures
+- Requirements for each test type
+
+## Testing
+
+```bash
+# Install extension to system PostgreSQL
+sudo make install
+
+# Run SQL regression tests
+make installcheck
+
+# Run TAP tests (Perl-based, creates temporary PostgreSQL instances)
+make prove
+
+# Run all tests
+make check
+```
+
+See `TESTING.md` for comprehensive testing documentation.
+
+## Contributing
+
+Contributions are welcome! Please adhere to the project's style guide (`STYLE-GUIDE.md`). Technical decisions are documented in `DECISION_LOG.md`.
+
+## License
+
+This project is dedicated to the public domain. No rights reserved.
