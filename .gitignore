@@ -6,6 +6,7 @@ build/
 *.o
 *.so
 *.a
+*.bc
 ssk.dylib
 
 # Test outputs

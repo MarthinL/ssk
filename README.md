@@ -1,6 +1,6 @@
 # SSK - SubSet Keys
 
-SSK (SubSet Key) is a novel scalar type for PostgreSQL, designed to invert the cornerstone of the relational database as we know it, where children store the parent key as one of its fields. SSK values allow the parent to store a field that nominates its children, in a very special way mathematicians refer to as a bijection, so that each possible subset of children gets a unique identity which endodes the set of children directly in the SSKs value.
+SSK (SubSet Key) is a novel scalar type for PostgreSQL, designed to invert the cornerstone of the relational database as we know it - the foreign key reference - where children store the parent key as one of their fields. SSK values allow the parent to store a field that nominates its children, in a very special way mathematicians refer to as a bijection, so that each possible subset of children gets a unique identity which encodes the set of children directly in the SSKs value.
 
 To achieve this, SSK implements a canonical encoding scheme for sparse bit vectors representing sets, designed to efficiently handle subsets of large ID spaces in relational databases. By exploiting unique structural opportunities, SSK overcomes traditional limitations in encoding sparse sets, enabling direct indexing, comparison, and set operations on encoded values without decoding.
 
