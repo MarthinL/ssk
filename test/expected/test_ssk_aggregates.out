@@ -1,0 +1,9 @@
+CREATE EXTENSION IF NOT EXISTS ssk;
+NOTICE:  extension "ssk" already exists, skipping
+-- Test aggregate functions
+SELECT ssk_agg(id) AS agg_result FROM (VALUES (1), (2), (3)) AS t(id);
+ agg_result 
+------------
+ \x00
+(1 row)
+

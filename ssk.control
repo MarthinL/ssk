@@ -1,5 +1,5 @@
-# SSK extension control file
-comment = 'SubSet Key - canonical encoding for sparse bit vectors'
+# SSK extension
+comment = 'SubSet Keys for efficient subset representation'
 default_version = '1.0'
 module_pathname = '$libdir/ssk'
 relocatable = true
