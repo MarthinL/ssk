@@ -70,6 +70,29 @@ SSK is designed as a PostgreSQL User-Defined Type (UDT), presenting externally a
 - **User-Defined Aggregates**: Support functions for aggregates where the result is an SSK UDT, enabling efficient construction from sets of IDs.
 - **Outer Codec**: Handles serialization/deserialization of SSK binary strings to/from memory structures conducive to interpretation and manipulation. This outer layer decodes the opaque binary into internal representations for normalization and canonical re-encoding, while the inner VLQ-P codec manages the compact encoding of lengths, offsets, and values.
 
+## Building
+
+### Unix-like Systems (Linux, macOS)
+
+SSK uses PostgreSQL's PGXS build system:
+
+```bash
+make
+sudo make install
+```
+
+### Windows
+
+SSK was developed and tested on Unix-like systems where `make` is native and PGXS is fully supported. PostgreSQL extension development on Windows has unique challenges due to toolchain differences (MSVC vs. GCC, header compatibility, etc.).
+
+If your daily work involves building PostgreSQL extensions on Windows, you likely have established toolchains and workflows. Adapt the build process to your environment as needed—whether using MinGW/MSYS2, Cygwin, or custom MSVC setups. The source code is portable C and should compile with appropriate PostgreSQL headers and libraries.
+
+For reference, common approaches include:
+- MinGW/MSYS2 for GCC-based builds compatible with PGXS.
+- MSVC with custom project files for full Windows integration.
+
+Contributions of Windows-specific build documentation or scripts are welcome!
+
 ## Project Goals
 
 SSK is released into the public domain as a standalone PostgreSQL extension, with aspirations for broader adoption:
