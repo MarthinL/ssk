@@ -31,8 +31,20 @@
  *   - Combinadic rank_bits table size (precomputed C(n,k) for n≤64, k≤18)
  *   - Compression effectiveness (rank vs raw bits)
  *   - Decoding speed (unrank computation)
+ *
+ * As per Spec Format 0.
  */
 #define SSK_K_CHUNK_ENUM_MAX    18
+
+/**
+ * Bits required to encode k value in ENUM token
+ * 
+ * For k=0..18, need at least 5 bits (2^5 = 32 > 18).
+ * Format 0 uses 6 bits for alignment and future-proofing.
+ *
+ * As per Spec Format 0.
+ */
+#define SSK_N_BITS_FOR_K        6
 
 // ============================================================================
 // SEGMENTATION THRESHOLDS

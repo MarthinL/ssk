@@ -32,13 +32,13 @@
  */
 
 /* From chunk_enum.c */
-extern size_t enum_token_bits(uint8_t n, uint8_t k, const SSKFormatSpec *spec);
+extern size_t enum_token_bits(uint8_t n, uint8_t k);
 extern size_t enum_token_encode(uint64_t bits, uint8_t n, uint8_t k,
-                                const SSKFormatSpec *spec, uint8_t *buf, size_t bit_pos);
+                                uint8_t *buf, size_t bit_pos);
 extern int enum_token_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
-                             uint8_t n, const SSKFormatSpec *spec,
-                             uint64_t *bits_out, uint8_t *k_out, size_t *bits_read);
-extern bool should_use_enum(uint8_t k, const SSKFormatSpec *spec);
+                             uint8_t n, uint64_t *bits_out, uint8_t *k_out,
+                             size_t *bits_read);
+extern bool should_use_enum(uint8_t k);
 
 /* From chunk_raw.c */
 extern size_t raw_token_bits(uint8_t n);
@@ -59,24 +59,26 @@ extern int raw_run_header_decode(const uint8_t *buf, size_t bit_pos, size_t buf_
  * Encode a single chunk as appropriate token type.
  * Does NOT handle RAW_RUN coalescing - caller must accumulate RAW chunks.
  *
- * @param bits      Chunk bit pattern (right-aligned)
- * @param n         Chunk size in bits (1-64)
- * @param k         Number of set bits (popcount)
- * @param spec      Format specification
- * @param buf       Output buffer
- * @param bit_pos   Starting bit position
+ * @param bits            Chunk bit pattern (right-aligned)
+ * @param n               Chunk size in bits (1-64)
+ * @param k               Number of set bits (popcount)
+ * @param buf             Output buffer
+ * @param bit_pos         Starting bit position
  * @param token_type_out  Output: token type used (TOK_ENUM or TOK_RAW)
  * @return Bits written, or 0 on error
+ *
+ * As per Spec Format 0: Decides between ENUM (if k <= SSK_K_CHUNK_ENUM_MAX)
+ *                       and RAW (otherwise), delegates to appropriate encoder.
  */
 size_t
 token_encode_single(uint64_t bits, uint8_t n, uint8_t k,
-                    const SSKFormatSpec *spec, uint8_t *buf, size_t bit_pos,
+                    uint8_t *buf, size_t bit_pos,
                     TokenKind *token_type_out)
 {
-    if (should_use_enum(k, spec))
+    if (should_use_enum(k))
     {
         *token_type_out = TOK_ENUM;
-        return enum_token_encode(bits, n, k, spec, buf, bit_pos);
+        return enum_token_encode(bits, n, k, buf, bit_pos);
     }
     else
     {
@@ -97,41 +99,43 @@ token_encode_single(uint64_t bits, uint8_t n, uint8_t k,
  * @param bit_pos       Starting bit position
  * @param buf_bits      Total bits available
  * @param chunk_bits    Default chunk size (for RAW)
- * @param spec          Format specification
  * @param token_out     Output: decoded token info
  * @param bits_read     Output: total bits consumed
  * @param prev_was_raw  Input: was the previous token RAW? (for canon check)
  * @return 0 on success, -1 on error, -2 on canon violation
  *
- * Note: For RAW_RUN, this only decodes the header. Caller must handle
+ * For RAW_RUN, this only decodes the header. Caller must handle
  * reading the raw data bits.
+ *
+ * As per Spec Format 0: Validates token type is not RESERVED,
+ *                       checks RAW coalescing (no consecutive RAW).
  */
 int
 token_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
-             uint8_t chunk_bits, const SSKFormatSpec *spec,
-             SSKToken *token_out, size_t *bits_read, bool prev_was_raw)
+             uint8_t chunk_bits, SSKToken *token_out, size_t *bits_read,
+             bool prev_was_raw)
 {
     size_t start_pos = bit_pos;
     
-    /* 1. Read token type (2 bits) */
+    /* 1. Read token type: 2 bits */
     if (bit_pos + 2 > buf_bits)
         return -1;  /* Truncated */
     
     uint8_t token_type = (uint8_t)bs_read_bits(buf, bit_pos, 2);
     bit_pos += 2;
     
-    /* 2. Validate token type */
+    /* 2. Validate token type is not reserved */
     if (token_type == TOK_RESERVED)
-        return -1;  /* Reserved token type */
+        return -1;  /* Reserved token type invalid */
     
-    /* 3. Canon check: RAW cannot follow RAW (must be coalesced) */
+    /* 3. Canon check: RAW cannot follow RAW (as per Spec Format 0) */
     if (token_type == TOK_RAW && prev_was_raw)
-        return -2;  /* Canon violation: consecutive RAW */
+        return -2;  /* Canon violation: uncoalesced consecutive RAW */
     
     token_out->kind = token_type;
     token_out->dirty = 0;
     
-    /* 4. Decode based on token type */
+    /* 4. Decode token based on its type */
     switch (token_type)
     {
         case TOK_ENUM:
@@ -140,14 +144,14 @@ token_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
             uint8_t k;
             size_t enum_read;
             
-            int rc = enum_token_decode(buf, bit_pos, buf_bits, chunk_bits, spec,
+            int rc = enum_token_decode(buf, bit_pos, buf_bits, chunk_bits,
                                        &chunk_bits_out, &k, &enum_read);
             if (rc != 0)
                 return -1;
             
             bit_pos += enum_read;
             token_out->popcount = k;
-            /* token_out->data_off to be set by caller */
+            /* token_out->data_off set by caller */
             break;
         }
         
@@ -171,19 +175,20 @@ token_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
             uint16_t run_len;
             size_t header_read;
             
-            int rc = raw_run_header_decode(buf, bit_pos, buf_bits, &run_len, &header_read);
+            int rc = raw_run_header_decode(buf, bit_pos, buf_bits,
+                                           &run_len, &header_read);
             if (rc != 0)
                 return -1;
             
             bit_pos += header_read;
-            /* Caller must read run_len * chunk_bits of data */
-            /* popcount must be computed from the data */
+            /* Caller must read run_len * chunk_bits of raw data */
+            /* popcount must be computed from data by caller */
             token_out->popcount = 0;  /* To be filled by caller */
             break;
         }
         
         default:
-            return -1;  /* Should not reach */
+            return -1;  /* Should never reach */
     }
     
     *bits_read = bit_pos - start_pos;

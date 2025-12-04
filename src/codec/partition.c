@@ -33,15 +33,16 @@
  *
  * @param partition_delta  Gap from previous partition ID
  * @param segment_count    Number of segments
- * @param spec             Format specification
  * @return Bits needed for header
+ *
+ * As per Spec Format 0: partition_delta uses VLQP_LARGE_INT,
+ *                       segment_count uses VLQP_SMALL_INT.
  */
 size_t
-partition_header_bits(uint32_t partition_delta, uint16_t segment_count,
-                      const SSKFormatSpec *spec)
+partition_header_bits(uint32_t partition_delta, uint16_t segment_count)
 {
-    size_t delta_bits = vlqp_encoded_bits(partition_delta, spec->vlqp_partition_delta);
-    size_t count_bits = vlqp_encoded_bits(segment_count, spec->vlqp_segment_count);
+    size_t delta_bits = vlqp_encoded_bits(partition_delta, &SSK_VLQP_PARTITION_DELTA);
+    size_t count_bits = vlqp_encoded_bits(segment_count, &SSK_VLQP_SEGMENT_COUNT);
     
     return delta_bits + count_bits;
 }
@@ -51,24 +52,26 @@ partition_header_bits(uint32_t partition_delta, uint16_t segment_count,
  *
  * @param partition_delta  Gap from previous partition
  * @param segment_count    Number of segments
- * @param spec             Format specification
  * @param buf              Output buffer
  * @param bit_pos          Starting bit position
  * @return Bits written
+ *
+ * As per Spec Format 0: partition_delta uses VLQP_LARGE_INT,
+ *                       segment_count uses VLQP_SMALL_INT.
  */
 size_t
 partition_header_encode(uint32_t partition_delta, uint16_t segment_count,
-                        const SSKFormatSpec *spec, uint8_t *buf, size_t bit_pos)
+                        uint8_t *buf, size_t bit_pos)
 {
     size_t start_pos = bit_pos;
     
-    /* 1. Partition delta (VLQ-P) */
-    size_t delta_written = vlqp_encode(partition_delta, spec->vlqp_partition_delta, 
+    /* 1. Partition delta: VLQP_LARGE_INT */
+    size_t delta_written = vlqp_encode(partition_delta, &SSK_VLQP_PARTITION_DELTA, 
                                        buf, bit_pos);
     bit_pos += delta_written;
     
-    /* 2. Segment count (VLQ-P) */
-    size_t count_written = vlqp_encode(segment_count, spec->vlqp_segment_count,
+    /* 2. Segment count: VLQP_SMALL_INT */
+    size_t count_written = vlqp_encode(segment_count, &SSK_VLQP_SEGMENT_COUNT,
                                        buf, bit_pos);
     bit_pos += count_written;
     
@@ -81,24 +84,25 @@ partition_header_encode(uint32_t partition_delta, uint16_t segment_count,
  * @param buf              Input buffer
  * @param bit_pos          Starting bit position
  * @param buf_bits         Total bits available
- * @param spec             Format specification
  * @param delta_out        Output: partition delta
  * @param seg_count_out    Output: segment count
  * @param bits_read        Output: bits consumed
  * @return 0 on success, -1 on error
+ *
+ * As per Spec Format 0: partition_delta uses VLQP_LARGE_INT,
+ *                       segment_count uses VLQP_SMALL_INT.
  */
 int
 partition_header_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
-                        const SSKFormatSpec *spec,
                         uint32_t *delta_out, uint16_t *seg_count_out,
                         size_t *bits_read)
 {
     size_t start_pos = bit_pos;
     
-    /* 1. Read partition delta (VLQ-P) */
+    /* 1. Read partition delta: VLQP_LARGE_INT */
     uint64_t delta;
     size_t vlqp_read;
-    int rc = vlqp_decode(buf, bit_pos, buf_bits, spec->vlqp_partition_delta, 
+    int rc = vlqp_decode(buf, bit_pos, buf_bits, &SSK_VLQP_PARTITION_DELTA, 
                          &delta, &vlqp_read);
     if (rc != 0)
         return -1;
@@ -108,17 +112,17 @@ partition_header_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
     if (delta > UINT32_MAX)
         return -1;
     
-    /* 2. Read segment count (VLQ-P) */
+    /* 2. Read segment count: VLQP_SMALL_INT */
     uint64_t seg_count;
-    rc = vlqp_decode(buf, bit_pos, buf_bits, spec->vlqp_segment_count,
+    rc = vlqp_decode(buf, bit_pos, buf_bits, &SSK_VLQP_SEGMENT_COUNT,
                      &seg_count, &vlqp_read);
     if (rc != 0)
         return -1;
     bit_pos += vlqp_read;
     
-    /* Validate segment count */
+    /* Validate segment count (no empty partitions) */
     if (seg_count == 0 || seg_count > UINT16_MAX)
-        return -1;  /* No empty partitions; reasonable upper bound */
+        return -1;
     
     *delta_out = (uint32_t)delta;
     *seg_count_out = (uint16_t)seg_count;
