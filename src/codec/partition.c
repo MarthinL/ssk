@@ -22,6 +22,7 @@
 #include <stdbool.h>
 #include "ssk.h"
 #include "ssk_format.h"
+#include "ssk_constants.h"
 
 /* ============================================================================
  * PARTITION HEADER ENCODING

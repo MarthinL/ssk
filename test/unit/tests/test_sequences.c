@@ -230,11 +230,11 @@ TEST(test_combinadic_rank_bits)
  */
 
 /* External declarations for token functions */
-extern size_t enum_token_bits(uint8_t n, uint8_t k, const SSKFormatSpec *spec);
+extern size_t enum_token_bits(uint8_t n, uint8_t k);
 extern size_t enum_token_encode(uint64_t bits, uint8_t n, uint8_t k,
-                                const SSKFormatSpec *spec, uint8_t *buf, size_t bit_pos);
+                                uint8_t *buf, size_t bit_pos);
 extern int enum_token_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
-                             uint8_t n, const SSKFormatSpec *spec,
+                             uint8_t n,
                              uint64_t *bits_out, uint8_t *k_out, size_t *bits_read);
 extern bool should_use_enum(uint8_t k, const SSKFormatSpec *spec);
 extern size_t raw_token_bits(uint8_t n);
@@ -256,20 +256,20 @@ TEST(test_enum_token_bits)
     
     /* ENUM token: 2 (type) + 6 (k) + rank_bits */
     /* k=0: no rank bits needed */
-    ASSERT_EQ(enum_token_bits(64, 0, &test_spec), 2 + 6 + 0);
+    ASSERT_EQ(enum_token_bits(64, 0), 2 + 6 + 0);
     
     /* k=1: C(64,1)=64, needs 6 bits */
-    ASSERT_EQ(enum_token_bits(64, 1, &test_spec), 2 + 6 + 6);
+    ASSERT_EQ(enum_token_bits(64, 1), 2 + 6 + 6);
     
     /* k=2: C(64,2)=2016, needs 11 bits */
-    ASSERT_EQ(enum_token_bits(64, 2, &test_spec), 2 + 6 + 11);
+    ASSERT_EQ(enum_token_bits(64, 2), 2 + 6 + 11);
     
     /* k=18: maximum for ENUM */
     uint8_t rank_bits_18 = ssk_get_rank_bits(64, 18);
-    ASSERT_EQ(enum_token_bits(64, 18, &test_spec), 2 + 6 + rank_bits_18);
+    ASSERT_EQ(enum_token_bits(64, 18), 2 + 6 + rank_bits_18);
     
     /* k=19: exceeds K_ENUM_MAX, should return 0 */
-    ASSERT_EQ(enum_token_bits(64, 19, &test_spec), 0);
+    ASSERT_EQ(enum_token_bits(64, 19), 0);
 }
 
 TEST(test_enum_token_roundtrip)
@@ -285,14 +285,14 @@ TEST(test_enum_token_roundtrip)
     ASSERT_EQ(k, 2);
     
     /* Encode */
-    size_t bits_written = enum_token_encode(test_bits, n, k, &test_spec, buf, 0);
+    size_t bits_written = enum_token_encode(test_bits, n, k, buf, 0);
     ASSERT(bits_written > 0);
     
     /* Skip the 2-bit type (already known to be ENUM) */
     uint64_t decoded_bits;
     uint8_t decoded_k;
     size_t bits_read;
-    int rc = enum_token_decode(buf, 2, 256, n, &test_spec, &decoded_bits, &decoded_k, &bits_read);
+    int rc = enum_token_decode(buf, 2, 256, n, &decoded_bits, &decoded_k, &bits_read);
     ASSERT_EQ(rc, 0);
     ASSERT_EQ(decoded_k, k);
     ASSERT_EQ(decoded_bits, test_bits);
@@ -341,7 +341,6 @@ extern size_t rle_segment_bits(uint64_t length_bits, const SSKFormatSpec *spec);
 extern size_t rle_segment_encode(uint8_t membership_bit, uint64_t length_bits,
                                  const SSKFormatSpec *spec, uint8_t *buf, size_t bit_pos);
 extern int rle_segment_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
-                              const SSKFormatSpec *spec,
                               uint8_t *membership_out, uint64_t *length_out, size_t *bits_read);
 extern size_t mix_segment_header_bits(uint64_t initial_delta, uint64_t length_bits,
                                       const SSKFormatSpec *spec);
@@ -349,7 +348,6 @@ extern size_t mix_segment_header_encode(uint64_t initial_delta, uint64_t length_
                                         const SSKFormatSpec *spec,
                                         uint8_t *buf, size_t bit_pos);
 extern int mix_segment_header_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
-                                     const SSKFormatSpec *spec,
                                      uint64_t *delta_out, uint64_t *length_out,
                                      size_t *bits_read);
 extern int segment_read_type(const uint8_t *buf, size_t bit_pos, size_t buf_bits);
@@ -385,7 +383,7 @@ TEST(test_rle_segment_roundtrip)
     uint8_t decoded_membership;
     uint64_t decoded_length;
     size_t bits_read;
-    int rc = rle_segment_decode(buf, 1, 256, &full_test_spec,
+    int rc = rle_segment_decode(buf, 1, 256,
                                 &decoded_membership, &decoded_length, &bits_read);
     ASSERT_EQ(rc, 0);
     ASSERT_EQ(decoded_membership, membership);
@@ -414,7 +412,7 @@ TEST(test_mix_segment_header_roundtrip)
     uint64_t decoded_delta;
     uint64_t decoded_length;
     size_t bits_read;
-    int rc = mix_segment_header_decode(buf, 1, 256, &full_test_spec,
+    int rc = mix_segment_header_decode(buf, 1, 256,
                                        &decoded_delta, &decoded_length,
                                        &bits_read);
     ASSERT_EQ(rc, 0);
@@ -444,7 +442,7 @@ TEST(test_mix_segment_partial_chunk)
     uint64_t decoded_delta;
     uint64_t decoded_length;
     size_t bits_read;
-    int rc = mix_segment_header_decode(buf, 1, 256, &full_test_spec,
+    int rc = mix_segment_header_decode(buf, 1, 256,
                                        &decoded_delta, &decoded_length,
                                        &bits_read);
     ASSERT_EQ(rc, 0);
@@ -472,12 +470,10 @@ TEST(test_should_use_rle)
  */
 
 /* External declarations for partition functions */
-extern size_t partition_header_bits(uint32_t partition_delta, uint16_t segment_count,
-                                    const SSKFormatSpec *spec);
+extern size_t partition_header_bits(uint32_t partition_delta, uint16_t segment_count);
 extern size_t partition_header_encode(uint32_t partition_delta, uint16_t segment_count,
-                                      const SSKFormatSpec *spec, uint8_t *buf, size_t bit_pos);
+                                      uint8_t *buf, size_t bit_pos);
 extern int partition_header_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
-                                   const SSKFormatSpec *spec,
                                    uint32_t *delta_out, uint16_t *seg_count_out,
                                    size_t *bits_read);
 extern size_t ssk_header_encode(uint16_t format_version, uint32_t n_partitions,
@@ -512,15 +508,14 @@ TEST(test_partition_header_roundtrip)
     uint16_t seg_count = 3;
     
     /* Encode */
-    size_t bits_written = partition_header_encode(delta, seg_count, 
-                                                  &partition_test_spec, buf, 0);
+    size_t bits_written = partition_header_encode(delta, seg_count, buf, 0);
     ASSERT(bits_written > 0);
     
     /* Decode */
     uint32_t decoded_delta;
     uint16_t decoded_seg_count;
     size_t bits_read;
-    int rc = partition_header_decode(buf, 0, 256, &partition_test_spec,
+    int rc = partition_header_decode(buf, 0, 256,
                                      &decoded_delta, &decoded_seg_count, &bits_read);
     ASSERT_EQ(rc, 0);
     ASSERT_EQ(decoded_delta, delta);

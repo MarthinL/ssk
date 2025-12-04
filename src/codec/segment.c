@@ -35,6 +35,7 @@
 #include <stdbool.h>
 #include "ssk.h"
 #include "ssk_format.h"
+#include "ssk_constants.h"
 #include "bitstream.h"
 
 /* ============================================================================
@@ -94,17 +95,16 @@ rle_segment_encode(uint8_t membership_bit, uint64_t length_bits,
  * @param buf              Input buffer
  * @param bit_pos          Starting bit position (after segment type read)
  * @param buf_bits         Total bits available
- * @param spec             Format specification
  * @param membership_out   Output: the repeated bit value
  * @param length_out       Output: number of bits in run
  * @param bits_read        Output: bits consumed (excluding type bit)
  * @return 0 on success, -1 on error
  *
  * Note: Caller has already read and verified segment_type = RLE.
+ *       Spec Format 0: length_bits uses VLQP_MEDIUM_INT.
  */
 int
 rle_segment_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
-                   const SSKFormatSpec *spec,
                    uint8_t *membership_out, uint64_t *length_out, size_t *bits_read)
 {
     size_t start_pos = bit_pos;
@@ -116,10 +116,10 @@ rle_segment_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
     *membership_out = (uint8_t)bs_read_bits(buf, bit_pos, 1);
     bit_pos += 1;
     
-    /* 2. Read length (VLQ-P) */
+    /* 2. Read length (VLQ-P MEDIUM_INT) */
     uint64_t length;
     size_t vlqp_read;
-    int rc = vlqp_decode(buf, bit_pos, buf_bits, spec->vlqp_length_bits, &length, &vlqp_read);
+    int rc = vlqp_decode(buf, bit_pos, buf_bits, &SSK_VLQP_LENGTH_BITS, &length, &vlqp_read);
     if (rc != 0)
         return -1;
     
@@ -199,34 +199,34 @@ mix_segment_header_encode(uint64_t initial_delta, uint64_t length_bits,
  * @param buf              Input buffer
  * @param bit_pos          Starting bit position (after segment type read)
  * @param buf_bits         Total bits available
- * @param spec             Format specification
  * @param delta_out        Output: initial delta
  * @param length_out       Output: total bits in segment
  * @param bits_read        Output: bits consumed (excluding type bit)
  * @return 0 on success, -1 on error
  *
+ * Spec Format 0: initial_delta uses VLQP_LARGE_INT, length_bits uses VLQP_MEDIUM_INT.
+ * 
  * Note: last_chunk_nbits is derivable from length_out as (*length_out % 64),
  * where 0 means 64. Caller should use segment_last_chunk_nbits() helper.
  */
 int
 mix_segment_header_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
-                          const SSKFormatSpec *spec,
                           uint64_t *delta_out, uint64_t *length_out,
                           size_t *bits_read)
 {
     size_t start_pos = bit_pos;
     
-    /* 1. Read initial delta (VLQ-P) */
+    /* 1. Read initial delta (VLQ-P LARGE_INT) */
     uint64_t delta;
     size_t vlqp_read;
-    int rc = vlqp_decode(buf, bit_pos, buf_bits, spec->vlqp_initial_delta, &delta, &vlqp_read);
+    int rc = vlqp_decode(buf, bit_pos, buf_bits, &SSK_VLQP_INITIAL_DELTA, &delta, &vlqp_read);
     if (rc != 0)
         return -1;
     bit_pos += vlqp_read;
     
-    /* 2. Read length (VLQ-P) */
+    /* 2. Read length (VLQ-P MEDIUM_INT) */
     uint64_t length;
-    rc = vlqp_decode(buf, bit_pos, buf_bits, spec->vlqp_length_bits, &length, &vlqp_read);
+    rc = vlqp_decode(buf, bit_pos, buf_bits, &SSK_VLQP_LENGTH_BITS, &length, &vlqp_read);
     if (rc != 0)
         return -1;
     bit_pos += vlqp_read;
