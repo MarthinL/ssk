@@ -1,0 +1,5 @@
+# SSK extension
+comment = 'SubSet Keys for efficient subset representation'
+default_version = '1.0'
+module_pathname = '$libdir/ssk'
+relocatable = true

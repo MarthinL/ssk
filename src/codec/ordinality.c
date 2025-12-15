@@ -1,0 +1,1 @@
+/* Ordinality codec stub */
