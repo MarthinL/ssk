@@ -51,7 +51,7 @@ By embodying subsets as scalars, SSK empowers databases to treat selections as f
 
 SSK addresses a fundamental challenge in relational databases: representing subsets of data (e.g., many-to-many relationships) as stable, manipulable scalars. Traditionally, subsets lack unique identities, limiting advanced operations. By establishing a bijection between subsets and scalar values, SSK enables direct indexing, set operations, and semantic clarity without disrupting existing systems.
 
-This opens new possibilities for dynamic querying, complex analytics, and evolving data models across relational databases, bridging theory and practice for more powerful data interactions.
+This opens new possibilities for dynamic querying, complex analytics, and evolving data models across relational databases, bridging theory and practice for more powerful data interactions. Originally developed to address a real need, SSK demonstrates that the 'impossible'—stable scalar identities for subsets—has been achieved, inviting theory to catch up.
 
 ## Encoding Scheme
 
