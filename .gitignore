@@ -1,0 +1,24 @@
+# Ignore the priv directory at the root of the repository
+/priv/
+
+# Build artifacts
+build/
+*.o
+*.so
+*.a
+*.bc
+ssk.dylib
+
+# Test outputs
+results/
+regression.out
+regression.diffs
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+# .vscode/  # Uncomment if you don't want to commit VS Code config
+*.swp
+*.swo
