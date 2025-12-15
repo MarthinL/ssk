@@ -47,6 +47,12 @@ SSK transforms this by assigning each possible subset of a table's primary keys 
 
 By embodying subsets as scalars, SSK empowers databases to treat selections as first-class, manipulable objects, reducing redundant computation and enhancing relational analytics.
 
+## Broader Implications
+
+SSK addresses a fundamental challenge in relational databases: representing subsets of data (e.g., many-to-many relationships) as stable, manipulable scalars. Traditionally, subsets lack unique identities, limiting advanced operations. By establishing a bijection between subsets and scalar values, SSK enables direct indexing, set operations, and semantic clarity without disrupting existing systems.
+
+This opens new possibilities for dynamic querying, complex analytics, and evolving data models across relational databases, bridging theory and practice for more powerful data interactions.
+
 ## Encoding Scheme
 
 An SSK encodes a sparse bit vector using a hybrid approach:
