@@ -611,7 +611,7 @@ TEST(test_cdu_max_bits_check)
         const CDUParam *p = &cdu_params[i];
         if (!p->fixed) {  // Only check variable-length types for 64-bit limit
             size_t max_bits = 0;
-            for (int step = 0; step < p->max_steps; step++) {
+            for (int step = 0; step < p->def_steps; step++) {
                 max_bits += p->steps[step] + 1;  // bits + continuation
             }
             ASSERT(max_bits <= 64);

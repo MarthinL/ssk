@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2020-2025 Marthin Laubscher
+ * All rights reserved. See LICENSE for details.
+ */
+
 #ifndef SSK_H
 #define SSK_H
 

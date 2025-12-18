@@ -1,4 +1,9 @@
 /*
+ * Copyright (c) 2020-2025 Marthin Laubscher
+ * All rights reserved. See LICENSE for details.
+ */
+
+/*
  * src/codec/chunks/chunk_raw.c
  *
  * RAW and RAW_RUN token encoding/decoding for dense chunks

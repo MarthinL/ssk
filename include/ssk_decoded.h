@@ -42,6 +42,11 @@
  * - All offsets are uint32_t (4GB max per SSK, more than sufficient)
  */
 
+/*
+ * Copyright (c) 2020-2025 Marthin Laubscher
+ * All rights reserved. See LICENSE for details.
+ */
+
 #ifndef SSK_DECODED_H
 #define SSK_DECODED_H
 

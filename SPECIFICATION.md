@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2020-2025 Marthin Laubscher. All rights reserved. See LICENSE for details. -->
+
 # SSK: Canonical Encoding of Sparse Abstract Bit Vectors
 
 ## The Problem
@@ -578,6 +580,31 @@ while value > 0 and step_i < max_steps:
 
 write encoded to bit stream (bits_used bits)
 ```
+
+### CDU Canonical Constraint: Final Step >= Step Size
+
+**Critical rule for variable-length types:** The final step (remainder) of a CDU type **MUST be >= step_size**. This ensures:
+
+1. **Canonality**: Without this constraint, the same value could encode in multiple ways (e.g., value 10 with `first=4, step_size=6` could use 1 step of 4 bits + remainder of 6, OR 1 step of 4 bits + remainder of 4 + extra continuation). Requiring remainder >= step_size eliminates ambiguity.
+
+2. **No waste**: Prevents tiny final steps (1-2 bits) that would waste space relative to the extra continuation bit they require.
+
+3. **Deterministic decoding**: Ensures the decoder can unambiguously reconstruct the value without needing to try multiple step combinations.
+
+**Implementation rule:** When calculating `middle_steps` from `base_bits`, `first`, and `step_size`:
+- Calculate `bits_after_first = base_bits - first`
+- Calculate `max_possible_middles = bits_after_first / step_size`
+- Calculate `remainder = bits_after_first - (max_possible_middles * step_size)`
+- If `remainder < step_size`, decrement `middle_steps` until remainder is sufficient
+- This ensures the final step always satisfies: `final_step = remainder >= step_size`
+
+**Example:** For `base_bits=20, first=6, step_size=7`:
+- bits_after_first = 14
+- max_possible_middles = 14 / 7 = 2
+- remainder = 14 - (2 * 7) = 0
+- Since remainder < step_size, decrement: middle_steps = 1
+- New remainder = 14 - (1 * 7) = 7 ✓ (equals step_size, now valid)
+- Final step structure: [first:6, middle:7, remainder:7]
 
 ### CDU Types for Format 0
 

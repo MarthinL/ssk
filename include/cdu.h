@@ -1,4 +1,9 @@
 /*
+ * Copyright (c) 2020-2025 Marthin Laubscher
+ * All rights reserved. See LICENSE for details.
+ */
+
+/*
  * include/cdu.h
  *
  * Canonical Data Unit (CDU) encoding/decoding.
@@ -17,46 +22,63 @@
  * CDU Parameters - Describes encoding for a value.
  *
  * For fixed encoding: write exactly base_bits, fixed=1.
- * For variable encoding: first segment of first bits, then step_size bits
- * per continuation segment, up to max_steps. Each segment except the last
- * is followed by a continuation bit (1=more segments, 0=done).
- * first=0 is special: value 0 fits in first step with just continuation=0.
+ * For variable encoding:
+ *   - Step 0: first bits (with continuation bit)
+ *   - Steps 1 to middle_steps: step_size bits each (with continuation bit)
+ *   - Final step: remainder_bits = base_bits - first - (middle_steps * step_size)
+ *   - CANONICAL RULE: final step (remainder) MUST be >= step_size to ensure
+ *     no ambiguity in encoding and no waste from tiny remainder steps.
+ *   - def_steps: Total defined steps = 1 + middle_steps + 1
+ *   - All steps have continuation bits; sequence stops when value fits in current step
+ * Special case: first=0 means value 0 requires only continuation=0 sentinel.
  */
 
 #define CDU_MAX_TYPES     11
 #define CDU_MAX_STEPS  8
 #define CDU_MAX_MAX_STEPS 8
-#define CDU_NUM_SUBTYPES 11
 
 typedef struct {
     uint8_t  base_bits;                 // Field width in bits
-    uint8_t  first : 7;                 // First step bits (0 means special case)
-    uint8_t  fixed : 1;                 // 1 for fixed-length, 0 for variable
-    uint8_t  step_size;                 // Subsequent step bits
-    uint8_t  max_steps;                 // Total allowed steps
-    uint8_t  steps[CDU_MAX_MAX_STEPS];  // sequence of step lengths
+    uint8_t  first;                     // First step bits
+    uint8_t  fixed;                     // 1 for fixed-length, 0 for variable
+    uint8_t  step_size;                 // Uniform middle step bits
+    uint8_t  max_mids;                  // Maximum middle steps (limit; actual may be less)
+    uint8_t  middle_steps;              // Actual number of middle steps after init (output)
+    uint8_t  def_steps;                 // Total defined steps: first + middle + remainder (output)
+    uint8_t  steps[CDU_MAX_MAX_STEPS];  // Step lengths [0..def_steps-1] valid; [def_steps] sentinel
     int64_t  conti;                     // CONTInuation bits in the encoded format
     int64_t  bmask;                     // value mask (binary value)
     int64_t  emask;                     // value mask (encoded value)
-    int64_t  masks[CDU_MAX_MAX_STEPS];  // Precomputed masks per type per subments
+    int64_t  masks[CDU_MAX_MAX_STEPS];  // Precomputed masks per type
 } CDUParam;
 
 /**
- * CDU Type Enumeration.
+ * CDU Type Enumeration - Variable-length types first, then fixed-length.
+ * Values auto-assigned by compiler; explicit assignment of CDU_TYPE_RAW1
+ * serves as verification that CDU_MAX_VL_TYPES boundary is correct.
  */
 typedef enum {
-    CDU_TYPE_DEFAULT          =  0,
-    CDU_TYPE_RAW1             =  1,
-    CDU_TYPE_RAW2             =  2,
-    CDU_TYPE_RAW64            =  3,
-    CDU_TYPE_SMALL_INT        =  4,
-    CDU_TYPE_MEDIUM_INT       =  5,
-    CDU_TYPE_LARGE_INT        =  6,
-    CDU_TYPE_INITIAL_DELTA    =  7,
-    CDU_TYPE_ENUM_K           =  8,
-    CDU_TYPE_ENUM_RANK        =  9,
-    CDU_TYPE_ENUM_COMBINED    = 10
+    /* Variable-length types (auto-assign 0..CDU_MAX_VL_TYPES-1) */
+    CDU_TYPE_DEFAULT,
+    CDU_TYPE_SMALL_INT,
+    CDU_TYPE_MEDIUM_INT,
+    CDU_TYPE_LARGE_INT,
+    CDU_TYPE_ENUM_K,
+    CDU_TYPE_ENUM_RANK,
+    CDU_TYPE_INITIAL_DELTA,
+    CDU_MAX_VL_TYPES,           /* Sentinel: number of variable-length types */
+    
+    /* Fixed-length types (start at CDU_MAX_VL_TYPES) */
+    CDU_TYPE_RAW1 = CDU_MAX_VL_TYPES,
+    CDU_TYPE_RAW2,
+    CDU_TYPE_RAW64,
+    CDU_TYPE_ENUM_COMBINED,
+    
+    CDU_TYPE_COUNT              /* Sentinel: total number of types (for array sizing) */
 } CDUtype;
+
+/* Verify constants for debugging */
+#define CDU_NUM_SUBTYPES CDU_TYPE_COUNT
 
 /**
  * Initialize CDU parameters. Call once at startup.

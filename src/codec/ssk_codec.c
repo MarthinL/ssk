@@ -1,4 +1,9 @@
 /*
+ * Copyright (c) 2020-2025 Marthin Laubscher
+ * All rights reserved. See LICENSE for details.
+ */
+
+/*
  * src/codec/ssk_codec.c
  *
  * SSK codec main functions.

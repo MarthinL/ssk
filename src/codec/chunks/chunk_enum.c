@@ -1,4 +1,9 @@
 /*
+ * Copyright (c) 2020-2025 Marthin Laubscher
+ * All rights reserved. See LICENSE for details.
+ */
+
+/*
  * src/codec/chunks/chunk_enum.c
  *
  * ENUM token encoding/decoding for sparse chunks

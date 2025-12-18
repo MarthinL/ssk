@@ -1,4 +1,9 @@
 /*
+ * Copyright (c) 2020-2025 Marthin Laubscher
+ * All rights reserved. See LICENSE for details.
+ */
+
+/*
  * src/codec/cdu.c
  *
  * Canonical Data Unit (CDU) encoding and decoding.
@@ -15,19 +20,21 @@
 #include "bitblocks.h"
 
 /* CDU parameter table: one entry per type */
-CDUParam cdu_params[CDU_MAX_TYPES] = {
-    //                           base_bits, first, fixed, step_size, max_steps
-    [CDU_TYPE_DEFAULT]       = {        16,     0,     0,         3,         6},
+/* Variables use max_mids as input limit; actual middle_steps calculated at init */
+CDUParam cdu_params[CDU_NUM_SUBTYPES] = {
+    //                           base_bits, first, fixed, step_size, max_mids
+    [CDU_TYPE_DEFAULT]       = {        16,     0,     0,         3,         5},  // rem>=3
+    [CDU_TYPE_SMALL_INT]     = {        32,     4,     0,         6,         2},  // rem>=6
+    [CDU_TYPE_MEDIUM_INT]    = {        32,     6,     0,         7,         2},  // rem>=7
+    [CDU_TYPE_LARGE_INT]     = {        32,     5,     0,         7,         2},  // rem>=7
+    [CDU_TYPE_ENUM_K]        = {        32,     4,     0,         5,         4},  // rem>=5
+    [CDU_TYPE_ENUM_RANK]     = {        48,     8,     0,        12,         3},  // rem>=12
+    [CDU_TYPE_INITIAL_DELTA] = {        32,     3,     0,         8,         2},  // rem>=8
+    /* Fixed-length types */
     [CDU_TYPE_RAW1]          = {         1,     0,     1,         0,         0},
     [CDU_TYPE_RAW2]          = {         2,     0,     1,         0,         0},
     [CDU_TYPE_RAW64]         = {        64,     0,     1,         0,         0},
-    [CDU_TYPE_SMALL_INT]     = {        16,     4,     0,         6,         3},
-    [CDU_TYPE_MEDIUM_INT]    = {        20,     6,     0,         7,         3},
-    [CDU_TYPE_LARGE_INT]     = {        32,     5,     0,         7,         4},
-    [CDU_TYPE_ENUM_COMBINED] = {        56,     8,     0,        12,         4},
-    [CDU_TYPE_ENUM_K]        = {        32,     4,     0,         5,         7},
-    [CDU_TYPE_ENUM_RANK]     = {        48,     8,     0,        12,         4},
-    [CDU_TYPE_INITIAL_DELTA] = {        32,     3,     0,         8,         4}
+    [CDU_TYPE_ENUM_COMBINED] = {        48,     8,     1,         0,         0}
 };
 
 
@@ -36,37 +43,126 @@ CDUParam cdu_params[CDU_MAX_TYPES] = {
 
 /* Initialize CDU parameters */
 void cdu_init(void) {
-    for (int i = 0; i < CDU_MAX_TYPES; i++) {
-        CDUParam * p       = &cdu_params[i];
-        if (!p->fixed && p-> base_bits > 0) {
-            int        cpos    = 0;
-            /* Build steps array for variable-length types */
-            for (int s = 0; s < p->max_steps; s++) {
-              p->steps[s] = s ? p->first : p->step_size;
-              p->conti |= (1LL << (cpos + p->steps[s]));
-              cpos += p->steps[s] + 1;
-            }
-
-            assert(cpos == p->base_bits + p->max_steps);  // Sanity check
-            assert(cpos <= 64);
-
-            p->bmask = (1LL << p->base_bits) - 1;
-            p->emask = (1LL << (p->base_bits + p->max_steps)) - 1;
-
+    /* PHASE 1: VALIDATE ALL TYPES BEFORE MODIFYING MEMORY */
+    /* ===================================================== */
+    uint8_t max_def_steps = 0;
+    
+    for (int i = 0; i < CDU_NUM_SUBTYPES; i++) {
+        CDUParam * p = &cdu_params[i];
+        
+        /* Skip types with no definition */
+        if (p->base_bits == 0) continue;
+        
+        /* Fixed-length types: just validate base_bits */
+        if (p->fixed) {
+            assert(p->base_bits <= 64 && "Fixed type exceeds 64 bits");
+            continue;
         }
+        
+        /* Variable-length types: validate parameter consistency */
+        assert(p->first < 64 && "first must be 0..63");
+        assert(p->step_size > 0 && p->step_size < 64 && "step_size must be 1..63");
+        assert(p->max_mids <= CDU_MAX_MAX_STEPS - 2 && "max_mids too large (need room for first+remainder)");
+        assert(p->base_bits >= p->first + p->step_size && "base_bits must be >= first + step_size");
+        
+        /* Calculate actual middle_steps: as many as fit while final step >= step_size */
+        /* CANONICAL RULE (from SPECIFICATION.md):
+         * The final step (remainder) MUST be >= step_size.
+         * This ensures:
+         *   1. Canonality: No ambiguity in how to encode a value
+         *   2. No waste: Prevents tiny final steps (1-2 bits) that waste space
+         *   3. Deterministic decoding: Unambiguous reconstruction of value
+         *
+         * If remainder < step_size, decrement middle_steps until valid.
+         */
+        uint8_t bits_after_first = p->base_bits - p->first;
+        uint8_t middle_steps = bits_after_first / p->step_size;
+        if (middle_steps > p->max_mids) middle_steps = p->max_mids;
+        
+        /* Adjust downward if remainder would be < step_size */
+        while (middle_steps > 0) {
+            uint8_t remainder = bits_after_first - (middle_steps * p->step_size);
+            if (remainder >= p->step_size) break;
+            middle_steps--;
+        }
+        
+        /* Final sanity check: remainder must be >= step_size */
+        uint8_t remainder = bits_after_first - (middle_steps * p->step_size);
+        assert(remainder >= p->step_size && "Remainder calculation failed");
+        
+        /* Calculate def_steps and validate it fits */
+        uint8_t def_steps = 1 + middle_steps + 1;  // first + middles + remainder
+        assert(def_steps <= CDU_MAX_MAX_STEPS && "def_steps exceeds CDU_MAX_MAX_STEPS");
+        
+        /* Validate encoded size fits in 64 bits */
+        int total_bits = 0;
+        for (int s = 0; s < middle_steps; s++) {
+            total_bits += p->step_size + 1;  /* middle step + continuation */
+        }
+        total_bits += p->first + 1;           /* first step + continuation */
+        total_bits += remainder + 1;          /* remainder step + continuation */
+        assert(total_bits <= 64 && "Encoded value exceeds 64 bits");
+        
+        /* Track max for final validation */
+        if (def_steps > max_def_steps) max_def_steps = def_steps;
     }
     
-    // cdu_params[CDU_TYPE_DEFAULT]         = (CDUParam){.base_bits = 16, .first = 0, .fixed = 0, .step_size = 3, .max_steps = 6};
-    // cdu_params[CDU_TYPE_RAW1]            = (CDUParam){.base_bits = 1, .first = 0, .fixed = 1, .step_size = 0, .max_steps = 0};
-    // cdu_params[CDU_TYPE_RAW2]            = (CDUParam){.base_bits = 2, .first = 0, .fixed = 1, .step_size = 0, .max_steps = 0};
-    // cdu_params[CDU_TYPE_RAW64]           = (CDUParam){.base_bits = 64, .first = 0, .fixed = 1, .step_size = 0, .max_steps = 0};
-    // cdu_params[CDU_TYPE_SMALL_INT]       = (CDUParam){.base_bits = 16, .first = 4, .fixed = 0, .step_size = 6, .max_steps = 3};
-    // cdu_params[CDU_TYPE_MEDIUM_INT]      = (CDUParam){.base_bits = 20, .first = 6, .fixed = 0, .step_size = 7, .max_steps = 3};
-    // cdu_params[CDU_TYPE_LARGE_INT]       = (CDUParam){.base_bits = 32, .first = 5, .fixed = 0, .step_size = 7, .max_steps = 4};
-    // cdu_params[CDU_TYPE_ENUM_COMBINED]   = (CDUParam){.base_bits = 56, .first = 8, .fixed = 0, .step_size = 12, .max_steps = 4};
-    // cdu_params[CDU_TYPE_ENUM_K]          = (CDUParam){.base_bits = 32, .first = 4, .fixed = 0, .step_size = 5, .max_steps = 7};
-    // cdu_params[CDU_TYPE_ENUM_RANK]       = (CDUParam){.base_bits = 48, .first = 8, .fixed = 0, .step_size = 12, .max_steps = 4};
-    // cdu_params[CDU_TYPE_INITIAL_DELTA]   = (CDUParam){.base_bits = 32, .first = 3, .fixed = 0, .step_size = 8, .max_steps = 4};
+    /* Validate CDU_MAX_MAX_STEPS is sufficient */
+    assert(max_def_steps <= CDU_MAX_MAX_STEPS && 
+           "CDU_MAX_MAX_STEPS too small; increase it");
+    
+    /* PHASE 2: INITIALIZE PARAMETERS WITH VALIDATED DATA */
+    /* ===================================================== */
+    for (int i = 0; i < CDU_NUM_SUBTYPES; i++) {
+        CDUParam * p = &cdu_params[i];
+        
+        /* Skip types with no definition */
+        if (p->base_bits == 0) continue;
+        
+        /* Fixed-length types: masks only */
+        if (p->fixed) {
+            p->bmask = (1LL << p->base_bits) - 1;
+            p->emask = p->bmask;  /* No continuation bits */
+            continue;
+        }
+        
+        /* Variable-length types: build steps array and masks */
+        uint8_t bits_after_first = p->base_bits - p->first;
+        uint8_t middle_steps = bits_after_first / p->step_size;
+        if (middle_steps > p->max_mids) middle_steps = p->max_mids;
+        
+        /* Adjust downward if remainder < step_size */
+        while (middle_steps > 0) {
+            uint8_t remainder = bits_after_first - (middle_steps * p->step_size);
+            if (remainder >= p->step_size) break;
+            middle_steps--;
+        }
+        
+        uint8_t remainder = bits_after_first - (middle_steps * p->step_size);
+        
+        /* Store actual middle_steps for encoder/decoder */
+        p->middle_steps = middle_steps;
+        p->def_steps = 1 + middle_steps + 1;
+        
+        /* Build steps array: [first, ...middles..., remainder] */
+        p->steps[0] = p->first;
+        for (int s = 1; s <= middle_steps; s++) {
+            p->steps[s] = p->step_size;
+        }
+        p->steps[middle_steps + 1] = remainder;
+        
+        /* Build continuation bit mask */
+        int cpos = 0;
+        p->conti = 0;
+        for (int s = 0; s < p->def_steps; s++) {
+            p->conti |= (1LL << (cpos + p->steps[s]));
+            cpos += p->steps[s] + 1;  /* +1 for continuation bit */
+        }
+        
+        /* Build value and encoded masks */
+        p->bmask = (1LL << p->base_bits) - 1;
+        p->emask = (1LL << (p->base_bits + p->def_steps)) - 1;
+    }
 }
 
 /*

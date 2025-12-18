@@ -29,7 +29,10 @@
  * - Leverages GCC/Clang intrinsics for CLZ, CTZ, POPCOUNT
  * - Handles arbitrary bit alignment via shift/mask operations
  */
-
+/*
+ * Copyright (c) 2020-2025 Marthin Laubscher
+ * All rights reserved. See LICENSE for details.
+ */
 #ifndef BITBLOCKS_H
 #define BITBLOCKS_H
 

@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2020-2025 Marthin Laubscher. All rights reserved. See LICENSE for details. -->
+
 # An introduction to SSK values  
 
 The concept of SSKs, SubSet Keys, was born in anguish over the slippery nature of M:N in SQL, lacking a stable

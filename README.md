@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2020-2025 Marthin Laubscher. All rights reserved. See LICENSE for details. -->
+
 # SSK - SubSet Keys
 
 SSK (SubSet Key) is a novel scalar type, designed to invert the cornerstone of the relational database as we know it - the foreign key reference - where children store the parent key as one of their fields. SSK values allow the parent to store a field that nominates its children, in a very special way mathematicians refer to as a bijection, so that each possible subset of children gets a unique identity which encodes the set of children directly in the SSKs value.
