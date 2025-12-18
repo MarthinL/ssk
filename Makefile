@@ -39,6 +39,9 @@ PG_CONFIG ?= pg_config
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 include $(PGXS)
 
+# Override installcheck to run regression tests
+installcheck: regression-test
+
 # Testing
 REGRESS = test_ssk_basic test_ssk_aggregates
 TAP_TESTS = 1

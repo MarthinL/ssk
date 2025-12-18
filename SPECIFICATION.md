@@ -1,8 +1,5 @@
 # SSK: Canonical Encoding of Sparse Abstract Bit Vectors
 
-> **WARNING: Development Implementation Only**  
-> The current CDU implementation in the codebase is a development placeholder that does not fully align with the original design intent described below. It is functional for testing and development with disposable data but **MUST NOT** be used in production for Format 0. A proper CDU implementation conforming to this specification will be required before production deployment to ensure canonical bijection and efficiency.
-
 ## The Problem
 
 Representing a subset of 64-bit integer IDs requires an **abstract bit vector** (abvector)—conceptually, one bit per possible ID (0 to 2^64-1 ≈ 18.4 exabits). Each bit indicates presence (1) or absence (0) in the subset.
@@ -522,70 +519,117 @@ bool ssk_equals(SSK *a, SSK *b) {
 }
 ```
 
-## CDU: Parameterized Variable-Length Encoding
+## CDU: Canonical Data Unit Codec
 
-SSK uses **CDU** (Canonical Data Unit) for all variable-length integer fields.
+SSK uses **Canonical Data Unit** (CDU) as sole inner codec, i.e for both fixed length, and variable length units of field data defined by Format 0. CDU replaced a older codec called VLQ-P which also used parameterisation but a 2-bit continuation scheme and more comple set of parameters. Both codecs maintain(ed) canon and were tunable, but CDU offered simpler code and bettter performance as a result.
 
-### CDU Definition
+### CDU Design Principles
+
+- **Single-pass encoding/decoding**: Allows for simple single pass encoding and decoding similar to LEB128 but without the byte-alighment performance and waste
+- **Parameterised types**: Each field type has tuned parameters for optimal space efficiency
+- **Fixed AND Variable**: Supports both fixed-length (raw blocks), or variable-length (steps with continuation bits)
+- **Canonical**: Strict rules to ensure canonality (bijective function between encoded and decoded values)
+
+### CDU Type Structure
+
+Each CDU type is defined by a `CDUParam` structure:
 
 ```c
-typedef struct CDUParam {
-    uint8_t n_stages;           // Number of extension stages
-    uint8_t stage_bits[16];     // Bit count for each stage
+typedef struct {
+    uint8_t  base_bits;        // Total domain size in bits (for validation)
+    uint8_t  first : 7;        // Bits in first segment (0 = special zero case)
+    uint8_t  fixed : 1;        // 1 = fixed-length, 0 = variable-length
+    uint8_t  step_size;        // Bits per continuation segment (unused for fixed)
+    uint8_t  max_steps;        // Max segments allowed (unused for fixed)
+    uint8_t  steps[8];         // Actual segment bit lengths
 } CDUParam;
 ```
 
-### Encoding Process
+### Fixed-Length Encoding
 
-```c
-uint64_t cdu_encode(uint64_t value, const CDUParam *params) {
-    uint64_t result = 0;
-    int bit_pos = 0;
-    int stage = 0;
-    
-    while (stage < params->n_stages) {
-        uint8_t bits_in_stage = params->stage_bits[stage];
-        uint64_t mask = (1ULL << bits_in_stage) - 1;
-        
-        if (value <= mask || stage == params->n_stages - 1) {
-            // Fits in this stage: no continuation bit
-            result |= (value << bit_pos);
-            return result;
-        }
-        
-        // Doesn't fit: add continuation bit and extend
-        result |= ((1ULL << bits_in_stage) | value) << bit_pos;
-        bit_pos += bits_in_stage + 1;
-        value >>= bits_in_stage;
-        stage++;
-    }
-    
-    return result;  // Overflow
-}
+For `fixed = 1` types (RAW1, RAW2, RAW64):
+- Write exactly `base_bits` bits directly to the bit stream
+- No continuation overhead
+- Used for raw data blocks and flags
+
+### Variable-Length Encoding
+
+For `fixed = 0` types:
+- Types are defined by base_bits, first, step_size and max_steps, but those parameters are reflected in a steps array to speed up the codec.
+- Every step has a continuation bit including the last, where it is set to 0, as a reliable sentinel.
+- Encoding stops when a 0 contination bit is encountered
+- Special case: `first = 0` allows value 0 to encode in 1 bit - just the obligatory 0 continuation bit
+
+
+**Encoding Algorithm** (simplified):
+```
+encoded = 0
+bits_used = 0
+step_i = 0
+
+while value > 0 and step_i < max_steps:
+    step_len = steps[step_i]
+    more_bit = 1 << step_len
+    segment = (value & (more_bit - 1)) | (value >= more_bit ? more_bit : 0)
+    encoded |= segment << bits_used
+    bits_used += step_len + 1
+    value >>= step_len
+    step_i++
+
+write encoded to bit stream (bits_used bits)
 ```
 
-### Example: stage_bits = {2, 5, 8}
+### CDU Types for Format 0
 
-| Value Range | Encoding | Stages |
-|-------------|----------|--------|
-| 0-3 | 2 bits, no continuation | 0 |
-| 4-131 | 2 bits (1 continuation) + 5 bits | 1 |
-| 132-32,899 | 2 bits + 5 bits (1 continuation) + 8 bits | 2 |
+Format 0 defines these CDU types with frozen parameters:
 
-### CDU Subtypes for Format 0
+| Type | Fixed | base_bits | first | steps | Purpose |
+|------|-------|-----------|-------|-------|---------|
+| RAW1 | Yes | 1 | - | - | Single bit flags |
+| RAW2 | Yes | 2 | - | - | 2-bit fields |
+| RAW64 | Yes | 64 | - | - | 64-bit data blocks |
+| SMALL_INT | No | 16 | 4 | {4,6,6} | Small counts (1-10) |
+| MEDIUM_INT | No | 20 | 6 | {6,7,7} | Medium values (64-2048) |
+| LARGE_INT | No | 32 | 5 | {5,8,8,11} | Large gaps (0-2^32) |
+| INITIAL_DELTA | No | 32 | 3 | {3,8,8,13} | Position deltas |
+| ENUM_K | No | 32 | 4 | {4,5,6,7,8,9,10} | Combinadic k values |
+| ENUM_RANK | No | 48 | 8 | {8,12,14,18} | Combinadic ranks |
+| ENUM_COMBINED | No | 56 | 8 | {8,12,14,18} | Combined enum data |
 
-Each encoded field has a specific CDU subtype, chosen to minimize total encoded size for typical value distributions:
+**Field Assignments** (frozen for Format 0):
+- `format_version` → `DEFAULT` 1 bit for 0, more bits when format > 0
+- `rare_bit` → `RAW1` (0 or 1)
+- `n_partitions` → `SMALL_INT`
+- `partition_delta` → `LARGE_INT`
+- `n_segments` → `SMALL_INT`
+- `segment_kind` → `RAW1` (0=RLE, 1=MIX)
+- `initial_delta` → `INITIAL_DELTA`
+- `length_bits` → `MEDIUM_INT`
+- `enum_k` → `ENUM_K`
+- `enum_rank` → `ENUM_RANK`
+- `enum_combined` → `ENUM_COMBINED`
+- Raw data blocks → `RAW64`
 
-**Field → Subtype assignments** (frozen for Format 0):
-- `format_version` → `CDU_DEFAULT` (must encode 0 in minimal space)
-- `partition_delta` → `CDU_LARGE_INT` (0 frequent, large gaps occasional)
-- `segment_count` → `CDU_SMALL_INT` (typically 1-10)
-- `initial_delta` → `CDU_INITIAL_DELTA` (0 frequent, gaps up to 2^32)
-- `length_bits` → `CDU_MEDIUM_INT` (typically 64-2048)
-- `enum_combined` → `CDU_LARGE_INT` (wide range depending on k and rank)
-- `raw_run_len` → `CDU_SMALL_INT` (typically 2-100)
+### Example: SMALL_INT Encoding
 
-These assignments are **immutable per format**. Changing any assignment breaks canon → requires new format version.
+Parameters: `first=4`, `steps={4,6,6}`, `max_steps=3`
+
+| Value | Segments | Bits | Encoding |
+|-------|----------|------|----------|
+| 0 | 1 (special) | 5 | `00000` (4 bits + cont=0) |
+| 5 | 1 | 5 | `00101 0` (4+1) |
+| 20 | 2 | 11 | `0100 1 0100 0` (4+1 + 6+1) |
+| 1000 | 3 | 17 | `0100 1 100100 1 010000 0` (4+1 + 6+1 + 6+1) |
+
+### Migration from VLQ-P
+
+CDU replaces the previous VLQ-P (2-bit continuation) with:
+- Single-bit continuation for efficiency
+- Parameterized segments for better tuning
+- Unified API for all field types
+- Maintained bijection and canon properties
+
+This change improves compression ratios and simplifies the codec implementation.
 
 ## Format 0 Canon Parameters (Frozen)
 

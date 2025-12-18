@@ -13,8 +13,15 @@
 #include "utils/array.h"
 #include "utils/builtins.h"
 #include "ssk.h"
+#include "cdu.h"
 
 PG_MODULE_MAGIC;
+
+/* Extension initialization */
+void _PG_init(void) {
+    cdu_init();              // Initialize CDU parameters
+    ssk_combinadic_init();   // Initialize combinadic tables
+}
 
 /*
  * ssk_version - return the extension version string

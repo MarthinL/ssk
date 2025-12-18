@@ -254,7 +254,7 @@ bb_insert_bits(uint8_t *buf, size_t bit_pos, uint64_t value, uint8_t n_bits)
         }
         
         /* Mask for bits in first 8 bytes (from bit_offset to end) */
-        uint64_t mask_low = ~((1ULL << bit_offset) - 1);
+        uint64_t mask_low = ~((1ULL << n_bits) - 1) << bit_offset;
         raw = (raw & ~mask_low) | (value << bit_offset);
         
         /* Store first 8 bytes */

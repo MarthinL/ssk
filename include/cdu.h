@@ -22,13 +22,23 @@
  * is followed by a continuation bit (1=more segments, 0=done).
  * first=0 is special: value 0 fits in first step with just continuation=0.
  */
+
+#define CDU_MAX_TYPES     11
+#define CDU_MAX_STEPS  8
+#define CDU_MAX_MAX_STEPS 8
+#define CDU_NUM_SUBTYPES 11
+
 typedef struct {
-    uint8_t  base_bits;        /* Field width in bits */
-    uint8_t  first : 7;        /* First segment bits (0 means special case) */
-    uint8_t  fixed : 1;        /* 1 for fixed-length, 0 for variable */
-    uint8_t  step_size;        /* Subsequent segment bits */
-    uint8_t  max_steps;        /* Total allowed segments */
-    uint8_t  steps[8];         /* sequnce of step lengths */
+    uint8_t  base_bits;                 // Field width in bits
+    uint8_t  first : 7;                 // First step bits (0 means special case)
+    uint8_t  fixed : 1;                 // 1 for fixed-length, 0 for variable
+    uint8_t  step_size;                 // Subsequent step bits
+    uint8_t  max_steps;                 // Total allowed steps
+    uint8_t  steps[CDU_MAX_MAX_STEPS];  // sequence of step lengths
+    int64_t  conti;                     // CONTInuation bits in the encoded format
+    int64_t  bmask;                     // value mask (binary value)
+    int64_t  emask;                     // value mask (encoded value)
+    int64_t  masks[CDU_MAX_MAX_STEPS];  // Precomputed masks per type per subments
 } CDUParam;
 
 /**
@@ -45,11 +55,15 @@ typedef enum {
     CDU_TYPE_INITIAL_DELTA    =  7,
     CDU_TYPE_ENUM_K           =  8,
     CDU_TYPE_ENUM_RANK        =  9,
-    CDU_TYPE_ENUM_COMBINED    = 10,
-    CDU_NUM_SUBTYPES
+    CDU_TYPE_ENUM_COMBINED    = 10
 } CDUtype;
 
-extern const CDUParam cdu_params[CDU_NUM_SUBTYPES];
+/**
+ * Initialize CDU parameters. Call once at startup.
+ */
+void cdu_init(void);
+
+extern CDUParam cdu_params[CDU_NUM_SUBTYPES];
 
 /* Convenience macros */
 #define CDU_DEFAULT         (&cdu_params[CDU_TYPE_DEFAULT])
@@ -100,20 +114,5 @@ size_t cdu_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
 #ifndef max
 #define max(a,b) ((a) > (b) ? (a) : (b))
 #endif
-
-static inline uint64_t 
-cdu_vl_n_decode_body(unsigned int n, uint64_t *valuep, uint64_t buffer, int * shiftp) {
-    *valuep |= (buffer & (1ULL<<n)-1) << *shiftp; 
-    *shiftp += n; 
-    return buffer & 1ULL<<n;
-}
-
-static inline uint64_t
-cdu_vl_n_encode_body(unsigned int n, uint64_t *encodedp, uint64_t value, int *bits_usedp) {
-   uint64_t morebit = 1ULL << n;
-   *encodedp |= (value | ((value > morebit-1) ? morebit : 0)) << *bits_usedp; 
-   *bits_usedp += n + 1; 
-   return value >> n;
-}
 
 #endif /* SSK_CDU_H */
