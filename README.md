@@ -140,7 +140,7 @@ SSK addresses a fundamental limitation in relational databases: representing M:N
 To contribute effectively:
 1. Understand which concern you're working ON
 2. Treat other concerns as black boxes (work WITH them)
-3. Consult the formal IDEF0 concern models for interaction patterns
+3. Consult the formal IDEF0 concern models for interaction patterns (see ARCHITECTURE.md)
 
 ## Under the Hood: Encoding Scheme
 

@@ -22,7 +22,7 @@
  * - Operations: IMP/A2:Function Processor (Set algebra function signatures)
  * - Persistence: IMP/A1:Value Decoder, IMP/A3:Value Encoder (Encode/decode entry points)
  *
- * See priv/workfiles/SSK_CONCERNS.TXT for formal concern model.
+ * See ARCHITECTURE.md for formal concern model.
  *
  * THE CORE CONCEPT:
  * SSK establishes a bijection between subsets of database IDs and scalar values.

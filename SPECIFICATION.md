@@ -35,7 +35,7 @@ With this context, the technical specification follows.
 
 ## Concerns Addressed by This Format
 
-Format 0 resolves the following concerns, mapped to the formal concern model:
+Format 0 resolves the following concerns, mapped to the formal concern model (see ARCHITECTURE.md):
 
 | Concern | Description | Reference |
 |---------|-------------|-----------|

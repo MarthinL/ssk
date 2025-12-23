@@ -62,7 +62,7 @@ SSK separates concerns to enable:
 When working on SSK:
 - **Know your concern**: Identify which concern you're modifying (IMP/A0, IMP/A1, IMP/A2, IMP/A3)
 - **Respect boundaries**: Don't mix persistence logic with PostgreSQL integration
-- **Consult the model**: See `priv/workfiles/SSK_CONCERNS.TXT` for formal concern relationships
+- **Consult the model**: See `ARCHITECTURE.md` for formal concern relationships
 
 ## Build Process
 
