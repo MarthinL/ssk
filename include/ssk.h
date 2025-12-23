@@ -14,19 +14,29 @@
 
 /**
  * @file ssk.h
- * @brief Public interface for the SSK library.
+ * @brief SSK (SubSet Key) primary header
  *
- * Subset Keys (SSK) represent a subset of database ID values as a single scalar value,
- * enabling efficient storage, set operations, and analytics in SQL.
+ * CONCERN CONTEXT:
+ * This header spans multiple implementation concerns:
+ * - Integration: IMP/A0:The SSK Extension (PostgreSQL UDT types and function declarations)
+ * - Operations: IMP/A2:Function Processor (Set algebra function signatures)
+ * - Persistence: IMP/A1:Value Decoder, IMP/A3:Value Encoder (Encode/decode entry points)
+ *
+ * See priv/workfiles/SSK_CONCERNS.TXT for formal concern model.
+ *
+ * THE CORE CONCEPT:
+ * SSK establishes a bijection between subsets of database IDs and scalar values.
+ * Each possible subset of a table's primary keys maps to exactly one SSK value.
+ * This is NOT a hash (no collisions) and NOT compression (perfectly reversible).
  *
  * CONCEPTUAL MODEL:
  * An SSK is abstractly equivalent to an abstract bit vector (abvector) with one bit
  * per possible ID in the domain (0 to 2^64-1). The abvector is astronomically
- * sparse, so SSK uses hierarchical compression (partitions → segments → chunks) to
+ * sparse, so SSK uses hierarchical encoding (partitions → segments → chunks) to
  * represent only the non-empty regions efficiently.
  *
  * For detailed format specifications, memory layout, and design rationale,
- * see ssk_format.h and copilot-instructions.md.
+ * see ssk_format.h and SPECIFICATION.md.
  */
 
 // ============================================================================

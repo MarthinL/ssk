@@ -2,6 +2,55 @@
 
 # SSK: Canonical Encoding of Sparse Abstract Bit Vectors
 
+## Preface: Encoding Strategy and Rationale
+
+This document specifies **Format 0**, the canonical encoding for SSK values. Before diving into technical detail, understand the strategic context:
+
+### Why This Specification Exists
+
+SSK's core value is the **bijection**—each subset of database IDs corresponds to exactly one scalar value. This bijection enables subset identity, indexing, and comparison. But to store and transmit SSK values, we need an encoding that:
+
+1. **Preserves bijection**: Same subset → identical bytes (always)
+2. **Exploits sparsity**: Real subsets are astronomically sparse; don't pay for empty bits
+3. **Enables direct comparison**: Encoded values must be comparable without decoding
+4. **Remains stable**: Once data is encoded in Format 0, it must be readable forever
+
+### Concern Separation
+
+This specification addresses the **persistence concern**—translating the abstract bit vector representation into storable bytes. It does NOT address:
+
+- **Representation concern**: How subsets map to abstract bit vectors (see SSK_INTRO.md)
+- **Query concern**: How operations work on in-memory representations
+- **Integration concern**: How PostgreSQL wraps this functionality
+
+### What is Immutable vs. Tunable
+
+- **Immutable**: The bijection property; Format 0 parameters once frozen
+- **Tunable during development**: CDU type parameters, threshold values
+- **Never tunable after production**: Any change requires a new format version
+
+With this context, the technical specification follows.
+
+---
+
+## Concerns Addressed by This Format
+
+Format 0 resolves the following concerns, mapped to the formal concern model:
+
+| Concern | Description | Reference |
+|---------|-------------|-----------|
+| **Bijection Guarantee** | Identical subsets produce identical bytes; different subsets produce different bytes | PRJ/A1:Formulation output |
+| **Sparsity Exploitation** | Empty partitions and long dominant runs are never stored | PRJ/A4:Expansion |
+| **Canonical Representation** | Deterministic encoding rules ensure one valid form per subset | Formal SSK Type Definition |
+| **Scalability** | Handles 2^64 ID space by hierarchical partitioning | Target Domain: BIGINT DBID |
+| **Storage Efficiency** | Combinadic encoding for sparse chunks; raw bits for dense chunks | Encoding Specification |
+
+The encoding is controlled by the **Encoding Specification (Format 0, CDU)** concept, which comprises:
+- **Format 0**: The structural hierarchy (Partitions → Segments → Chunks → Tokens)
+- **CDU Types**: The inner codec for variable-length and fixed-length data units
+
+---
+
 ## The Problem
 
 Representing a subset of 64-bit integer IDs requires an **abstract bit vector** (abvector)—conceptually, one bit per possible ID (0 to 2^64-1 ≈ 18.4 exabits). Each bit indicates presence (1) or absence (0) in the subset.

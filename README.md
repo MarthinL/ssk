@@ -17,7 +17,7 @@ In Donald Knuth's seminal work on combinatorial algorithms, the encoding of spar
 - **Scalability**: Handles both tiny subsets (common case) and exceptionally large ones (rare but critical) with elegance.
 - **Performance**: Minimizes encode-decode cycles, crucial for PostgreSQL aggregates, CTEs, and user-defined functions.
 
-SSK is not a general-purpose compression algorithm but a specialized codec for set representation in databases, where the encoded form must be indexable and comparable.
+SSK is a representation system for database subsets, enabling each subset of a table's primary keys to have a unique, stable scalar identity. This identity is not a hash (which may have collisions) but a bijection—a one-to-one correspondence between subsets and scalar values. For persistence and indexing, SSK uses a canonical encoding that is deterministic and comparable.
 
 ## Theoretical Foundation
 
@@ -55,9 +55,98 @@ SSK addresses a fundamental challenge in relational databases: representing subs
 
 This opens new possibilities for dynamic querying, complex analytics, and evolving data models across relational databases, bridging theory and practice for more powerful data interactions. Originally developed to address a real need, SSK demonstrates that the 'impossible'—stable scalar identities for subsets—has been achieved, inviting theory to catch up.
 
-## Encoding Scheme
+## Conceptual Architecture
 
-An SSK encodes a sparse bit vector using a hybrid approach:
+SSK is organized as a hierarchy of concerns, each with clear responsibilities:
+
+### Concern Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Strategic Concerns (Project Concerns Model)                     │
+│   What SSK must achieve, what constrains and enables it         │
+│ ┌─────────────────────────────────────────────────────────────┐ │
+│ │ Formulation     - Define the bijection formally             │ │
+│ │ Exposition      - Demonstrate value in action               │ │
+│ │ Implementation  - Build reference implementation            │ │
+│ │ Expansion       - Scale to BIGINT domain                    │ │
+│ │ Vitalisation    - Capture derivative opportunities          │ │
+│ └─────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+                              ↕
+┌─────────────────────────────────────────────────────────────────┐
+│ Technical Concerns (Implementation Concerns Model)              │
+│   How to retain bijection semantics at BIGINT scale             │
+│ ┌─────────────────────────────────────────────────────────────┐ │
+│ │ Representation Layer: Abstract bit vector ↔ subset of IDs  │ │
+│ │   (Formal SSK Type Definition governs)                      │ │
+│ ├─────────────────────────────────────────────────────────────┤ │
+│ │ Function Processor: SSK operations on AbV representation    │ │
+│ │   - Union, Intersection, Complement, Except, Membership     │ │
+│ │   - Fragmentation for efficient processing                  │ │
+│ │   - Normalisation for canonical output                      │ │
+│ ├─────────────────────────────────────────────────────────────┤ │
+│ │ Persistence Layer: Encode/Decode for storage                │ │
+│ │   (Format 0 + CDU codec)                                    │ │
+│ │   - Value Decoder: bytes → AbV                              │ │
+│ │   - Value Encoder: AbV → bytes                              │ │
+│ ├─────────────────────────────────────────────────────────────┤ │
+│ │ Integration Layer: PostgreSQL UDT, Aggregates, Operators    │ │
+│ │   (PostgreSQL Server as mechanism)                          │ │
+│ └─────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### What This Means for Different Roles
+
+- **Users**: Interact with the representation layer through SQL. The encoding is invisible.
+- **Contributors**: Work ON specific concerns while treating others as black boxes. The concern hierarchy guides focus.
+- **Architects**: The separation enables future enhancements (GIN indexing, additional formats) without disrupting existing semantics.
+
+## For Different Audiences
+
+### For Data Scientists and Analysts
+
+SSK enables you to reason about subsets of database IDs as stable scalars:
+- Capture complex selections as indexable values, avoiding repeated query execution
+- Group by subset identity to find patterns in M:N relationships
+- Perform set operations (union, intersection, difference) directly on stored subsets
+- Convert between SSK values and arrays of IDs as needed
+
+The encoding is invisible. The semantics are the same whether your table has 64 rows or 64 billion.
+
+### For Application Developers
+
+SSK provides a PostgreSQL User-Defined Type with:
+- Input/output functions for text representation
+- Comparison operators for indexing and equality
+- Set algebra functions (union, intersect, except, complement)
+- Membership tests and cardinality functions
+- Aggregate function for constructing SSKs from query results
+
+**Current limitations** (honest framing):
+- No GIN index support yet—use application-layer filtering
+- No referential integrity enforcement—application must ensure ID validity
+- Optimized for sparse subsets of large ID spaces; not designed for dense or small domains
+
+### For Database Architects and Contributors
+
+SSK addresses a fundamental limitation in relational databases: representing M:N relationships as stable, manipulable scalars. The implementation separates:
+- **Representation concern**: The bijection between abstract bit vectors and subsets of IDs
+- **Persistence concern**: Canonical encoding for storage (Format 0, CDU)
+- **Query concern**: Efficient operations on the sparse in-memory representation
+- **Integration concern**: PostgreSQL UDT semantics and aggregates
+
+To contribute effectively:
+1. Understand which concern you're working ON
+2. Treat other concerns as black boxes (work WITH them)
+3. Consult the formal IDEF0 concern models for interaction patterns
+
+## Under the Hood: Encoding Scheme
+
+> **Note:** This section describes HOW the abstract bit vector representation is persisted as bytes. If you're using SSK through SQL, you don't need to understand this—the encoding is invisible. This detail matters for contributors working ON the persistence layer.
+
+The representation (abstract bit vector) is encoded for storage using a hybrid approach:
 
 1. **Raw Bit Segments**: Direct encoding of contiguous bit runs where the pattern is chaotic or dense.
 2. **Run-Length Encoded (RLE) Exceptions**: Efficient representation of long runs of zeros or ones relative to a variable base.
@@ -78,7 +167,7 @@ SSK is designed as a PostgreSQL User-Defined Type (UDT), presenting externally a
 
 - **UDT Functions and Operators**: Full implementation of PostgreSQL UDT specifications, including input/output functions, comparison operators, and type-specific operations.
 - **User-Defined Aggregates**: Support functions for aggregates where the result is an SSK UDT, enabling efficient construction from sets of IDs.
-- **Outer Codec**: Handles serialization/deserialization of SSK binary strings to/from memory structures conducive to interpretation and manipulation. This outer layer decodes the opaque binary into internal representations for normalization and canonical re-encoding, while the inner CDU codec manages the compact encoding of lengths, offsets, and values.
+- **Persistence Layer**: Manages translation between the encoded SSK (stored as database bytes) and the in-memory abstract bit vector representation. This layer decodes the stored form into working structures for operations, then re-encodes canonical results for storage. The inner CDU codec handles encoding of individual data units (lengths, offsets, counts, ranks) within Format 0.
 
 ## Building
 
@@ -133,24 +222,6 @@ cd test && make installcheck USE_PGXS=1
 - How to add new tests
 - Debugging test failures
 - Requirements for each test type
-
-## Testing
-
-```bash
-# Install extension to system PostgreSQL
-sudo make install
-
-# Run SQL regression tests
-make installcheck
-
-# Run TAP tests (Perl-based, creates temporary PostgreSQL instances)
-make prove
-
-# Run all tests
-make check
-```
-
-See `TESTING.md` for comprehensive testing documentation.
 
 ## Contributing
 

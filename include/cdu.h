@@ -8,8 +8,22 @@
  *
  * Canonical Data Unit (CDU) encoding/decoding.
  *
- * CDU provides variable-length and fixed-length encoding.
- * Simple single-pass encode/decode with minimal logic.
+ * CONCERN: Persistence Layer - inner codec (IMP/A1, IMP/A3)
+ *
+ * CDU is the low-level codec for encoding variable-length and fixed-length
+ * data units within Format 0. It handles:
+ * - Partition deltas, segment counts, lengths
+ * - Combinadic k and rank values
+ * - Raw bit blocks
+ *
+ * CDU maintains canonicality through strict minimality rules. Any value
+ * encodes to exactly one byte sequence.
+ *
+ * CDU replaced VLQ-P (2-bit continuation) for simpler code and better performance.
+ *
+ * RELATIONSHIP TO FORMAT 0:
+ * Format 0 defines WHAT data to encode (hierarchy structure).
+ * CDU defines HOW to encode each data unit (bit packing).
  */
 
 #ifndef SSK_CDU_H

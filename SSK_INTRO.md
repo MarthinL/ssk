@@ -73,6 +73,86 @@ That 3-bit value would become the identity of that specific subset, a scalar val
 
 ### **That's the entire SubSet Key concept - a value capturing subset membership so predictably it qualifies as unique ID for each possible subset.**
 
+## Why Compression Works: The Kolmogorov Insight
+
+Before diving into encoding mechanics, understand the theoretical foundation that makes SSK possible.
+
+Andrey Kolmogorov's work on data compression (circa 1968) provides the validation for SSK's approach:
+
+> - All compression is about understanding the structure of data and storing the structure instead of the data
+> - Unbounded compression is enabled by either sparsity or known structure—having both is miraculous
+> - Dense, chaotic data defeats compression, but environments (like databases) that induce structure make domain-wide chaos unnatural
+
+SSK has BOTH sparsity (subsets are astronomically sparse) AND known structure (IDs are ordered, database constraints limit cardinality). The encoding exploits this:
+
+- **Store structure, not data**: Segment boundaries, partition IDs, chunk popcounts
+- **Exploit sparsity**: Empty partitions and dominant runs are never stored
+- **Absorb chaos**: When structure fails (chaotic bit patterns), store raw bits directly
+
+This isn't magic compression—it's domain-specific compaction exploiting known constraints.
+
+Well after I had taken to doing SSK as I figured it could work, when I took to documenting it as a project on its
+own, I found a string of prior art and academic references supporting and validating what I've done and how. 
+At the end of that chain, I discovered a summary of the work of Andrey Kolmogorov circa '68. 
+Admittedly, even if you shoved it right in my face, shouting "Here, this is the solution", I would not have seen any 
+connection between what I was trying to do and what Kolmogorov wrote. Only in hindsight, once it was all figured
+out, was I in a position to recognise that it actually confirms and validates exactly the solution I found. 
+
+A (very) loosely paraphrased summary of what Kolmogorov had to say about compression was, interpreted by many
+others along the way, was this:
+- all compression is about understanding the structure of the data (detected or induced), and storing the structure instead of the data, 
+- unbounded compression is enabled by either sparsity or known structure, having both is miraculous, and
+- dense, chaotic data defeats any compression, but where the environment (like the database) induces structure, domain-wide chaos in unnatural and attempts to force it will in itself induce structure.
+
+The original Kolmogorov papers were about using "programs in some language" that generates the data, which is
+exactly what's happening in SSK, if you map it as such. While not expressed in any general purpose language as he
+suggested, SSK uses an extremely tight domain specific language, yet every SSK in its encoded form only
+occasionally embeds raw data. Only when the stretch of data is too small to make a fuss about or too random for the
+cost to understand its structure. The rest, every single bit of it, is actually a program that generates the data,
+the decoder is a compiler that translates the program to executable form in memory, the functions are plug-in
+modules for when the program runs, and the encoder is a code generator taking an empty or modified program and
+compacts it into code again. The format description provides the environment variables and compiler directives used
+by the compiler, code generator and the run-time of the program in order to achieve the second objective - ensuring
+that every virtual dataset has one and only one possible programmatic representation. 
+
+It will take some unpacking to apply each of those abstracted concepts in algorithmic code, but that's SSK in a
+nutshell, validated by long established principles in mathematics and computer science, in aid of finally getting
+SQL to deliver on the Relational Data Model child of both disciplines.
+
+## Separation of Concerns
+
+SSK addresses three distinct concerns. Understanding which concern you're engaging with prevents confusion:
+
+### 1. Representation Concern
+
+**What**: The bijection between abstract bit vectors and subsets of IDs.
+
+**Semantics**: Each possible subset of a table's primary keys maps to exactly one abstract bit vector, which in turn maps to exactly one SSK scalar value. The semantics are identical whether the domain is 1..64 or 1..2^64.
+
+**Who cares**: Everyone. This IS the SSK concept.
+
+### 2. Encoding Concern (Persistence)
+
+**What**: Translating the abstract bit vector into storable bytes.
+
+**Implementation**: Format 0 with CDU codec, hierarchical structure (Partitions → Segments → Chunks → Tokens), canonical rules ensuring bijection is preserved.
+
+**Who cares**: Contributors working ON the persistence layer. Users don't need to understand this.
+
+### 3. Query Concern (Operations)
+
+**What**: Performing set operations on the in-memory representation.
+
+**Implementation**: Algorithms operating on decoded fragments, producing canonical outputs that preserve bijection.
+
+**Who cares**: Contributors working ON function implementation. Users call SQL functions; internals are hidden.
+
+---
+
+The following sections describe the ENCODING concern—how we persist the representation. If you're only using SSK, you can skip to "Set Operations Mapping."
+
+## Scaling Up: From Trivial to BIGINT
+
 With the "what and why" so clear, attention shifts to how, which of course presents the minor complication that we
 to scale up from the above trivial example, to the actual bigint we're targeting,  
 
@@ -124,39 +204,13 @@ unbounded compression.
 SSK uses domain-specific compaction, exploiting known structure, raw binary for patches of localised randomness,
 and combinadics for the semi-dense areas that's neither empty nor chaotic.  
 
-Well after I had taken to doing SSK as I figured it could work, when I took to documenting it as a project on its
-own, I found a string of prior art and academic references supporting and validating what I've done and how. 
-At the end of that chain, I discovered a summary of the work of Andrey Kolmogorov circa '68. 
-Admittedly, even if you shoved it right in my face, shouting "Here, this is the solution", I would not have seen any 
-connection between what I was trying to do and what Kolmogorov wrote. Only in hindsight, once it was all figured
-out, was I in a position to recognise that it actually confirms and validates exactly the solution I found. 
+## Under the Hood: Encoding Strategy
 
-A (very) loosely paraphrased summary of what Kolmogorov had to say about compression was, interpreted by many
-others along the way, was this:
-- all compression is about understanding the structure of the data (detected or induced), and storing the structure instead of the data, 
-- unbounded compression is enabled by either sparsity or known structure, having both is miraculous, and
-- dense, chaotic data defeats any compression, but where the environment (like the database) induces structure, domain-wide chaos in unnatural and attempts to force it will in itself induce structure.
+> **Note for readers**: The following sections describe the PERSISTENCE LAYER—how the abstract bit vector is encoded for storage. This is implementation detail. The representation concern (bijection) is independent of these mechanics.
 
-The original Kolmogorov papers were about using "programs in some language" that generates the data, which is
-exactly what's happening in SSK, if you map it as such. While not expressed in any general purpose language as he
-suggested, SSK uses an extremely tight domain specific language, yet every SSK in its encoded form only
-occasionally embeds raw data. Only when the stretch of data is too small to make a fuss about or too random for the
-cost to understand its structure. The rest, every single bit of it, is actually a program that generates the data,
-the decoder is a compiler that translates the program to executable form in memory, the functions are plug-in
-modules for when the program runs, and the encoder is a code generator taking an empty or modified program and
-compacts it into code again. The format description provides the environment variables and compiler directives used
-by the compiler, code generator and the run-time of the program in order to achieve the second objective - ensuring
-that every virtual dataset has one and only one possible programmatic representation. 
+> **Note for contributors**: These sections explain HOW encoding decisions are made deterministically. Every rule exists to ensure bijection: same subset → same bytes, always.
 
-It will take some unpacking to apply each of those abstracted concepts in algorithmic code, but that's SSK in a
-nutshell, validated by long established principles in mathematics and computer science, in aid of finally getting
-SQL to deliver on the Relational Data Model child of both disciplines. 
-
-
-  
-## Putting it to work  
-  
-> Note: The procedural components mentioned in this description are not specific to the encoding or decoding process, but to how the abstract bit vector is broken down into smaller, well defined parts. It’s described as if operating on a materialised bit string, which is not an option.  How that maps into the in-memory decoded representation of the abstract bit vector and the encoded for storage version of the same thing, is treated as a separate concern.  
+The procedural components mentioned here describe how the abstract bit vector is broken down into smaller, well-defined parts for encoding. It's described as if operating on a materialised bit string, which is not an option. How that maps into the in-memory decoded representation of the abstract bit vector and the encoded for storage version of the same thing, is treated as a separate concern.
   
 As explained above SSK is trivially simple as an abstract concept, with all of its complications arising from the equally simple fact that in no known (computational) universe can we even contemplate loading the abstract bit vector into memory in its expanded form to work on it. We’re faced with two basic sources of complexity - canonical representation as a minimal scalar value and the algorithms to implement operations on the SSK in its in-memory format which has to exploit the sparse nature of the actual values as well in order to even fit into memory.  With some commonalities between them we’ll cover first, we can unpack the essence of each type of complication and how SSK tackles them.  
   

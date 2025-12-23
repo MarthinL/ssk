@@ -14,16 +14,30 @@
 
 /**
  * @file ssk_format.h
- * @brief SSK encoding format specifications and decoded memory structures
+ * @brief Format 0 parameters and structures
+ *
+ * CONCERN: Persistence Layer (IMP/A1:Value Decoder, IMP/A3:Value Encoder)
+ *
+ * This header defines Format 0 encoding parameters. These values are
+ * IMMUTABLE after production freeze. Any change requires Format 1+.
+ *
+ * WHAT IS FORMAT 0:
+ * The canonical encoding that translates abstract bit vector representation
+ * into storable bytes. Preserves bijection: same subset → identical bytes.
+ *
+ * WHAT IS NOT HERE:
+ * - Representation semantics (controlled by Formal SSK Type Definition)
+ * - Set operations (see IMP/A2:Function Processor)
+ * - PostgreSQL integration (see IMP/A0:The SSK Extension)
  *
  * SSK CONCEPTUAL MODEL:
  * =====================
  * An SSK represents a subset as an "abstract bit vector" (abvector) - conceptually,
- * one bit per possible primary key value in the domain (0 to 2^64-1). Each abstact
+ * one bit per possible primary key value in the domain (0 to 2^64-1). Each abstract
  * bit (absbit) indicates presence (1) or absence (0) of that ID in the subset.
  *
  * The abvector is astronomically sparse (like matter in space), so SSK exploits
- * this emptiness through hierarchical compression:
+ * this emptiness through hierarchical encoding:
  *   Domain (2^64 values) → Partitions (2^32 each) → Segments → Chunks
  *
  * CANONICITY - THE FOUNDATION:
