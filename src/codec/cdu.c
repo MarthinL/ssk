@@ -19,23 +19,26 @@
 #include "cdu.h"
 #include "bitblocks.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 /* CDU parameter table: one entry per type */
 /* Variables use max_mids as input limit; actual middle_steps calculated at init */
 CDUParam cdu_params[CDU_NUM_SUBTYPES] = {
     //                           base_bits, first, fixed, step_size, max_mids
-    [CDU_TYPE_DEFAULT]       = {        16,     0,     0,         3,         5},  // rem>=3
-    [CDU_TYPE_SMALL_INT]     = {        32,     4,     0,         6,         2},  // rem>=6
-    [CDU_TYPE_MEDIUM_INT]    = {        32,     6,     0,         7,         2},  // rem>=7
-    [CDU_TYPE_LARGE_INT]     = {        32,     5,     0,         7,         2},  // rem>=7
-    [CDU_TYPE_ENUM_K]        = {        32,     4,     0,         5,         4},  // rem>=5
-    [CDU_TYPE_ENUM_RANK]     = {        48,     8,     0,        12,         3},  // rem>=12
-    [CDU_TYPE_INITIAL_DELTA] = {        32,     3,     0,         8,         2},  // rem>=8
+    [CDU_TYPE_DEFAULT]       = {        16,     0,     0,         3,        5},  // rem>=3
+    [CDU_TYPE_SMALL_INT]     = {        32,     4,     0,         6,        2},  // rem>=6
+    [CDU_TYPE_MEDIUM_INT]    = {        32,     6,     0,         7,        2},  // rem>=7
+    [CDU_TYPE_LARGE_INT]     = {        32,     5,     0,         7,        2},  // rem>=7
+    [CDU_TYPE_ENUM_K]        = {        32,     4,     0,         5,        4},  // rem>=5
+    [CDU_TYPE_ENUM_RANK]     = {        48,     8,     0,        12,        3},  // rem>=12
+    [CDU_TYPE_INITIAL_DELTA] = {        32,     3,     0,         8,        2},  // rem>=8
     /* Fixed-length types */
-    [CDU_TYPE_RAW1]          = {         1,     0,     1,         0,         0},
-    [CDU_TYPE_RAW2]          = {         2,     0,     1,         0,         0},
-    [CDU_TYPE_RAW64]         = {        64,     0,     1,         0,         0},
-    [CDU_TYPE_ENUM_COMBINED] = {        48,     8,     1,         0,         0}
+    [CDU_TYPE_RAW1]          = {         1,     0,     1,         0,        0},
+    [CDU_TYPE_RAW2]          = {         2,     0,     1,         0,        0},
+    [CDU_TYPE_RAW64]         = {        64,     0,     1,         0,        0},
+    [CDU_TYPE_ENUM_COMBINED] = {        48,     8,     1,         0,        0}
 };
+#pragma GCC diagnostic pop
 
 
 
@@ -154,7 +157,7 @@ void cdu_init(void) {
         /* Build continuation bit mask */
         int cpos = 0;
         p->conti = 0;
-        for (int s = 0; s < p->def_steps; s++) {
+        for (int s = 0; s < p->def_steps-1; s++) { // def_steps-1 to force final sector continuation bit to 0
             p->conti |= (1LL << (cpos + p->steps[s]));
             cpos += p->steps[s] + 1;  /* +1 for continuation bit */
         }
