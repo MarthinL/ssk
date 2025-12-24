@@ -1,169 +1,345 @@
-# SSK Architecture: Dual IDEF0 Concern Models
+# SSK Architecture Guide
 
-This document presents the formal concern models that govern SSK's architecture. All SSK documentation, source organization, and design decisions trace back to these models.
+**For Contributors and Technical Architects**
 
-## Interactive Diagrams
-
-All diagrams below are clickable and show the detailed decomposition of each concern. The diagrams use IDEF0 visual notation with:
-
-- **Click on activities** (the boxes labeled A1, A2, A3, etc.) to navigate to detailed activity decompositions
-- **Input flows** (left arrows) show what each activity receives
-- **Control flows** (top arrows) show governing rules and constraints
-- **Output flows** (right arrows) show what each activity produces
-- **Mechanism flows** (bottom arrows) show supporting infrastructure
-
-The diagrams are fully interactive and work on GitHub, allowing you to explore the architecture from the top level (A0) down through detailed decompositions (A1-A5).
-
-## Understanding Concern Models
-
-SSK is organized using **IDEF0 notation**—a formal language for describing how complex systems separate concerns. Each concern has clear inputs, outputs, controls, and mechanisms.
-
-**Key principle**: Concerns operate in parallel/reactive mode, not sequentially. When inputs, controls, and mechanisms are present, outputs are generated instantly.
+This document integrates the dual IDEF0 concern models—[Project Concerns](PROJECT_CONCERNS.md) and [Implementation Concerns](IMPLEMENTATION_CONCERNS.md)—into practical guidance for contributors working on the SSK codebase.
 
 ---
 
-## Project Concerns Model (PRJ)
+## Quick Navigation
 
-**Context**: What SSK must achieve and what enables/constrains it.
-
-### PRJ/A0: Subset Identity from Zero to Hero
-
-The overarching goal: give subsets stable, queryable identities in relational databases.
-
-**Diagram** (click activities to explore decompositions):
-
-![Project Concerns Diagram](diagrams/Project%20Concerns.svg)
-
-**Decomposition**:
-
-| Activity | Reference | Purpose | Description |
-|----------|-----------|---------|-------------|
-| **A1** | PRJ/A1 | **Formulation: The Bijection Affair** | Recognize prior art, formulate SSK as scalar value bijecting subset onto unique identifier |
-| **A2** | PRJ/A2 | **Exposition: Nothing without Value** | Demonstrate SSK in action—capturing, storing, combining, filtering subsets as scalar data |
-| **A3** | PRJ/A3 | **Implementation: Rubber Hits Road** | Build reference implementation in PostgreSQL (trivial domain first, then target domain) |
-| **A4** | PRJ/A4 | **Expansion: Preserving Semantics at BIGINT Scale** | The heavy lifting—engineering for correctness, completeness, bijection at scale |
-| **A5** | PRJ/A5 | **Vitalisation: Expanding Horizons** | Capture derivative ideas, extended scope, adjacent domains for future work |
-
-**Critical Observation**: PRJ/A4:Expansion is where most code lives, but PRJ/A1:Formulation is where the concept lives. Documentation must not conflate these.
+- **[Project Concerns Model](PROJECT_CONCERNS.md)** — Strategic scope and governance (PRJ/A0-A5)
+- **[Implementation Concerns Model](IMPLEMENTATION_CONCERNS.md)** — Technical decomposition (IMP/A0-A3)
+- **[Specification](SPECIFICATION.md)** — Formal SSK semantics and Format 0
+- **[Introduction](SSK_INTRO.md)** — Conceptual overview
 
 ---
 
-## Implementation Concerns Model (IMP)
+## Understanding the Dual Models
 
-**Context**: How to retain bijection semantics at BIGINT scale.
+SSK is governed by two complementary IDEF0 models, each addressing a different class of concern:
 
-### IMP/A0: The SSK Extension
+### Project Concerns (PRJ)
 
-The PostgreSQL extension implementing SSK functionality.
+**What**: Strategic and governance concerns  
+**Audience**: Project maintainers, strategic decision-makers, adopters  
+**Activities**: Formulation → Exposition → Implementation → Expansion → Vitalisation  
+**Focus**: *Why* SSK exists and *what* it provides
 
-**Diagram** (click activities to explore decompositions):
+**Context Diagram**:
 
-![Implementation Concerns Diagram](diagrams/Implementation%20Concerns.svg)
+![Project Concerns](diagrams/Project%20Concerns.svg)
 
-**Decomposition**:
-
-| Activity | Reference | Purpose | Description |
-|----------|-----------|---------|-------------|
-| **A1** | IMP/A1 | **Value Decoder** | Decode SSK bytes → Abstract bit Vector (AbV) in memory |
-| **A2** | IMP/A2 | **Function Processor** | Apply SSK operation on AbV representation |
-| **A3** | IMP/A3 | **Value Encoder** | Encode AbV → SSK bytes for storage |
-
-**Individual Activity Diagrams** (click activities to explore details):
-
-1. **[IMP/A1: Value Decoder](diagrams/A1_%20Value%20Decoder.svg)** — Decode SSK bytes → Abstract bit Vector (AbV) in memory
-   - IMP/A11: Use existing AbV
-   - IMP/A12: Decode AbV  
-   - IMP/A13: Decode Token
-   - IMP/A14: Remember AbV
-
-2. **[IMP/A2: Function Processor](diagrams/A2_%20Function%20Processor.svg)** — Apply SSK operation on AbV representation
-   - IMP/A21: SSK/AGG Function Exec
-   - IMP/A22: Determine output by AbV
-   - IMP/A23: Fragment Input(s)
-   - IMP/A24: Determine Output per Fragment
-   - IMP/A25: Normalise (Clean & Defrag)
-
-3. **[IMP/A3: Value Encoder](diagrams/A3_%20Value%20Encoder.svg)** — Encode AbV → SSK bytes for storage
-   - IMP/A31: Encode AbV
-   - IMP/A32: Encode Token
-   - IMP/A33: Conditionally Remember AbV
+[→ Full Project Concerns Model](PROJECT_CONCERNS.md)
 
 ---
 
-## Control Objects (What Governs the System)
+### Implementation Concerns (IMP)
 
-| Control | Type | Governs | Description |
-|---------|------|---------|-------------|
-| **Formal SSK Type Definition** | Cost Object | PRJ/A3:Implementation, PRJ/A4:Expansion, IMP/A0 | Formal mathematical definition of SSK semantics |
-| **Target Domain: BIGINT DBID** | Resource | PRJ/A1:Formulation, PRJ/A4:Expansion | 2^64 ID space requirement |
-| **Scalar Requirement** | Resource | PRJ/A3:Implementation, PRJ/A4:Expansion | Must work as PostgreSQL scalar type |
-| **Encoding Specification (Format 0, CDU)** | Resource | IMP/A1:Value Decoder, IMP/A3:Value Encoder | Canonical encoding preserving bijection |
+**What**: Technical decomposition of the extension  
+**Audience**: Contributors, developers, code reviewers  
+**Activities**: Value Decoder → Function Processor → Value Encoder  
+**Focus**: *How* SSK is implemented
+
+**Context Diagram**:
+
+![Implementation Concerns](diagrams/Implementation%20Concerns.svg)
+
+[→ Full Implementation Concerns Model](IMPLEMENTATION_CONCERNS.md)
+
+---
+
+## The Critical Distinction
+
+**Most code lives in PRJ/A4 (Expansion: Preserving Semantics at BIGINT Scale)**  
+**Most concept lives in PRJ/A1 (Formulation: The Bijection Affair)**
+
+Do not conflate these. When you're debugging a complex encoding issue, you're in A4 (engineering for scale). When you're explaining what SSK *is*, you're in A1 (the bijection concept).
 
 ---
 
 ## Source Code Mapping
 
-| Directory | Concern Layer | IDEF0 Reference | Purpose |
-|-----------|---------------|-----------------|---------|
-| `src/udt/` | Integration | IMP/A0:The SSK Extension | PostgreSQL type system integration |
-| `src/agg/` | Integration | IMP/A21:SSK/AGG Function Exec | Aggregate functions |
-| `src/codec/` | Persistence | IMP/A1:Value Decoder, IMP/A3:Value Encoder | Encoding/decoding |
-| `src/keystore/` | Caching | Support | AbV transaction cache |
-| (missing) | Function Processing | IMP/A2:Function Processor | Set operations (currently distributed) |
+### Implementation Concerns → Code
+
+| IDEF0 Activity | Directory | Purpose | Key Files |
+|----------------|-----------|---------|-----------|
+| **IMP/A0** | `src/udt/` | PostgreSQL integration | Type definitions, I/O functions |
+| **IMP/A1** Decoder | `src/codec/` | Value decoding | `decode.c`, Format 0 parsing |
+| **IMP/A11-A14** | `src/keystore/` | AbV caching | Cache management |
+| **IMP/A2** Processor | *Distributed* | Set operations | Needs consolidation |
+| **IMP/A21** | `src/agg/` | Aggregates | Aggregate function handlers |
+| **IMP/A3** Encoder | `src/codec/` | Value encoding | `encode.c`, CDU serialization |
+| **CDU** (Mechanism) | `src/codec/`, `include/cdu.h` | Variable-length encoding | Canonical Data Unit |
+| **Format 0** (Control) | `include/ssk_format.h` | Encoding specification | Hierarchical structure |
+
+### Project Concerns → Artifacts
+
+| IDEF0 Activity | Artifact Type | Location |
+|----------------|---------------|----------|
+| **PRJ/A1** Formulation | Formal definitions | `SPECIFICATION.md`, `SSK_INTRO.md` |
+| **PRJ/A2** Exposition | Examples, tutorials | `README.md`, `examples/` |
+| **PRJ/A3** Implementation | Core extension code | Early commits, `src/udt/` |
+| **PRJ/A4** Expansion | Scale engineering | Most of `src/`, `include/` |
+| **PRJ/A5** Vitalisation | Future directions | `TODO-LIST.md`, issues |
 
 ---
 
-## Key Architectural Insights
+## Key Architectural Principles
 
-### 1. **Separation of Concerns**
-
-SSK addresses three distinct concerns:
-
-- **Representation**: The bijection between abstract bit vectors and subsets (everyone cares)
-- **Persistence**: Encoding/decoding for storage (contributors working ON persistence layer)  
-- **Operations**: Set algebra on in-memory representation (contributors working ON function implementation)
-
-### 2. **Bijection is Everything**
+### 1. Bijection is Everything
 
 SSK is NOT compression, NOT hashing. It's a bijection:
+
 - Same subset → identical bytes (always)
 - Different subsets → different bytes (no collisions)
 - Perfectly reversible (contains all subset information)
 
-### 3. **Format Immutability**
+**Governed by**: PRJ/A1 (Formulation), enforced by IMP/A3 (Encoder canonical form)
 
-Format 0 parameters are immutable after production. Changes require Format 1+.
+### 2. Separation of Representation and Persistence
 
-### 4. **Scale Strategy**
+- **AbV** (Abstract bit Vector) — in-memory representation, optimized for operations
+- **Format 0** — persistent byte encoding, optimized for storage
+- **IMP/A1** (Decoder) and **IMP/A3** (Encoder) manage the boundary
+- **IMP/A2** (Processor) never sees bytes, only AbV
 
-Handles 2^64 ID space through:
-- Hierarchical partitioning (Partitions → Segments → Chunks → Tokens)
-- Sparsity exploitation (empty regions never stored)
-- Domain-specific compaction (structure + combinadics + raw bits)
+**Benefit**: Can evolve Format 1+ without changing operation semantics
+
+### 3. Hierarchical Partitioning for Scale
+
+Handles 2^64 domain through hierarchy:
+
+```
+Partition (top level)
+  └─ Segment
+      └─ Chunk
+          └─ Token (combinadic-compressed)
+```
+
+**Governed by**: Format 0 specification (control to IMP/A1/A3)  
+**Implemented by**: PRJ/A4 (Expansion engineering)
+
+### 4. Canonical Encoding
+
+Every value has exactly ONE byte representation:
+
+- Enforces bijection (same AbV → same bytes)
+- Enables equality testing via byte comparison
+- Requires normalization after operations
+
+**Governed by**: Format 0 + CDU specifications  
+**Implemented by**: IMP/A25 (Normalise), IMP/A31 (Encode AbV)
 
 ---
 
-## Using This Architecture
+## Contributor Guidelines
 
-### For Contributors
+### Before Modifying Code
 
-1. **Know your concern**: Identify which IDEF0 activity you're modifying
-2. **Respect boundaries**: Don't mix persistence with PostgreSQL integration  
-3. **Consult inputs/outputs**: Understand what your concern receives/produces
-4. **Test in isolation**: Each concern should be testable independently
+1. **Identify your concern**:
+   - Am I working on concept/semantics? → PRJ/A1 (rare, requires deep review)
+   - Am I adding an example? → PRJ/A2 (documentation)
+   - Am I fixing a bug? → PRJ/A4 or IMP/A1-A3 (identify which activity)
+   - Am I optimizing performance? → PRJ/A4 and IMP/A1-A3 (identify impact)
 
-### For Architects
+2. **Understand the activity**:
+   - Read the [relevant model document](IMPLEMENTATION_CONCERNS.md)
+   - Identify inputs, outputs, controls, mechanisms
+   - Check if changes cross activity boundaries
 
-- Use IDEF0 references in design documents (e.g., "This change affects IMP/A2:Function Processor")
-- Changes within a concern are safe; changes crossing concerns need review
-- Future enhancements (GIN indexing, additional formats) map to specific concerns
+3. **Assess impact**:
+   - Does this affect the bijection? (requires formal review)
+   - Does this change the encoding? (breaks backward compatibility)
+   - Does this change the API? (impacts users)
 
-### For Users
+### Testing by Activity
 
-- You interact with the representation layer through SQL
-- Persistence and operations concerns are invisible to you
-- The architecture enables guarantees about performance and correctness
+| Activity | Test Strategy |
+|----------|---------------|
+| **IMP/A1** Decoder | Round-trip tests (encode → decode → verify), known-value tests |
+| **IMP/A2** Processor | Operation semantics (union, intersection, etc.), idempotency, commutativity |
+| **IMP/A3** Encoder | Canonical form tests (same AbV → same bytes), bijection tests |
+
+### Code Review Checklist
+
+- [ ] Changes properly scoped to identified activity
+- [ ] Bijection property preserved (if applicable)
+- [ ] Backward compatibility maintained (or version bump justified)
+- [ ] Tests cover changed activity
+- [ ] Documentation updated (if externally visible)
+- [ ] IDEF0 reference in commit message (e.g., "Optimize IMP/A31 encoding")
 
 ---
 
-This architecture serves as the authoritative framework for all SSK development decisions. When in doubt, trace your question back to the concern model.
+## Common Patterns
+
+### Adding a New Set Operation
+
+**Affects**: IMP/A2 (Function Processor)  
+**Steps**:
+1. Define operation semantics (what it computes)
+2. Implement in Function Processor (operates on AbV only)
+3. Add to IMP/A21 (SSK/AGG Function Exec) routing
+4. Test with various input sizes and fragmentation states
+5. Ensure normalization (IMP/A25) is applied
+
+**Does NOT affect**: IMP/A1 (Decoder) or IMP/A3 (Encoder)
+
+### Optimizing Encoding Performance
+
+**Affects**: IMP/A3 (Value Encoder)  
+**Constraints**:
+- MUST preserve canonical form (bijection requirement)
+- MUST maintain Format 0 compliance
+- Cannot break backward compatibility
+
+**Steps**:
+1. Profile to identify bottleneck
+2. Optimize while maintaining CDU specification
+3. Test round-trip (decode optimized → encode → verify identical bytes)
+4. Benchmark against existing values
+
+### Adding Format 1
+
+**Affects**: IMP/A1 (Decoder) AND IMP/A3 (Encoder)  
+**Complexity**: HIGH (crosses activity boundary, backward compatibility critical)
+
+**Steps**:
+1. Define Format 1 specification (new control)
+2. Add version detection to IMP/A1
+3. Implement Format 1 encoder in IMP/A3
+4. Ensure both formats coexist
+5. Provide migration path
+6. Document compatibility matrix
+
+---
+
+## Debugging Guide
+
+### Symptom: Wrong results from operations
+
+**Likely Activity**: IMP/A2 (Function Processor)  
+**Check**:
+- Is normalization working? (IMP/A25)
+- Are fragments being processed correctly? (IMP/A24)
+- Is operation logic correct? (IMP/A21-A22)
+
+### Symptom: Encoding/decoding errors
+
+**Likely Activity**: IMP/A1 (Decoder) or IMP/A3 (Encoder)  
+**Check**:
+- Format 0 compliance (control specification)
+- CDU type usage (variable-length encoding)
+- Round-trip test (encode → decode → verify)
+
+### Symptom: Performance degradation
+
+**Likely Activity**: Could be any; profile first  
+**Common Causes**:
+- Cache misses (IMP/A14/A33)
+- Excessive fragmentation (IMP/A23-A25)
+- Inefficient encoding (IMP/A31-A32)
+
+---
+
+## Architecture Evolution
+
+### Stable (Do Not Change)
+
+- **PRJ/A1**: SSK semantics and bijection definition
+- **Format 0**: Encoding specification for backward compatibility
+- **IMP/A0**: PostgreSQL integration interface (ABI stability)
+
+### Can Evolve
+
+- **IMP/A2**: Operation implementations (as long as semantics unchanged)
+- **IMP/A1/A3**: Optimizations (as long as Format 0 compliance maintained)
+- **PRJ/A2**: Examples and documentation (always improvable)
+
+### Future Additions
+
+- **Format 1+**: New encoding formats (IMP/A1/A3 must support both)
+- **New Operations**: Additional set operations (IMP/A2 expansion)
+- **GIN Indexing**: From PRJ/A5 → PRJ/A4 (new mechanism for IMP/A0)
+
+---
+
+## Interaction Patterns
+
+### How Activities Interact
+
+```
+User Query (SQL)
+    ↓
+IMP/A0 (PostgreSQL Integration)
+    ↓
+IMP/A1 (Decoder): bytes → AbV
+    ↓
+IMP/A2 (Processor): AbV → AbV (operation)
+    ↓
+IMP/A3 (Encoder): AbV → bytes
+    ↓
+Result (returned to user)
+```
+
+### Control Flow
+
+- **Formal SSK Type Definition** (PRJ/A1 output) → governs IMP/A2 semantics
+- **Encoding Specification** (PRJ/A4 output) → governs IMP/A1 + IMP/A3
+- **PostgreSQL Server** (mechanism) → enables IMP/A0
+
+### Data Flow
+
+- **Given Value** (input) → IMP/A1 → **Given as AbV** (internal) → IMP/A2
+- **Canonical Result AbV** (internal) → IMP/A3 → **Resulting Value** (output)
+
+---
+
+## For Architects
+
+### Design Questions
+
+When evaluating a proposed change:
+
+1. **Which activity does it affect?**
+2. **What are the inputs, outputs, controls, and mechanisms?**
+3. **Does it cross activity boundaries?** (requires extra care)
+4. **Does it preserve bijection?** (non-negotiable)
+5. **What's the test strategy?** (must cover affected activities)
+
+### Refactoring Opportunities
+
+Based on IDEF0 analysis:
+
+- **IMP/A2 (Function Processor) is scattered** → should consolidate into dedicated module
+- **Cache management (IMP/A14/A33)** → could be unified mechanism
+- **Fragmentation logic** → appears in multiple places, should be centralized
+
+### Future Enhancements
+
+Trace from PRJ/A5 (Vitalisation) through models:
+
+- **GIN Indexing**: New mechanism for IMP/A0, requires IMP/A1 cooperation
+- **Format 1**: Evolution of control for IMP/A1/A3
+- **Multi-DB Support**: New platforms for PRJ/A3/A4
+
+---
+
+## Related Resources
+
+### IDEF0 Understanding
+
+- **Ai0Win Convention**: A0 (not A-0), activities operate in parallel/reactive mode
+- Diagrams use ICOM notation: Inputs (left), Controls (top), Outputs (right), Mechanisms (bottom)
+
+### SSK Documentation
+
+- **[Project Concerns Model](PROJECT_CONCERNS.md)** — Strategic decomposition
+- **[Implementation Concerns Model](IMPLEMENTATION_CONCERNS.md)** — Technical decomposition
+- **[Specification](SPECIFICATION.md)** — Formal semantics (PRJ/A1 output)
+- **[Introduction](SSK_INTRO.md)** — Conceptual overview (PRJ/A1/A2 output)
+
+---
+
+*This architecture guide serves as the bridge between the formal IDEF0 models and day-to-day development work. When in doubt, trace your question back to the concern models.*

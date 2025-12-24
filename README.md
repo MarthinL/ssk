@@ -57,7 +57,21 @@ This opens new possibilities for dynamic querying, complex analytics, and evolvi
 
 ## Conceptual Architecture
 
-SSK is organized as a hierarchy of concerns, each with clear responsibilities:
+SSK is formally organized using **IDEF0 concern models**—a rigorous decomposition methodology that separates strategic governance concerns from technical implementation concerns.
+
+**📚 Full Documentation:**
+
+- **[Project Concerns Model](PROJECT_CONCERNS.md)** — Strategic scope and governance (PRJ/A0-A5)
+  - *What* SSK must achieve and *why*
+  - Formulation → Exposition → Implementation → Expansion → Vitalisation
+  
+- **[Implementation Concerns Model](IMPLEMENTATION_CONCERNS.md)** — Technical decomposition (IMP/A0-A3)
+  - *How* SSK is implemented and *how* concerns interact
+  - Value Decoder → Function Processor → Value Encoder
+  
+- **[Architecture Guide](ARCHITECTURE.md)** — Integration guide for contributors
+  - Source code mapping to IDEF0 activities
+  - Contributor guidelines and design patterns
 
 ### Concern Hierarchy
 
@@ -99,9 +113,9 @@ SSK is organized as a hierarchy of concerns, each with clear responsibilities:
 
 ### What This Means for Different Roles
 
-- **Users**: Interact with the representation layer through SQL. The encoding is invisible.
-- **Contributors**: Work ON specific concerns while treating others as black boxes. The concern hierarchy guides focus.
-- **Architects**: The separation enables future enhancements (GIN indexing, additional formats) without disrupting existing semantics.
+- **Users**: Interact with the representation layer through SQL. The encoding is invisible. See [Project Concerns](PROJECT_CONCERNS.md) for strategic context.
+- **Contributors**: Work ON specific concerns while treating others as black boxes. See [Implementation Concerns](IMPLEMENTATION_CONCERNS.md) for technical decomposition and [Architecture Guide](ARCHITECTURE.md) for contribution patterns.
+- **Architects**: The separation enables future enhancements (GIN indexing, additional formats) without disrupting existing semantics. See both concern models for the complete picture.
 
 ## For Different Audiences
 
@@ -131,16 +145,19 @@ SSK provides a PostgreSQL User-Defined Type with:
 
 ### For Database Architects and Contributors
 
-SSK addresses a fundamental limitation in relational databases: representing M:N relationships as stable, manipulable scalars. The implementation separates:
-- **Representation concern**: The bijection between abstract bit vectors and subsets of IDs
-- **Persistence concern**: Canonical encoding for storage (Format 0, CDU)
-- **Query concern**: Efficient operations on the sparse in-memory representation
-- **Integration concern**: PostgreSQL UDT semantics and aggregates
+SSK addresses a fundamental limitation in relational databases: representing M:N relationships as stable, manipulable scalars. The implementation is formally decomposed using IDEF0 into distinct concerns:
+- **Representation concern**: The bijection between abstract bit vectors and subsets of IDs (PRJ/A1 Formulation)
+- **Persistence concern**: Canonical encoding for storage via Format 0 and CDU (IMP/A1 Decoder, IMP/A3 Encoder)
+- **Operations concern**: Efficient set operations on the sparse in-memory representation (IMP/A2 Function Processor)
+- **Integration concern**: PostgreSQL UDT semantics and aggregates (IMP/A0)
 
-To contribute effectively:
+**To contribute effectively:**
 1. Understand which concern you're working ON
 2. Treat other concerns as black boxes (work WITH them)
-3. Consult the formal IDEF0 concern models for interaction patterns (see ARCHITECTURE.md)
+3. Consult the formal IDEF0 concern models:
+   - **[Implementation Concerns](IMPLEMENTATION_CONCERNS.md)** for technical decomposition
+   - **[Project Concerns](PROJECT_CONCERNS.md)** for strategic context
+   - **[Architecture Guide](ARCHITECTURE.md)** for integration patterns and source code mapping
 
 ## Under the Hood: Encoding Scheme
 
