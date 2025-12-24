@@ -63,18 +63,12 @@ def fix_svg(content, filename):
     
     content = '\n'.join(fixed_lines)
     
-    # 4. Remove or fix broken xlink:href references
-    # In SVGs, xlink:href on <a> tags is not valid - remove the attributes
-    # Keep the <a> structure but remove xlink:href
+    # 4. Convert xlink:href to href - for HTML/SVG compatibility and navigation
+    # xlink:href on <a> tags is not valid per SVG spec; use standard href instead
+    # This preserves the navigation links while maintaining XML/SVG validity
     content = re.sub(
-        r'<a\s+xlink:href="[^"]*"([^>]*)>',
-        r'<a\1>',
-        content
-    )
-    # Also remove any remaining <a> tags that don't have anything else
-    content = re.sub(
-        r'<a\s*></a>',
-        '',
+        r'<a\s+xlink:href="([^"]*)"([^>]*)>',
+        r'<a href="\1"\2>',
         content
     )
     
