@@ -2,6 +2,18 @@
 
 This document presents the formal concern models that govern SSK's architecture. All SSK documentation, source organization, and design decisions trace back to these models.
 
+## Interactive Diagrams
+
+All diagrams below are clickable and show the detailed decomposition of each concern. The diagrams use IDEF0 visual notation with:
+
+- **Click on activities** (the boxes labeled A1, A2, A3, etc.) to navigate to detailed activity decompositions
+- **Input flows** (left arrows) show what each activity receives
+- **Control flows** (top arrows) show governing rules and constraints
+- **Output flows** (right arrows) show what each activity produces
+- **Mechanism flows** (bottom arrows) show supporting infrastructure
+
+The diagrams are fully interactive and work on GitHub, allowing you to explore the architecture from the top level (A0) down through detailed decompositions (A1-A5).
+
 ## Understanding Concern Models
 
 SSK is organized using **IDEF0 notation**—a formal language for describing how complex systems separate concerns. Each concern has clear inputs, outputs, controls, and mechanisms.
@@ -17,6 +29,8 @@ SSK is organized using **IDEF0 notation**—a formal language for describing how
 ### PRJ/A0: Subset Identity from Zero to Hero
 
 The overarching goal: give subsets stable, queryable identities in relational databases.
+
+**Diagram** (click activities to explore decompositions):
 
 ![Project Concerns Diagram](diagrams/Project%20Concerns.svg)
 
@@ -42,6 +56,8 @@ The overarching goal: give subsets stable, queryable identities in relational da
 
 The PostgreSQL extension implementing SSK functionality.
 
+**Diagram** (click activities to explore decompositions):
+
 ![Implementation Concerns Diagram](diagrams/Implementation%20Concerns.svg)
 
 **Decomposition**:
@@ -52,25 +68,25 @@ The PostgreSQL extension implementing SSK functionality.
 | **A2** | IMP/A2 | **Function Processor** | Apply SSK operation on AbV representation |
 | **A3** | IMP/A3 | **Value Encoder** | Encode AbV → SSK bytes for storage |
 
-**Detailed Decompositions**:
+**Individual Activity Diagrams** (click activities to explore details):
 
-- **IMP/A1:Value Decoder** →
-  - IMP/A11: Use existing AbV
-  - IMP/A12: Decode AbV  
-  - IMP/A13: Decode Token
-  - IMP/A14: Remember AbV
+1. **[IMP/A1: Value Decoder](diagrams/A1_%20Value%20Decoder.svg)** — Decode SSK bytes → Abstract bit Vector (AbV) in memory
+   - IMP/A11: Use existing AbV
+   - IMP/A12: Decode AbV  
+   - IMP/A13: Decode Token
+   - IMP/A14: Remember AbV
 
-- **IMP/A2:Function Processor** →
-  - IMP/A21: SSK/AGG Function Exec
-  - IMP/A22: Determine output by AbV
-  - IMP/A23: Fragment Input(s)
-  - IMP/A24: Determine Output per Fragment
-  - IMP/A25: Normalise (Clean & Defrag)
+2. **[IMP/A2: Function Processor](diagrams/A2_%20Function%20Processor.svg)** — Apply SSK operation on AbV representation
+   - IMP/A21: SSK/AGG Function Exec
+   - IMP/A22: Determine output by AbV
+   - IMP/A23: Fragment Input(s)
+   - IMP/A24: Determine Output per Fragment
+   - IMP/A25: Normalise (Clean & Defrag)
 
-- **IMP/A3:Value Encoder** →
-  - IMP/A31: Encode AbV
-  - IMP/A32: Encode Token
-  - IMP/A33: Conditionally Remember AbV
+3. **[IMP/A3: Value Encoder](diagrams/A3_%20Value%20Encoder.svg)** — Encode AbV → SSK bytes for storage
+   - IMP/A31: Encode AbV
+   - IMP/A32: Encode Token
+   - IMP/A33: Conditionally Remember AbV
 
 ---
 
