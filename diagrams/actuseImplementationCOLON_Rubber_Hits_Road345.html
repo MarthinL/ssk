@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+<style type="text/css">
+p{margin-top:0; margin-bottom:0;}
+</style>
+<body>
+<BOLD><h2>Activity-in-Diagram: Implementation: Rubber Hits Road</h2>
+<p class="textfield" id="creator"><B>Creator</B>Marthin Laubscher</p>
+<p class="textfield" id="description"><B>Description </B></p>Implementation is a technical problem, and any technical problem has a solution. What separates "can be solved" from "is solved" is doing the work. This is the concern where we do it.
+<br>
+<br>For its initial and reference implementation, SSK lives in PostgreSQL user space as a C language extension: a User Defined Type SSK with functions, operators, and a User Defined Aggregate SSK_AGG. Not deeply integrated into the database core, but fully functional.
+<br>
+<br>The trivial domain implementation is trivial, and that matters. Free of scale's distractions, it focuses entirely on SSK semantics�transparent and auditable. Every bit in the vector is visible. Every membership decision is clear. Every operation is verifiable with a programmer's calculator. No magic. No black boxes. No ambiguity.
+<br>
+<br>When we extend to the inevitable non-trivial domain, the trivial implementation stands as a code-level reference. It defines what each function must achieve as it works with the vast abstract bit vector. The semantics remain fixed, solid, regardless of scale.
+<br><br>
+<p id="owner"><B>Owning Diagram </B><a class="diagram" href="dgmDecomposition_of_SSK_Concerns333.html">Decomposition of SSK Concerns</a></p>
+<h2>Input</h2>
+<p class="poolitem"><a href="concuseAudited_Expected_Test_Results519.html">Audited Expected Test Results</a></p>
+<h2>Output</h2>
+<p class="poolitem"><a href="concuseProven_Correctness444.html">Proven Correctness</a></p>
+<p class="poolitem"><a href="concuseOpportunities503.html">Opportunities</a></p>
+<p class="poolitem"><a href="concuseSSK_for_Trivial_Domain510.html">SSK for Trivial Domain</a></p>
+<p class="poolitem"><a href="concuseCalculated_Results521.html">Calculated Results</a></p>
+<h2>Control</h2>
+<p class="poolitem"><a href="concuseFormal_SSK_Type_Definition493.html">Formal SSK Type Definition</a></p>
+<p class="poolitem"><a href="concuseScalar_Requirement487.html">Scalar Requirement</a></p>
+<h2>Mechanism</h2>
+<p class="poolitem"><a href="concusePostgreSQL_Server527.html">PostgreSQL Server</a></p>
+</body>
+</html>

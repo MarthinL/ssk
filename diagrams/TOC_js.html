@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+   <head>
+      <style>
+         SPAN {cursor: hand ; font-size: 8pt; font-family:Verdana,Arial,Helvetica;}
+         .bright {color: red ; font-size: 8pt; font-family:Verdana,Arial,Helvetica;}
+         .dark {color: black ; font-size: 8pt; font-family:Verdana,Arial,Helvetica;}
+      </style>
+ <script>
+    var curLevel = 0;
+    var prevElement = null;
+    var prevLevel;
+    var prevID;
+    var builtHTML = "";
+ function MakeTree() {
+    var coll = document.all;
+    var level;
+    var id;
+    var tagBegin;
+    for (i=document.body.sourceIndex+1; i<coll.length; i++) {
+       switch (coll[i].tagName.substring(0,3)) {
+          case "LVL":        
+             level = parseInt( coll[i].tagName.charAt(3) + coll[i].tagName.charAt(4) );
+             break;
+          default:
+             level = -1;
+       }
+       if (level!=-1) {
+          id = i;
+          addElem(coll[i], level, id);
+       }
+    }
+    addElem(prevElement,0, prevID);
+    divWrap();
+    //   document.all.Debug.outerText = MyTree.innerHTML;
+ }
+ function addElem(el, level, id) {
+    if (prevElement == null)
+    {
+       prevElement = el;
+       prevLevel = level;
+       prevID = id;
+       return;
+    }
+    var s = "&nbsp;";
+    var s1 = "&nbsp;&nbsp;";
+    for (var j=0; j<prevLevel; j++)
+       s = s + s1;
+    
+    if (level > curLevel)
+    {
+       //alert(prevElement.outerHTML);
+       builtHTML += "<SPAN STYLE='cursor:hand' class='dark'  IURL='" 
+                 + prevElement.getAttribute('IURL') 
+                 + "' ";
+
+       if (prevElement.getAttribute('IURL') != "")
+         builtHTML += "FLASHER"; 
+
+       builtHTML += " LEVEL='" 
+                 + curLevel
+                 + "' IS_POOL='"
+                 + prevElement.getAttribute('IS_POOL')
+                 + "' >"
+                 + s; 
+
+       
+       if( (curLevel == 0) || (prevElement.getAttribute('IS_POOL')=="1") )
+       {
+         builtHTML += "<IMG src='expand.gif' id='OUT"; 
+       }
+       else if( curLevel == 1 )
+       {
+         builtHTML += "<IMG src='diagram+.gif' id='OUT";
+       }
+       else
+       {
+         builtHTML += "<IMG src='activity+.gif' id='OUT";
+       }
+       builtHTML += prevID.toString() 
+                 + "' class='collapsible' "
+                 + " LEVEL='"
+                 + curLevel
+                 + "' IS_POOL='"
+                 + prevElement.getAttribute('IS_POOL')  
+                 + "'> &nbsp;&nbsp;" 
+                 + prevElement.getAttribute('ITEXT') 
+                 + "<br></SPAN>" 
+                 + "<DIV id='OUT" 
+                 + prevID.toString() 
+                 + "D' STYLE='display:none'  >"; 
+       curLevel = level;
+    }
+    else
+    {
+       builtHTML += "<SPAN STYLE='cursor:hand'  class='dark' IURL='" 
+                 + prevElement.getAttribute('IURL'); 
+
+       if ( prevElement.getAttribute('IURL') != "" )
+         builtHTML += "' FLASHER"; 
+  
+       builtHTML += " LEVEL='" 
+                 + curLevel
+                 + "' >"
+                 + s; 
+       if( (curLevel == 0) || (prevElement.getAttribute('IS_POOL')=="1") )
+       {
+         builtHTML += "<IMG src='leaf.gif' "; 
+       }
+       else if( curLevel == 1 )
+       {
+         builtHTML += "<IMG src='diagram.gif' ";
+       }
+       else
+       {
+         builtHTML += "<IMG src='activity.gif' ";
+       }
+       builtHTML += " LEVEL='"
+                 + curLevel
+                 + "'>&nbsp;" 
+                 + prevElement.getAttribute('ITEXT') 
+                 + "<br></SPAN>";
+       if (level < curLevel)
+       {
+          for (var tplev = level; tplev < curLevel; tplev++)
+             builtHTML += "</DIV>";
+          curLevel = level;
+       }
+    }   
+  
+    prevElement = el;
+    prevLevel = level;
+    prevID = id;
+ }
+
+ function divWrap() {
+    while (curLevel > 0)
+    {
+       builtHTML +=      "</DIV>";
+       curLevel--;
+    }
+    document.all.MyTree.innerHTML=builtHTML;
+ }
+
+ function clickHandler(frametype) {
+    var colId, colElem ;
+    var tpURL;
+    gifElem = window.event.srcElement;
+    if (gifElem.className == "collapsible") {
+ 
+       colId = gifElem.id + "D";
+       colElem = document.all(colId);
+       if (colElem.style.display == "none") {
+          colElem.style.display = "" ;
+          if( (gifElem.getAttribute("LEVEL") == "0") || (gifElem.getAttribute('IS_POOL')=="1") )
+          {
+            gifElem.src = "fixed.gif" ;
+            
+          }
+          else if( gifElem.getAttribute("LEVEL") == "1" )
+          {
+            gifElem.src = "diagram.gif" ;
+          }
+          else
+          {
+            gifElem.src = "activity.gif" ;
+          }
+       } else {
+          colElem.style.display = "none" ;
+          if( (gifElem.getAttribute("LEVEL") == "0") || (gifElem.getAttribute('IS_POOL')=="1") )
+          {
+            gifElem.src = "expand.gif" ;
+          }
+          else if( gifElem.getAttribute("LEVEL") == "1" )
+          {
+            gifElem.src = "diagram+.gif" ;
+          }
+          else
+          {
+            gifElem.src = "activity+.gif" ;
+          }
+       }
+    }
+    if (gifElem.className == "bright")
+    {
+       if(frametype == 3)
+       {  
+         with (parent.top.document.all)
+         {
+          if(gifElem.getAttribute("IURL") != "")
+            top.location=gifElem.getAttribute("IURL");
+         }
+       }
+       else
+       {
+         with (parent.frames[1].document.all)
+         {
+          if(gifElem.getAttribute("IURL") != "")
+            top.Right.location=gifElem.getAttribute("IURL");
+	    top.Down.location = "Blank.html";		//load blank in lower frame, Kanika 02/07/05
+         }
+       }
+    }
+ }
+ function MakeBright() {
+    el = event.srcElement ;
+    if (el.getAttribute("FLASHER") != null) {
+       el.className = "bright" ;
+    }
+ }
+ 
+ function MakeDark() {
+    el = event.srcElement ;
+    if (el.getAttribute("FLASHER") != null) {
+       el.className = "dark";
+    }
+ }
+</script></head>
+
+<body  ONLOAD="MakeTree()">
+<a href="summary.html" TARGET=Right>Repository Summary</a><br><br>
+<NOBR><a href="TOC_Hier.html">Expanded Tree</a></NOBR><br>
+<NOBR><a href="TOC.html">Collapsed Tree</a></NOBR><br>
+<LVL0  ITEXT="Diagrams" IURL="" ITARGET=></LVL0>
+<LVL1  ITEXT="Project Concerns" IURL="dgmProject%5FConcerns24.html" ITARGET=Right></LVL1>
+<LVL2  ITEXT="Subset Identity from Zero to Hero" IURL="actuseSubset%5FIdentity%5Ffrom%5FZero%5Fto%5FHero328.html" ITARGET=Right></LVL2>
+<LVL3  ITEXT="Decomposition of SSK Concerns" IURL="dgmDecomposition%5Fof%5FSSK%5FConcerns333.html" ITARGET=Right></LVL3>
+<LVL4  ITEXT="Formulation: The Bijection Affair" IURL="actuseFormulationCOLON%5FThe%5FBijection%5FAffair338.html" ITARGET=Right></LVL4>
+<LVL4  ITEXT="Exposition: Nothing without Value" IURL="actuseExpositionCOLON%5FNothing%5Fwithout%5FValue343.html" ITARGET=Right></LVL4>
+<LVL4  ITEXT="Implementation: Rubber Hits Road" IURL="actuseImplementationCOLON%5FRubber%5FHits%5FRoad345.html" ITARGET=Right></LVL4>
+<LVL4  ITEXT="Expansion: Preserving Semantics at BIGINT Scale" IURL="actuseExpansionCOLON%5FPreserving%5FSemantics%5Fat%5FBIGINT%5FScale347.html" ITARGET=Right></LVL4>
+<LVL4  ITEXT="Vitalisation: Expanding Horizons" IURL="actuseVitalisationCOLON%5FExpanding%5FHorizons349.html" ITARGET=Right></LVL4>
+<LVL1  ITEXT="Implementation Concerns" IURL="dgmImplementation%5FConcerns824.html" ITARGET=Right></LVL1>
+<LVL2  ITEXT="The SSK Extension" IURL="actuseThe%5FSSK%5FExtension1302.html" ITARGET=Right></LVL2>
+<LVL3  ITEXT="A0: The SSK Extension" IURL="dgmA0COLON%5FThe%5FSSK%5FExtension1305.html" ITARGET=Right></LVL3>
+<LVL4  ITEXT="Value Decoder" IURL="actuseValue%5FDecoder1308.html" ITARGET=Right></LVL4>
+<LVL5  ITEXT="A1: Value Decoder" IURL="dgmA1COLON%5FValue%5FDecoder1320.html" ITARGET=Right></LVL5>
+<LVL6  ITEXT="Use existing AbV" IURL="actuseUse%5Fexisting%5FAbV1331.html" ITARGET=Right></LVL6>
+<LVL6  ITEXT="Decode AbV" IURL="actuseDecode%5FAbV1338.html" ITARGET=Right></LVL6>
+<LVL6  ITEXT="Decode Token" IURL="actuseDecode%5FToken1348.html" ITARGET=Right></LVL6>
+<LVL6  ITEXT="Remember AbV" IURL="actuseRemember%5FAbV1355.html" ITARGET=Right></LVL6>
+<LVL4  ITEXT="Function Processor" IURL="actuseFunction%5FProcessor1366.html" ITARGET=Right></LVL4>
+<LVL5  ITEXT="A2: Function Processor" IURL="dgmA2COLON%5FFunction%5FProcessor1382.html" ITARGET=Right></LVL5>
+<LVL6  ITEXT="SSK/AGG Function Exec" IURL="actuseSSKSLASHAGG%5FFunction%5FExec1403.html" ITARGET=Right></LVL6>
+<LVL6  ITEXT="Determine output by AvB" IURL="actuseDetermine%5Foutput%5Fby%5FAvB1414.html" ITARGET=Right></LVL6>
+<LVL6  ITEXT="Fragment Input(s)" IURL="actuseFragment%5FInput%28s%291421.html" ITARGET=Right></LVL6>
+<LVL6  ITEXT="Determine Output per Fragment" IURL="actuseDetermine%5FOutput%5Fper%5FFragment1428.html" ITARGET=Right></LVL6>
+<LVL6  ITEXT="Normalise (Clean & Defrag)" IURL="actuseNormalise%5F%28Clean%5F%26%5FDefrag%291435.html" ITARGET=Right></LVL6>
+<LVL4  ITEXT="Value Encoder" IURL="actuseValue%5FEncoder1445.html" ITARGET=Right></LVL4>
+<LVL5  ITEXT="A3: Value Encoder" IURL="dgmA3COLON%5FValue%5FEncoder1450.html" ITARGET=Right></LVL5>
+<LVL6  ITEXT="Encode AbV" IURL="actuseEncode%5FAbV1461.html" ITARGET=Right></LVL6>
+<LVL6  ITEXT="Encode Token" IURL="actuseEncode%5FToken1470.html" ITARGET=Right></LVL6>
+<LVL6  ITEXT="Conditionally Remember AbV" IURL="actuseConditionally%5FRemember%5FAbV1477.html" ITARGET=Right></LVL6>
+<LVL0  ITEXT=Pool ItemsIURL="" ITARGET=></LVL0>
+<LVL1  ITEXT="Activity Pool" IS_POOL="1" IURL=""></LVL1>
+<LVL2 ITEXT="Conditionally Remember AbV" IURL="actConditionally%5FRemember%5FAbV968.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Decode AbV" IURL="actDecode%5FAbV955.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Decode Token" IURL="actDecode%5FToken951.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Determine output by AvB" IURL="actDetermine%5Foutput%5Fby%5FAvB1025.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Determine Output per Fragment" IURL="actDetermine%5FOutput%5Fper%5FFragment978.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Encode AbV" IURL="actEncode%5FAbV960.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Encode Token" IURL="actEncode%5FToken964.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Expansion: Preserving Semantics at BIGINT Scale" IURL="actExpansionCOLON%5FPreserving%5FSemantics%5Fat%5FBIGINT%5FScale346.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Exposition: Nothing without Value" IURL="actExpositionCOLON%5FNothing%5Fwithout%5FValue342.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Formulation: The Bijection Affair" IURL="actFormulationCOLON%5FThe%5FBijection%5FAffair331.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Fragment Input(s)" IURL="actFragment%5FInput%28s%29974.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Function Processor" IURL="actFunction%5FProcessor941.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Implementation: Rubber Hits Road" IURL="actImplementationCOLON%5FRubber%5FHits%5FRoad344.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Normalise (Clean & Defrag)" IURL="actNormalise%5F%28Clean%5F%26%5FDefrag%29982.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Remember AbV" IURL="actRemember%5FAbV1167.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="SSK Implementation" IURL="actSSK%5FImplementation819.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="SSK/AGG Function Exec" IURL="actSSKSLASHAGG%5FFunction%5FExec1015.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Subset Identity from Zero to Hero" IURL="actSubset%5FIdentity%5Ffrom%5FZero%5Fto%5FHero327.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="The SSK Extension" IURL="actThe%5FSSK%5FExtension1301.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Use existing AbV" IURL="actUse%5Fexisting%5FAbV947.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Value Decoder" IURL="actValue%5FDecoder933.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Value Encoder" IURL="actValue%5FEncoder937.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Vitalisation: Expanding Horizons" IURL="actVitalisationCOLON%5FExpanding%5FHorizons348.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL1  ITEXT="Concept Pool" IS_POOL="1" IURL=""></LVL1>
+<LVL2 ITEXT="64-bit Processor Architecture" IURL="conc64%2Dbit%5FProcessor%5FArchitecture522.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="AbV Param" IURL="concAbV%5FParam1019.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="AbV Param2" IURL="concAbV%5FParam21033.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Audited Expected Test Results" IURL="concAudited%5FExpected%5FTest%5FResults518.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="BIGINT Param" IURL="concBIGINT%5FParam1035.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="BIGINT[] Param" IURL="concBIGINT%5B%5D%5FParam1023.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Bourbaki: bijection" IURL="concBourbakiCOLON%5Fbijection532.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Calculated Results" IURL="concCalculated%5FResults520.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Call Parameter(s)" IURL="concCall%5FParameter%28s%291059.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Call Return Value" IURL="concCall%5FReturn%5FValue1056.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Canonical Result AbV" IURL="concCanonical%5FResult%5FAbV990.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="CDU Types" IURL="concCDU%5FTypes1186.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Changes Enabling Opportunities" IURL="concChanges%5FEnabling%5FOpportunities504.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Decoded AbV" IURL="concDecoded%5FAbV1171.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Definition Issues" IURL="concDefinition%5FIssues494.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Dirty AvB" IURL="concDirty%5FAvB1031.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Dirty FragmentSet" IURL="concDirty%5FFragmentSet988.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Encoded Token" IURL="concEncoded%5FToken1175.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Encoded Value" IURL="concEncoded%5FValue1177.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Encoding Specification (Format 0, CDU)" IURL="concEncoding%5FSpecification%5F%28Format%5F0,%5FCDU%291179.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Example Problems" IURL="concExample%5FProblems496.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Extension Function Call" IURL="concExtension%5FFunction%5FCall1053.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Formal SSK Type Definition" IURL="concFormal%5FSSK%5FType%5FDefinition492.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Format 0" IURL="concFormat%5F01184.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Fresh FragmentSet" IURL="concFresh%5FFragmentSet986.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Function Callback" IURL="concFunction%5FCallback1004.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Functional SSK Bijection" IURL="concFunctional%5FSSK%5FBijection436.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Given as AbV" IURL="concGiven%5Fas%5FAbV992.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Given BIGINT" IURL="concGiven%5FBIGINT994.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Given BIGINT[]" IURL="concGiven%5FBIGINT%5B%5D996.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Given Value" IURL="concGiven%5FValue1045.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Knuth: set + bit vector" IURL="concKnuthCOLON%5Fset%5F%5Fplus%5Fbit%5Fvector528.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Limitations of Database Technology" IURL="concLimitations%5Fof%5FDatabase%5FTechnology454.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="McCaffrey: combinadics" IURL="concMcCaffreyCOLON%5Fcombinadics530.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Modern Computing and Database Platform" IURL="concModern%5FComputing%5Fand%5FDatabase%5FPlatform451.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Opportunities" IURL="concOpportunities502.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Original M:N OLTP Requirement" IURL="concOriginal%5FMCOLONN%5FOLTP%5FRequirement445.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="PostgreSQL Server" IURL="concPostgreSQL%5FServer526.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="PostgresSQL Extensibility" IURL="concPostgresSQL%5FExtensibility524.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Prior Art in Mathematics, Scients and Technology" IURL="concPrior%5FArt%5Fin%5FMathematics,%5FScients%5Fand%5FTechnology448.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Project Ethos" IURL="concProject%5FEthos506.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Proven Correctness" IURL="concProven%5FCorrectness442.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Resulting BIGINT" IURL="concResulting%5FBIGINT998.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Resulting BIGINT[]" IURL="concResulting%5FBIGINT%5B%5D1000.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Resulting BOOLEAN" IURL="concResulting%5FBOOLEAN1002.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Resulting Value" IURL="concResulting%5FValue1050.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Scalar Requirement" IURL="concScalar%5FRequirement486.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="SQL Compatibility" IURL="concSQL%5FCompatibility439.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="SSK for Target Domain" IURL="concSSK%5Ffor%5FTarget%5FDomain511.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="SSK for Trivial Domain" IURL="concSSK%5Ffor%5FTrivial%5FDomain508.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Structure of Data Imposed by Databases" IURL="concStructure%5Fof%5FData%5FImposed%5Fby%5FDatabases457.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Target Domain: BIGINT DBID" IURL="concTarget%5FDomainCOLON%5FBIGINT%5FDBID484.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Token to Encode" IURL="concToken%5Fto%5FEncode1173.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Token Type" IURL="concToken%5FType1161.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Token Value" IURL="concToken%5FValue1163.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="User Guide" IURL="concUser%5FGuide500.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Value Buffer" IURL="concValue%5FBuffer1159.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL2 ITEXT="Value Bytes" IURL="concValue%5FBytes1165.html" ITARGET=Right IS_POOL="1"></LVL2>
+<LVL1  ITEXT="Note Pool" IS_POOL="1" IURL=""></LVL1>
+<LVL2 ITEXT="It's b for bit, B for Byte, so abstract bit value is abbreviated AbV" IURL="noteIt%27s%5Fb%5Ffor%5Fbit,%5FB%5Ffor%5FByte,%5Fso%5Fabstract%5Fbit%5Fvalue%5Fis%5Fabbreviated%5FAbV103.html" ITARGET=Right IS_POOL="1"></LVL2>
+  <TABLE width=95% BORDER=0 ALIGN=left>
+
+    <TR><TD BGCOLOR="lightyellow">&nbsp;</TD></TR>
+    <TR><TD width=350 height=340 VALIGN="top" BGCOLOR="lightyellow">
+    <DIV id=MyTree>
+    </DIV>
+    <DIV id=Debug>
+    </DIV>
+    </TD></TR>
+ </TABLE>
+<script LANUGAGE="JScript">
+   document.onclick = function(){clickHandler(4);}
+   document.onmouseover = MakeBright;
+   document.onmouseout = MakeDark;
+</script>
+<br clear=left>
+
+<center><p class="emaillink">
+<a class="emaillink" href="mailto:?subject=Re: Activity Modeling Project 'Open Source SSK'">Send Feedback</a></p></center>
+</body>
+</html>
