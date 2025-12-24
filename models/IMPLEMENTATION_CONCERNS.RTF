@@ -1,0 +1,491 @@
+{\rtf1\ansi {\fonttbl{\f0\fnil ;}}{\stylesheet{\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\sbasedon0\snext0 AI0Win Body Style;}{\s2\f0\fs20\b\ql\fi0\li0\ri0\sb0\sa0\sl0\sbasedon1\snext1 AI0Win Bold Style;}{\s3\f0\fs24\b\ql\fi0\li0\ri0\sb180\sa180\sl0\sbasedon1\snext1 AI0Win Sub-Title;}{\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0\sbasedon1\snext1 AI0Win Title;}{\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0\sbasedon1\snext1 AI0Win Section Heading;}}\deftab360{\header\pard\plain\s2\f0\fs20\b\ql\fi0\li0\ri0\sb0\sa0\sl0\qj
+Repository:  
+Open Source SSK
+;  Date:  
+12/24/2025}
+{\footer\pard\plain\s2\f0\fs20\b\ql\fi0\li0\ri0\sb0\sa0\sl0\qc
+For Official Use Only\par}
+\page
+\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\par\par\par\par\par\par\par\par\par\par\par\par\par\par\par\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+This page is left intentionally blank.\par\page
+\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\par\par\par\par\par\par\par\par\par\par\par\par\par\par\par\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Repository:  Open Source SSK\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Repository Summary\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Used At\plain\f0\fs20
+:\tab 
+LobeShare\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s3\f0\fs24\b\ql\fi0\li0\ri0\sb180\sa180\sl0\li0\fi0\ri0
+Description\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\li360\fi0\ri0
+This repository deals with the extraction of SSK as defined and used by Synoida into a separate public GitHub Repository aimed at allowing the enormous potential the SubSet Key bijection has in the wider database industry and its countless customers, end-users, their customers, and the plethora of ventures that form and service the entire value chain.\par\page
+\page
+\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\par\par\par\par\par\par\par\par\par\par\par\par\par\par\par\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Model:  Implementation Concerns\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Model Summary\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Name\plain\f0\fs20
+:\tab 
+Implementation Concerns\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s3\f0\fs24\b\ql\fi0\li0\ri0\sb180\sa180\sl0\li0\fi0\ri0
+Purpose\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\li360\fi0\ri0
+As a repository and C Language project, SSK is misleadingly lobsided. The core concept is incredibly simple once grasped, with full implementation of the trivial case probably not even worth adding a second source file. Meanwhile the code base is dominated by the complexities arising from a secondary problem - scaling that super-simple core to a the required domain.  \par
+\par
+This model seeks to create stable, useful separation of concerns to manage that complexity better by drawing clear lines with well defined interactions between them. \par
+\par
+Do not expect to see a source file per concern, that is not the way. \par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Title:Implementation Concerns\par
+{\field{\*\fldinst { INCLUDEPICTURE "images/dgm824.wmf"\\* MERGEFORMAT \\d }}{\fldrslt {\lang1024 }}}
+\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Activities in Diagram"Implementation Concerns"\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A0: The SSK Extension\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Concepts in Diagram"Implementation Concerns"\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Extension Function Call\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Call Return Value\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Call Parameter(s)\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Formal SSK Type Definition\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+PostgreSQL Server\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Encoding Specification (Format 0, CDU)\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Title:A0: The SSK Extension\par
+{\field{\*\fldinst { INCLUDEPICTURE "images/dgm1305.wmf"\\* MERGEFORMAT \\d }}{\fldrslt {\lang1024 }}}
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Diagram Summary\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Name\plain\f0\fs20
+:\tab 
+A0: The SSK Extension\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Activities in Diagram"A0: The SSK Extension"\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A1: Value Decoder\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A2: Function Processor\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A3: Value Encoder\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Concepts in Diagram"A0: The SSK Extension"\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Given Value\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Given as AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Encoding Specification (Format 0, CDU)\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+PostgreSQL Server\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Given BIGINT\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Given BIGINT[]\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Resulting BIGINT\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Resulting BOOLEAN\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Resulting BIGINT[]\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Canonical Result AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Formal SSK Type Definition\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Extension Function Call\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Resulting Value\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Call Parameter(s)\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Call Return Value\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Title:A1: Value Decoder\par
+{\field{\*\fldinst { INCLUDEPICTURE "images/dgm1320.wmf"\\* MERGEFORMAT \\d }}{\fldrslt {\lang1024 }}}
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Diagram Summary\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Name\plain\f0\fs20
+:\tab 
+A1: Value Decoder\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Activities in Diagram"A1: Value Decoder"\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A11: Use existing AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A12: Decode AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A13: Decode Token\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A14: Remember AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Concepts in Diagram"A1: Value Decoder"\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Given Value\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Encoding Specification (Format 0, CDU)\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Given as AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+PostgreSQL Server\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Value Bytes\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Token Value\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Decoded AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Token Type\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Value Buffer\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+CDU Types\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Title:A2: Function Processor\par
+{\field{\*\fldinst { INCLUDEPICTURE "images/dgm1382.wmf"\\* MERGEFORMAT \\d }}{\fldrslt {\lang1024 }}}
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Diagram Summary\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Name\plain\f0\fs20
+:\tab 
+A2: Function Processor\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Activities in Diagram"A2: Function Processor"\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A21: SSK/AGG Function Exec\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A22: Determine output by AvB\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A23: Fragment Input(s)\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A24: Determine Output per Fragment\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A25: Normalise (Clean & Defrag)\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Concepts in Diagram"A2: Function Processor"\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Given as AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Given BIGINT\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Given BIGINT[]\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Formal SSK Type Definition\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Extension Function Call\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Resulting BIGINT\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Resulting BOOLEAN\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Resulting BIGINT[]\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Canonical Result AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+PostgreSQL Server\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+AbV Param2\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+BIGINT[] Param\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Function Callback\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+BIGINT Param\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+AbV Param\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Dirty AvB\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Fresh FragmentSet\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Dirty FragmentSet\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Title:A3: Value Encoder\par
+{\field{\*\fldinst { INCLUDEPICTURE "images/dgm1450.wmf"\\* MERGEFORMAT \\d }}{\fldrslt {\lang1024 }}}
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Diagram Summary\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Name\plain\f0\fs20
+:\tab 
+A3: Value Encoder\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li0\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Activities in Diagram"A3: Value Encoder"\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A31: Encode AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A32: Encode Token\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+A33: Conditionally Remember AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Concepts in Diagram"A3: Value Encoder"\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Canonical Result AbV\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Encoding Specification (Format 0, CDU)\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Resulting Value\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+PostgreSQL Server\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Encoded Token\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Encoded Value\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+Token to Encode\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\pard\plain\s4\f0\fs28\b\ql\fi0\li0\ri0\sb288\sa180\sl0
+CDU Types\par\pard\plain\s1\f0\fs20\ql\fi0\li0\ri0\sb0\sa0\sl0\plain\f0\fs20\b\li720\fi0\ri0
+Creator\plain\f0\fs20
+:\tab 
+Marthin Laubscher\par\page
+\pard\plain\s5\f0\fs28\b\qc\fi0\li0\ri0\sb288\sa180\sl0
+Table of Contents\par\pard\plain\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {\b Repository:  Open Source SSK\tab 3
+\par \b0 }\pard\plain\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {\b Model:  Implementation Concerns\tab 6
+\par \b0 }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Model Summary"Implementation Concerns"\tab 7
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Activities in Diagram"Implementation Concerns"\tab 9
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A0: The SSK Extension\tab 9
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Concepts in Diagram"Implementation Concerns"\tab 10
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Extension Function Call\tab 10
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Call Return Value\tab 10
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Call Parameter(s)\tab 10
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Formal SSK Type Definition\tab 10
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {PostgreSQL Server\tab 10
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Encoding Specification (Format 0, CDU)\tab 10
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Diagram Summary"A0: The SSK Extension"\tab 11
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Activities in Diagram"A0: The SSK Extension"\tab 12
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A1: Value Decoder\tab 12
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A2: Function Processor\tab 12
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A3: Value Encoder\tab 12
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Concepts in Diagram"A0: The SSK Extension"\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Given Value\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Given as AbV\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Encoding Specification (Format 0, CDU)\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {PostgreSQL Server\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Given BIGINT\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Given BIGINT[]\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Resulting BIGINT\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Resulting BOOLEAN\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Resulting BIGINT[]\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Canonical Result AbV\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Formal SSK Type Definition\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Extension Function Call\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Resulting Value\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Call Parameter(s)\tab 13
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Call Return Value\tab 13
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Diagram Summary"A1: Value Decoder"\tab 14
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Activities in Diagram"A1: Value Decoder"\tab 15
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A11: Use existing AbV\tab 15
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A12: Decode AbV\tab 15
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A13: Decode Token\tab 15
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A14: Remember AbV\tab 15
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Concepts in Diagram"A1: Value Decoder"\tab 16
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Given Value\tab 16
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Encoding Specification (Format 0, CDU)\tab 16
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Given as AbV\tab 16
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {PostgreSQL Server\tab 16
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Value Bytes\tab 16
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Token Value\tab 16
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Decoded AbV\tab 16
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Token Type\tab 16
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Value Buffer\tab 16
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {CDU Types\tab 16
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Diagram Summary"A2: Function Processor"\tab 17
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Activities in Diagram"A2: Function Processor"\tab 18
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A21: SSK/AGG Function Exec\tab 18
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A22: Determine output by AvB\tab 18
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A23: Fragment Input(s)\tab 18
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A24: Determine Output per Fragment\tab 18
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A25: Normalise (Clean & Defrag)\tab 18
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Concepts in Diagram"A2: Function Processor"\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Given as AbV\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Given BIGINT\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Given BIGINT[]\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Formal SSK Type Definition\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Extension Function Call\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Resulting BIGINT\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Resulting BOOLEAN\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Resulting BIGINT[]\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Canonical Result AbV\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {PostgreSQL Server\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {AbV Param2\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {BIGINT[] Param\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Function Callback\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {BIGINT Param\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {AbV Param\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Dirty AvB\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Fresh FragmentSet\tab 19
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Dirty FragmentSet\tab 19
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Diagram Summary"A3: Value Encoder"\tab 20
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Activities in Diagram"A3: Value Encoder"\tab 21
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A31: Encode AbV\tab 21
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A32: Encode Token\tab 21
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {A33: Conditionally Remember AbV\tab 21
+\par }\pard\plain\li431\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Concepts in Diagram"A3: Value Encoder"\tab 22
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Canonical Result AbV\tab 22
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Encoding Specification (Format 0, CDU)\tab 22
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Resulting Value\tab 22
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {PostgreSQL Server\tab 22
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Encoded Token\tab 22
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Encoded Value\tab 22
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {Token to Encode\tab 22
+\par }\pard\plain\li863\widctlpar\tqr\tldot\tx7920\adjustright\fs20\cgrid {CDU Types\tab 22
+\par }}

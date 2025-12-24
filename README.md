@@ -158,6 +158,7 @@ SSK addresses a fundamental limitation in relational databases: representing M:N
    - **[Implementation Concerns](IMPLEMENTATION_CONCERNS.md)** for technical decomposition
    - **[Project Concerns](PROJECT_CONCERNS.md)** for strategic context
    - **[Architecture Guide](ARCHITECTURE.md)** for integration patterns and source code mapping
+   - **[Formal IDEF0 Models](models/)** for authoritative model exports from professional IDEF0 tools
 
 ## Under the Hood: Encoding Scheme
 
