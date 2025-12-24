@@ -63,16 +63,20 @@ def fix_svg(content, filename):
     
     content = '\n'.join(fixed_lines)
     
-    # 4. Remove or fix broken xlink:href references to non-existent files
-    # Keep href attributes that reference actual .svg files in diagrams/, remove others
+    # 4. Remove or fix broken xlink:href references
+    # In SVGs, xlink:href on <a> tags is not valid - remove the attributes
+    # Keep the <a> structure but remove xlink:href
     content = re.sub(
-        r'<a\s+xlink:href="dgm\d+\.svg"[^>]*>',
-        '',  # Remove the tag
+        r'<a\s+xlink:href="[^"]*"([^>]*)>',
+        r'<a\1>',
         content
     )
-    content = re.sub(r'</a>\s*</a>',
-                     '</a>',  # Fix double close tags from anchor removal
-                     content)
+    # Also remove any remaining <a> tags that don't have anything else
+    content = re.sub(
+        r'<a\s*></a>',
+        '',
+        content
+    )
     
     # 5. Fix duplicate IDs - make them unique by adding a counter suffix
     id_counts = {}
