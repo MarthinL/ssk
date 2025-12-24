@@ -18,6 +18,8 @@ SSK is organized using **IDEF0 notation**—a formal language for describing how
 
 The overarching goal: give subsets stable, queryable identities in relational databases.
 
+![Project Concerns Diagram](diagrams/Project%20Concerns.svg)
+
 **Decomposition**:
 
 | Activity | Reference | Purpose | Description |
@@ -39,6 +41,8 @@ The overarching goal: give subsets stable, queryable identities in relational da
 ### IMP/A0: The SSK Extension
 
 The PostgreSQL extension implementing SSK functionality.
+
+![Implementation Concerns Diagram](diagrams/Implementation%20Concerns.svg)
 
 **Decomposition**:
 
