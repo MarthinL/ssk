@@ -26,10 +26,6 @@ SSK is governed by two complementary IDEF0 models, each addressing a different c
 **Activities**: Formulation → Exposition → Implementation → Expansion → Vitalisation  
 **Focus**: *Why* SSK exists and *what* it provides
 
-**Context Diagram**:
-
-![Project Concerns](diagrams/Project%20Concerns.svg)
-
 [→ Full Project Concerns Model](PROJECT_CONCERNS.md)
 
 ---
@@ -41,9 +37,41 @@ SSK is governed by two complementary IDEF0 models, each addressing a different c
 **Activities**: Value Decoder → Function Processor → Value Encoder  
 **Focus**: *How* SSK is implemented
 
-**Context Diagram**:
+[→ Full Implementation Concerns Model](IMPLEMENTATION_CONCERNS.md)
 
-![Implementation Concerns](diagrams/Implementation%20Concerns.svg)
+---
+
+## A0 Context Diagrams: The Models
+
+Each concern model defines its scope through an A0 (context) diagram, which then decomposes into detailed activities:
+
+### Project Concerns A0: Strategic Scope
+
+The top-level context diagram for project-level concerns:
+
+![Project Concerns](diagrams/dgm24.svg)
+
+The A0 decomposes into five strategic activities:
+- **Formulation** — Bijection concept and theory
+- **Exposition** — Communication and education
+- **Implementation** — Core realization
+- **Expansion** — Scale engineering
+- **Vitalisation** — Future growth
+
+[→ Full Project Concerns Model](PROJECT_CONCERNS.md)
+
+---
+
+### Implementation Concerns A0: Technical Scope
+
+The top-level context diagram for implementation-level concerns:
+
+![Implementation Concerns](diagrams/dgm824.svg)
+
+The A0 decomposes into three technical activities:
+- **Value Decoder** — Parsing subset data from Format 0
+- **Function Processor** — Set operations
+- **Value Encoder** — Serializing subset data to Format 0
 
 [→ Full Implementation Concerns Model](IMPLEMENTATION_CONCERNS.md)
 
