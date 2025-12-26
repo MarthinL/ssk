@@ -26,16 +26,51 @@
 #define FREE(ptr) free(ptr)
 #endif
 
+#ifdef TRIVIAL 
+
+// ============================================================================
+// TRIVIAL REFERENCE: Format 1023 (IDs 1..64)
+// ============================================================================
+
+int ssk_encode(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size, uint16_t target_format)
+{
+    // Trivial: 1 byte format + 8 bytes AbV
+    if (buffer_size < 9) return -1;
+    buffer[0] = 1023;
+    *(uint64_t *)(buffer + 1) = *ssk;  // ssk IS the AbV in trivial mode
+    return 9;
+}
+
+int ssk_decode(const uint8_t *buffer, size_t buffer_size, SSKDecoded *out)
+{
+    // Trivial: read 1 byte format + 8 bytes AbV
+    if (buffer_size < 9) return -1;
+    if (buffer[0] != 1023) return -1;
+    *out = *(uint64_t *)(buffer + 1);
+    return 9;
+}
+
+#else // NON TRIVIAL
+
+// ============================================================================
+// SCALE IMPLEMENTATION: Format 0 (IDs 1..2^64)
+// ============================================================================
+
 /* Forward declarations */
 int ssk_encode_impl(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size, 
                    uint16_t target_format, FILE *debug_log, char *mock_output, 
                    size_t mock_output_size, size_t *mock_output_used);
 
-/* Encode SSK to binary Format 0 (minimal) */
-int
-ssk_encode(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size, uint16_t target_format)
+int ssk_encode(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size, uint16_t target_format)
 {
+    // Current implementation (hierarchical, CDU, etc.)
     return ssk_encode_impl(ssk, buffer, buffer_size, target_format, NULL, NULL, 0, NULL);
+}
+
+int ssk_decode(const uint8_t *buffer, size_t buffer_size, SSKDecoded **out)
+{
+    // TODO: Implement Format 0 decoding (blocked on partition strategy)
+    return -1;
 }
 
 /* Internal implementation with debug/audit support */
@@ -309,26 +344,6 @@ ssk_encode_impl(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size,
     return bytes_used;
 }
 
-/* Stub: Decode binary to SSK memory structures */
-int
-ssk_decode(const uint8_t *buffer, size_t buffer_size, SSKDecoded **ssk)
-{
-if (buffer_size < 1)
-return -1;
-
-	*ssk = (SSKDecoded *) ALLOC(sizeof(SSKDecoded));
-	if (!*ssk)
-		return -1;
-
-	(*ssk)->format_version = buffer[0] & 0x0F;
-	(*ssk)->n_partitions = 0;
-	(*ssk)->var_data_off = 0;
-	(*ssk)->var_data_used = 0;
-	(*ssk)->var_data_allocated = 0;
-	(*ssk)->cardinality = 0;
-	(*ssk)->rare_bit = 0;
-	return 1;
-}
 
 /* Stub: Free decoded SSK */
 void
@@ -351,3 +366,5 @@ ssk_cdu_is_minimal(const uint8_t *encoded_bytes, CDUtype cdu_type, uint64_t valu
     (void)value;          /* unused */
     return true;
 }
+
+#endif // (NON) TRIVIAL

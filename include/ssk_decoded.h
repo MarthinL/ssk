@@ -1,8 +1,36 @@
+#ifndef SSK_DECODED_H
+#define SSK_DECODED_H
+/*
+ * Copyright (c) 2020-2025 Marthin Laubscher
+ * All rights reserved. See LICENSE for details.
+ */
+
 /*
  * include/ssk_decoded.h
  *
  * In-memory decoded representation of SSK values.
  *
+ */
+#ifdef TRIVIAL
+
+#include <stdint.h>
+
+/*
+ * The dirty little secret of the trivial implementation is that the Abstract bit Vector that
+ * in the full implementation would be such a centre of attention, is not abstract at all,
+ * but a simple, 64 bit physical bit vector represented by a single uint64_t.
+ *
+ */
+
+typedef uint64_t SSKDecoded;
+
+#else // NON TRIVIAL
+
+#include <stdint.h>
+#include <stddef.h>
+#include <stdbool.h>
+
+/*
  * Design Principles:
  * ==================
  * 1. Single contiguous allocation - entire SSK lives in one memory block
@@ -41,14 +69,6 @@
  * - SSKSegment.blocks_off: byte offset from &data[0] to blocks array
  * - All offsets are uint32_t (4GB max per SSK, more than sufficient)
  */
-
-/*
- * Copyright (c) 2020-2025 Marthin Laubscher
- * All rights reserved. See LICENSE for details.
- */
-
-#ifndef SSK_DECODED_H
-#define SSK_DECODED_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -437,5 +457,7 @@ void ssk_finalize_segment(SSKDecoded *dec);
  * Finalize current partition.
  */
 void ssk_finalize_partition(SSKDecoded *dec);
+
+#endif // (NON) TRIVIAL
 
 #endif /* SSK_DECODED_H */

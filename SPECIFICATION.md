@@ -53,9 +53,13 @@ The encoding is controlled by the **Encoding Specification (Format 0, CDU)** con
 
 ## The Problem
 
-Representing a subset of 64-bit integer IDs requires an **abstract bit vector** (abvector)—conceptually, one bit per possible ID (0 to 2^64-1 ≈ 18.4 exabits). Each bit indicates presence (1) or absence (0) in the subset.
+Representing a subset of 64-bit integer IDs requires an **abstract bit vector (AbV)**—a logical construct: one bit per possible ID (0 to 2^64-1 ≈ 18.4 exabits), where each bit indicates presence (1) or absence (0) in the subset. The AbV is independent of implementation; `SSKDecoded` is its concrete C representation.
 
-Storing this literally requires **2,048 petabytes** per SSK. Impossible.
+**In code:** Variable and parameter names use `abv` to denote actual AbV values. The type is always `SSKDecoded`, whose meaning depends on context:
+- **Trivial domain (IDs 1..64):** `SSKDecoded` = `uint64_t` — single 64-bit AbV
+- **Scale domain (IDs 1..2^64):** `SSKDecoded` = hierarchical structure (partitions → segments → chunks → tokens)
+
+Storing an AbV literally (as a single bit per ID) requires **2,048 petabytes** per SSK. Impossible.
 
 Yet real-world subsets are astronomically sparse—like matter in space. A subset of 1,000 IDs out of 2^64 has the same density ratio as a single grain of sand compared to the entire Earth.
 

@@ -127,16 +127,25 @@ SSK is NOT compression, NOT hashing. It's a bijection:
 
 ### 2. Separation of Representation and Persistence
 
-- **AbV** (Abstract bit Vector) — in-memory representation, optimized for operations
-- **Format 0** — persistent byte encoding, optimized for storage
-- **IMP/A1** (Decoder) and **IMP/A3** (Encoder) manage the boundary
-- **IMP/A2** (Processor) never sees bytes, only AbV
+### 2. Abstract Bit Vector (AbV) as Representation Layer
 
-**Benefit**: Can evolve Format 1+ without changing operation semantics
+**Definition:**
+- **AbV (Abstract Bit Vector):** Logical construct representing subset membership—one bit per ID in the domain.
+- **SSKDecoded:** Concrete C representation of the AbV. Its internal structure depends on domain and implementation:
+  - **Trivial domain (IDs 1..64):** `SSKDecoded` = `uint64_t` — single 64-bit AbV (no hierarchy, pure and simple)
+  - **Scale domain (IDs 1..2^64):** `SSKDecoded` = hierarchical struct with partitions → segments → chunks → tokens
+
+**In code:** Variables and parameters use the name `abv` to denote actual AbV values. Always of type `SSKDecoded` (or `SSKDecoded*`), but the implementation swaps via `#ifdef TRIVIAL_IMPL`.
+
+**Benefit:** 
+- IMP/A1 (Decoder) and IMP/A3 (Encoder) manage the format boundary (bytes ↔ AbV)
+- IMP/A2 (Processor) works only with AbV; never sees bytes
+- Can evolve from trivial (uint64_t) to scale (hierarchy) without changing operation semantics
+- Trivial implementation proves correctness; scale implementation proves scalability
 
 ### 3. Hierarchical Partitioning for Scale
 
-Handles 2^64 domain through hierarchy:
+Handles 2^64 domain through hierarchy (scale implementation only):
 
 ```
 Partition (top level)
@@ -150,7 +159,7 @@ Partition (top level)
 
 ### 4. Canonical Encoding
 
-Every value has exactly ONE byte representation:
+Every AbV has exactly ONE byte representation (bijection):
 
 - Enforces bijection (same AbV → same bytes)
 - Enables equality testing via byte comparison
