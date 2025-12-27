@@ -10,8 +10,6 @@
 #include "ssk.h"
 #include "cdu.h"
 
-PG_MODULE_MAGIC;
-
 /* All aggregate function declarations (same for both TRIVIAL and NON-TRIVIAL) */
 PG_FUNCTION_INFO_V1(ssk_sfunc);
 PG_FUNCTION_INFO_V1(ssk_finalfunc);
