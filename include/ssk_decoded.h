@@ -332,7 +332,7 @@ partition_header_size(uint32_t n_segments)
  * ============================================================================
  */
 
-typedef struct AbV {
+typedef struct AbVRoot {
     uint16_t format_version;     /* Format this was decoded from (or will encode to) */
     uint8_t  rare_bit;           /* Global rare bit (0 or 1) - backstop for complement */
     uint8_t  _pad1;
@@ -352,8 +352,9 @@ typedef struct AbV {
      * Access: partition_offs[i] gives byte offset to AbVPartition i
      */
     uint32_t partition_offs[];
-} * AbV;
+} AbVRoot;
 
+typedef AbVRoot *AbV;
 
 /* Get pointer to partition i */
 static inline AbVPartition *
@@ -363,11 +364,11 @@ decoded_partition(AbV abv, uint32_t i)
     return (AbVPartition *)(base + abv->partition_offs[i]);
 }
 
-/* Minimum size of struct AbV header with n_partitions offset slots */
+/* Minimum size of AbVRoot header with n_partitions offset slots */
 static inline size_t
 decoded_header_size(uint32_t n_partitions)
 {
-    return sizeof(struct AbV) + n_partitions * sizeof(uint32_t);
+    return sizeof(AbVRoot) + n_partitions * sizeof(uint32_t);
 }
 
 /* ============================================================================

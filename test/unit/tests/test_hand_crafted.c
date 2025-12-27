@@ -29,7 +29,7 @@
  *       [token_stream]     token_tag(2) + token_data
  *
  * STRUCTURE SIZES:
- *   struct AbV:   32 bytes, partition_offs[] FAM at offset 32
+ *   AbVRoot:      32 bytes, partition_offs[] FAM at offset 32
  *   AbVPartition: 28 bytes, segment_offs[] FAM at offset 28
  *   AbVSegment:   24 bytes, data[] FAM at offset 24
  */
@@ -86,7 +86,7 @@ build_test_single_42(uint8_t *buf, size_t bufsize)
     AbVSegment   *segment   = (AbVSegment *)(buf + 68);
 
     /* --- AbV --- */
-    *abv = (struct AbV){
+    *abv = (AbVRoot){
         .format_version     = 0,            // ??? CDU: bits
         .rare_bit           = 1,            // ??? (global rare bit)
         .n_partitions       = 1,            // ??? (implies 1 partition follows)
@@ -158,7 +158,7 @@ build_test_sparse_3(uint8_t *buf, size_t bufsize)
     AbVPartition *partition = (AbVPartition *)(buf + 36);
     AbVSegment   *segment   = (AbVSegment *)(buf + 68);
 
-    *abv = (struct AbV){
+    *abv = (AbVRoot){
         .format_version     = 0,            // ??? CDU: bits
         .rare_bit           = 1,            // ???
         .n_partitions       = 1,            // ???
@@ -237,7 +237,7 @@ build_test_raw_30(uint8_t *buf, size_t bufsize)
     AbVPartition *partition = (AbVPartition *)(buf + 36);
     AbVSegment   *segment   = (AbVSegment *)(buf + 68);
 
-    *abv = (struct AbV){
+    *abv = (AbVRoot){
         .format_version     = 0,            // ??? CDU: bits
         .rare_bit           = 1,            // ??? (1s are rare: 30/63 < 50%)
         .n_partitions       = 1,            // ???
@@ -305,7 +305,7 @@ build_test_rle_64(uint8_t *buf, size_t bufsize)
     AbVPartition *partition = (AbVPartition *)(buf + 36);
     AbVSegment   *segment   = (AbVSegment *)(buf + 68);
 
-    *abv = (struct AbV){
+    *abv = (AbVRoot){
         .format_version     = 0,            // ??? CDU: bits
         .rare_bit           = 1,            // ???
         .n_partitions       = 1,            // ???
