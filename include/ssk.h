@@ -8,7 +8,7 @@
 
 #ifdef TRIVIAL
 
-#include "ssk_format.h" // FOR TRIVIAL, essentially bakes "Format 1023" into the code
+#include "abv_format.h" // FOR TRIVIAL, essentially bakes "Format 1023" into the code
 
 /*
  * The TRIVIAL implenentation of SSK operates in a constrained domain of IDs 1..64.
@@ -21,7 +21,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include "ssk_format.h" // For NON TRIVIAL, bakes "Format 0" into the code
+#include "abv_format.h" // For NON TRIVIAL, bakes "Format 0" into the code
 #include "cdu.h"
 
 /**

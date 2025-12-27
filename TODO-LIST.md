@@ -32,7 +32,7 @@
 ## Key Assumptions
 
 ### Assumption 1: Hierarchy Navigation is Mechanical
-The hierarchical offset-based structure in [include/ssk_decoded.h](include/ssk_decoded.h) is complete and correct. Navigation (finding/creating partitions and segments) follows straightforward offset math without hidden edge cases.
+The hierarchical offset-based structure in [include/abv_decoded.h](include/abv_decoded.h) is complete and correct. Navigation (finding/creating partitions and segments) follows straightforward offset math without hidden edge cases.
 
 **Implication:** Implementation proceeds directly to adding values without redesigning the hierarchy.
 
@@ -67,7 +67,7 @@ The hierarchy stores only non-empty partitions and segments. Empty partitions/se
 
 ### Task 1: Implement Memory Functions
 
-**File:** src/codec/memory.c (new) + updates to [include/ssk_decoded.h](include/ssk_decoded.h)
+**File:** src/codec/memory.c (new) + updates to [include/abv_decoded.h](include/abv_decoded.h)
 
 **Scope:** ~100 lines of C code
 
@@ -254,7 +254,7 @@ Each test file should follow pattern:
 #include <stdio.h>
 #include <assert.h>
 #include "ssk.h"
-#include "ssk_decoded.h"
+#include "abv_decoded.h"
 #include "cdu.h"
 
 void test_memory_alloc() { ... }
@@ -355,7 +355,7 @@ SELECT ssk_describe(ssk_value) FROM demo_ssk;
 ## Dependencies & Preconditions
 
 **Before starting Task 1:**
-- Verify [include/ssk_decoded.h](include/ssk_decoded.h) is complete and compiles
+- Verify [include/abv_decoded.h](include/abv_decoded.h) is complete and compiles
 - Verify CDU in [src/codec/cdu.c](src/codec/cdu.c) compiles and links
 
 **Before starting Task 2:**
@@ -382,7 +382,7 @@ SELECT ssk_describe(ssk_value) FROM demo_ssk;
    - By direct offset (value → partition_id, segment_id)?
    - Current spec silent on this; affects hierarchy_add_value() logic.
 
-2. **Chunk Metadata Format:** Are chunks packed as 2-bit fields per [include/ssk_decoded.h](include/ssk_decoded.h), or stored separately?
+2. **Chunk Metadata Format:** Are chunks packed as 2-bit fields per [include/abv_decoded.h](include/abv_decoded.h), or stored separately?
    - Decision affects segment encoding/decoding.
 
 3. **RLE vs. Raw:** When do segments use RLE (run-length encoding) vs. raw chunks?

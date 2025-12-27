@@ -32,8 +32,8 @@
 #include <stdlib.h>
 #endif
 
-#include "ssk_format.h"
-#include "ssk_constants.h"
+#include "abv_format.h"
+#include "abv_constants.h"
 
 /* Extern declarations for tables from combinadic_init.c */
 extern uint64_t binomial[SSK_RANK_BITS_K_MAX + 1][SSK_RANK_BITS_N_MAX + 1];  /* k-major layout */

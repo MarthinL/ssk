@@ -35,8 +35,8 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "ssk.h"
-#include "ssk_format.h"
-#include "ssk_constants.h"
+#include "abv_format.h"
+#include "abv_constants.h"
 
 /* ============================================================================
  * PARTITION HEADER ENCODING

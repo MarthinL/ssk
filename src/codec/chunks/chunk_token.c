@@ -36,7 +36,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "ssk.h"
-#include "ssk_format.h"
+#include "abv_format.h"
 #include "bitblocks.h"
 
 /* ============================================================================

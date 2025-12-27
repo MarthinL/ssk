@@ -13,7 +13,7 @@
  * WHICH IS THE SIMPLE 1..64 ID DOMAIN WITH DIRECT BITVECTOR MAPPING.
  */
 
-#include "ssk_decoded.h"
+#include "abv_decoded.h"
 
 #define SSK_FORMAT 1023
 #define SSK_MIN_ID 1
@@ -27,7 +27,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include "ssk_decoded.h"
+#include "abv_decoded.h"
 #include "cdu.h"
 
 /**

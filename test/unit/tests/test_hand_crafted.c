@@ -49,7 +49,7 @@ int run_hand_crafted_tests(void) { return 0; }
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#include "../include/ssk_decoded.h"
+#include "../include/abv_decoded.h"
 
 /* Forward declaration for testing */
 int ssk_encode_impl(const AbV abv, uint8_t *buffer, size_t buffer_size, 
