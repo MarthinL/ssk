@@ -1,4 +1,10 @@
 /*
+ * Copyright (c) 2020-2025 Marthin Laubscher
+ * All rights reserved. See LICENSE for details.
+ */
+#ifndef BITBLOCKS_H
+#define BITBLOCKS_H
+/*
  * include/bitblocks.h
  *
  * Bit-level operations for SSK encoding/decoding.
@@ -29,12 +35,106 @@
  * - Leverages GCC/Clang intrinsics for CLZ, CTZ, POPCOUNT
  * - Handles arbitrary bit alignment via shift/mask operations
  */
+
+#ifdef TRIVIAL
+
+#include <stdint.h>
+#include <stddef.h>
+#include <string.h>
+#include <assert.h>
+
 /*
- * Copyright (c) 2020-2025 Marthin Laubscher
- * All rights reserved. See LICENSE for details.
+ * None of what is defined in this header plays a role in the TRIVIAL case.
+ * It purely addresses issues arising from upscaling the ID domain to BIGINT scale.
+ * 
+ * Implementations with buf_bits parameter for compatibility and bounds checking.
  */
-#ifndef BITBLOCKS_H
-#define BITBLOCKS_H
+
+/**
+ * Write fixed-length block (TRIVIAL version with buf_bits parameter)
+ */
+static inline void
+bb_place_fl_block(uint8_t *dst, size_t dst_bit, uint64_t value, uint8_t n_bits, size_t buf_bits)
+{
+  /* Fixed-length CDU write, 128-bit optimized with 64-bit unit addressing */
+  assert(n_bits <= 64);
+
+  value &= (n_bits < 64) ? ((1ULL << n_bits) - 1) : ~0ULL;
+
+  /* Work in 64-bit units: read 128 bits, modify, write back */
+  uint64_t unit_offset = dst_bit / 64;
+  unsigned int bit_shift = dst_bit % 64;
+
+  /* Read 128 bits at unit boundary */
+  __uint128_t block = *(__uint128_t *)((uint64_t *)dst + unit_offset);
+
+  /* Create mask for bits being replaced */
+  __uint128_t mask = ((n_bits < 64) ? ((__uint128_t)((1ULL << n_bits) - 1)) : (__uint128_t)~0ULL) << bit_shift;
+
+  /* Clear old bits, insert new (shifted by bit_shift) */
+  block = (block & ~mask) | (((__uint128_t)value << bit_shift) & mask);
+
+  /* Write back 128 bits */
+  *(__uint128_t *)((uint64_t *)dst + unit_offset) = block;
+}
+
+/**
+ * Read fixed-length block (TRIVIAL version with buf_bits parameter)
+ */
+static inline uint64_t
+bb_fetch_fl_block(const uint8_t *src, size_t src_bit, uint8_t n_bits, size_t buf_bits)
+{
+  assert(n_bits <= 64);
+
+  /* Work in 64-bit units: read 128 bits starting at the 64-bit unit containing src_bit */
+  uint64_t unit_offset = src_bit / 64;
+  unsigned int bit_shift = src_bit % 64;
+
+  /* Single 128-bit read covers two 64-bit units */
+  __uint128_t block = *(__uint128_t *)((uint64_t *)src + unit_offset);
+
+  /* Shift entire register by bit offset within the 64-bit unit */
+  block >>= bit_shift;
+
+  /* Extract and mask to requested bit count */
+  uint64_t result = (uint64_t)block;
+  if (n_bits < 64)
+    result &= (1ULL << n_bits) - 1;
+
+  return result;
+}
+
+/**
+ * Write variable-length encoding (TRIVIAL version with buf_bits parameter)
+ */
+static inline void
+bb_place_vl_encoding(uint8_t *dst, size_t dst_bit, uint64_t value, uint8_t n_bits, size_t buf_bits)
+{
+  assert((n_bits + (dst_bit % 8)) <= 64);
+
+  /* the only midly tricky part here is to create the masks for the n_bits we want to overwrite */
+  uint64_t valmask = (n_bits < 64) ? ((1ULL << n_bits) - 1) : ~0ULL;
+  uint64_t dstmask = valmask << (dst_bit % 8);
+  uint64_t *temp   = (uint64_t *)(dst + dst_bit / 8);
+  *temp = (*temp & ~dstmask) | ((value & valmask) << (dst_bit % 8));
+}
+
+/**
+ * Read variable-length block (TRIVIAL version with buf_bits parameter)
+ */
+static inline uint64_t
+bb_fetch_vl_block(const uint8_t *src, size_t src_bit, size_t buf_bits)
+{
+  /* NOTE: This function unconditionally loads 8 bytes for performance.
+   * If CDUParam for variable-length types ever exceed 64 bits overall,
+   * a special case must be added here to handle larger blocks safely.
+   * Currently, variable-length CDUs max at 36 bits (verified manually).
+   */
+
+  return *((uint64_t *)(src + src_bit / 8)) >> (src_bit % 8);
+}
+
+#else // NON TRIVIAL
 
 #include <stdint.h>
 #include <stddef.h>
@@ -131,150 +231,7 @@ bb_store_block_aligned(uint8_t *buf, uint64_t val)
     memcpy(buf, &val, 8);
 }
 
-/**
- * Extract up to 64 bits from buffer at arbitrary bit position.
- * LSB-first: bit_pos 0 = bit 0 of byte 0 (lowest ID).
- *
- * @param buf       Source buffer (must have enough bytes)
- * @param bit_pos   Starting bit position (0 = LSB of byte 0)
- * @param n_bits    Number of bits to extract (1-64)
- * @return Value with bits right-aligned (LSBs contain the data)
- */
-static inline uint64_t
-bb_extract_bits(const uint8_t *buf, size_t bit_pos, uint8_t n_bits)
-{
-    if (n_bits == 0)
-        return 0;
 
-    /* For small extractions (typical CDU case), use optimized path */
-    if (n_bits <= 16) {
-        size_t byte_offset = bit_pos / 8;
-        unsigned int bit_offset = bit_pos % 8;
-
-        /* Load 1-3 bytes efficiently */
-        uint64_t raw;
-        if (bit_offset + n_bits <= 8) {
-            /* Bits fit entirely within one byte */
-            raw = buf[byte_offset];
-        } else if (bit_offset + n_bits <= 16) {
-            /* Bits span two bytes */
-            raw = buf[byte_offset] | ((uint64_t)buf[byte_offset + 1] << 8);
-        } else {
-            /* Bits span three bytes */
-            raw = buf[byte_offset] | ((uint64_t)buf[byte_offset + 1] << 8) | ((uint64_t)buf[byte_offset + 2] << 16);
-        }
-
-        /* Shift to align the desired bits to LSB position */
-        raw >>= bit_offset;
-
-        /* Mask to extract only the desired number of bits */
-        raw &= (1ULL << n_bits) - 1;
-
-        return raw;
-    } else {
-        /* Fallback for larger extractions - use original algorithm */
-        size_t byte_offset = bit_pos / 8;
-        unsigned int bit_offset = bit_pos % 8;
-
-        unsigned int total_bits_in_bytes = bit_offset + n_bits;
-        unsigned int bytes_needed = (total_bits_in_bytes + 7) / 8;
-
-        /* Load bytes into a uint64_t */
-        uint64_t raw = 0;
-        for (unsigned int i = 0; i < bytes_needed && i < 8; i++) {
-            raw |= ((uint64_t)buf[byte_offset + i]) << (i * 8);
-        }
-
-        /* Shift down to align with bit_offset */
-        raw >>= bit_offset;
-
-        /* Mask to n_bits */
-        if (n_bits < 64)
-            raw &= (1ULL << n_bits) - 1;
-
-        return raw;
-    }
-}
-
-/**
- * Insert up to 64 bits into buffer at arbitrary bit position.
- * LSB-first: bit_pos 0 = bit 0 of byte 0 (lowest ID).
- *
- * @param buf       Destination buffer (must have enough bytes)
- * @param bit_pos   Starting bit position (0 = LSB of byte 0)
- * @param value     Value to insert (right-aligned, LSBs contain the data)
- * @param n_bits    Number of bits to insert (1-64)
- */
-static inline void
-bb_insert_bits(uint8_t *buf, size_t bit_pos, uint64_t value, uint8_t n_bits)
-{
-    if (n_bits == 0)
-        return;
-    
-    size_t byte_offset = bit_pos / 8;
-    unsigned int bit_offset = bit_pos % 8;
-    
-    /* Mask value to n_bits */
-    if (n_bits < 64)
-        value &= (1ULL << n_bits) - 1;
-    
-    unsigned int total_bits_in_bytes = bit_offset + n_bits;
-    unsigned int bytes_needed = (total_bits_in_bytes + 7) / 8;
-    
-    if (bytes_needed <= 8)
-    {
-        /* Common case: fits in 8 bytes */
-        /* Load existing bytes, little-endian */
-        uint64_t raw = 0;
-        for (unsigned int i = 0; i < bytes_needed; i++)
-        {
-            raw |= ((uint64_t)buf[byte_offset + i]) << (i * 8);
-        }
-        
-        /* Create mask for the bits we're replacing */
-        uint64_t mask = ((n_bits < 64) ? ((1ULL << n_bits) - 1) : ~0ULL) << bit_offset;
-        
-        /* Clear old bits, insert new (shifted up by bit_offset) */
-        raw = (raw & ~mask) | (value << bit_offset);
-        
-        /* Store back, little-endian */
-        for (unsigned int i = 0; i < bytes_needed; i++)
-        {
-            buf[byte_offset + i] = (raw >> (i * 8)) & 0xFF;
-        }
-    }
-    else
-    {
-        /*
-         * Rare case: spans 9 bytes (bit_offset > 0 and n_bits == 64)
-         * Write low portion to first 8 bytes, high portion to byte 9.
-         */
-        /* Load first 8 bytes */
-        uint64_t raw = 0;
-        for (unsigned int i = 0; i < 8; i++)
-        {
-            raw |= ((uint64_t)buf[byte_offset + i]) << (i * 8);
-        }
-        
-        /* Mask for bits in first 8 bytes (from bit_offset to end) */
-        uint64_t mask_low = ~((1ULL << n_bits) - 1) << bit_offset;
-        raw = (raw & ~mask_low) | (value << bit_offset);
-        
-        /* Store first 8 bytes */
-        for (unsigned int i = 0; i < 8; i++)
-        {
-            buf[byte_offset + i] = (raw >> (i * 8)) & 0xFF;
-        }
-        
-        /* Handle byte 9: high bits of value go into low bits of byte 9 */
-        unsigned int high_bits_count = bit_offset;  /* bits that spill into byte 9 */
-        uint64_t high_val = value >> (64 - bit_offset);
-        uint8_t byte9 = buf[byte_offset + 8];
-        uint8_t mask9 = (1 << high_bits_count) - 1;
-        byte9 = (byte9 & ~mask9) | (high_val & mask9);
-        buf[byte_offset + 8] = byte9;
-    }
-}
 
 /* ============================================================================
  * PUBLIC API - MAIN FUNCTIONS
@@ -283,6 +240,7 @@ bb_insert_bits(uint8_t *buf, size_t bit_pos, uint64_t value, uint8_t n_bits)
 
 /**
  * Write bits to a buffer at a specified bit position.
+ * 128-bit optimized: reads 128 bits, masks and shifts value, writes back.
  *
  * @param dst       Destination buffer (must have space for bits being written)
  * @param dst_bit   Starting bit position in destination (0 = LSB of byte 0)
@@ -292,11 +250,33 @@ bb_insert_bits(uint8_t *buf, size_t bit_pos, uint64_t value, uint8_t n_bits)
 static inline void
 bb_write_bits(uint8_t *dst, size_t dst_bit, uint64_t value, uint8_t n_bits)
 {
-    bb_insert_bits(dst, dst_bit, value, n_bits);
+    if (n_bits == 0)
+        return;
+    
+    /* Work in 64-bit units: read 128 bits, modify, write back */
+    uint64_t unit_offset = dst_bit / 64;
+    unsigned int bit_shift = dst_bit % 64;
+    
+    /* Mask value to n_bits */
+    if (n_bits < 64)
+        value &= (1ULL << n_bits) - 1;
+    
+    /* Read 128 bits at unit boundary */
+    __uint128_t block = *(__uint128_t *)((uint64_t *)dst + unit_offset);
+    
+    /* Create mask for bits being replaced */
+    __uint128_t mask = ((n_bits < 64) ? ((__uint128_t)((1ULL << n_bits) - 1)) : (__uint128_t)~0ULL) << bit_shift;
+    
+    /* Clear old bits, insert new (shifted by bit_shift) */
+    block = (block & ~mask) | (((__uint128_t)value << bit_shift) & mask);
+    
+    /* Write back 128 bits */
+    *(__uint128_t *)((uint64_t *)dst + unit_offset) = block;
 }
 
 /**
  * Read bits from a buffer at a specified bit position.
+ * 128-bit optimized: reads 128 bits, shifts by bit offset, masks to n_bits.
  *
  * @param src       Source buffer
  * @param src_bit   Starting bit position in source (0 = LSB of byte 0)
@@ -309,35 +289,24 @@ bb_read_bits(const uint8_t *src, size_t src_bit, uint8_t n_bits)
     if (n_bits == 0)
         return 0;
 
-    size_t byte_offset = src_bit / 8;
-    unsigned int bit_offset = src_bit % 8;
+    /* Work in 64-bit units: read 128 bits starting at the 64-bit unit containing src_bit */
+    uint64_t unit_offset = src_bit / 64;
+    unsigned int bit_shift = src_bit % 64;
 
-    /* For small extractions (typical CDU case), use optimized path */
-    if (n_bits <= 16) {
-        /* Load 1-3 bytes efficiently */
-        uint64_t raw;
-        if (bit_offset + n_bits <= 8) {
-            /* Bits fit entirely within one byte */
-            raw = src[byte_offset];
-        } else if (bit_offset + n_bits <= 16) {
-            /* Bits span two bytes */
-            raw = src[byte_offset] | ((uint64_t)src[byte_offset + 1] << 8);
-        } else {
-            /* Bits span three bytes */
-            raw = src[byte_offset] | ((uint64_t)src[byte_offset + 1] << 8) | ((uint64_t)src[byte_offset + 2] << 16);
-        }
+    /* Single 128-bit read covers two 64-bit units */
+    __uint128_t block = *(__uint128_t *)((uint64_t *)src + unit_offset);
 
-        /* Shift to align the desired bits to LSB position */
-        raw >>= bit_offset;
+    /* Shift entire register by bit offset within the 64-bit unit */
+    block >>= bit_shift;
 
-        /* Mask to extract only the desired number of bits */
-        raw &= (1ULL << n_bits) - 1;
+    /* Extract final 64-bit value */
+    uint64_t result = (uint64_t)block;
 
-        return raw;
-    } else {
-        /* Fallback for larger extractions */
-        return bb_extract_bits(src, src_bit, n_bits);
-    }
+    /* Mask to n_bits */
+    if (n_bits < 64)
+        result &= (1ULL << n_bits) - 1;
+
+    return result;
 }
 
 /**
@@ -391,93 +360,62 @@ bb_fetch_vl_block(const uint8_t *src, size_t src_bit)
 static inline void
 bb_place_fl_block(uint8_t *dst, size_t dst_bit, uint64_t value, uint8_t n_bits)
 {
-  // NOTE: This function handles writing up to 64 bits, potentially spanning 9 bytes.
-  // Fixed-length CDUs use this for safe bit-aligned writes.
-
+  /* Fixed-length CDU write, 128-bit optimized with 64-bit unit addressing */
   assert(n_bits <= 64);
 
   value &= (n_bits < 64) ? ((1ULL << n_bits) - 1) : ~0ULL;
 
-  size_t start_byte = dst_bit / 8;
-  size_t bit_offset = dst_bit % 8;
-  size_t end_bit = dst_bit + n_bits - 1;
-  size_t end_byte = end_bit / 8;
-  size_t num_bytes = end_byte - start_byte + 1;
+  /* Work in 64-bit units: read 128 bits, modify, write back */
+  uint64_t unit_offset = dst_bit / 64;
+  unsigned int bit_shift = dst_bit % 64;
 
-  if (num_bytes <= 8) {
-    // Fits in 8 bytes
-    uint64_t *ptr = (uint64_t *)(dst + start_byte);
-    uint64_t mask;
-    if (n_bits == 64) {
-      mask = ~0ULL;
-    } else {
-      mask = ((1ULL << n_bits) - 1) << bit_offset;
-    }
-    *ptr = (*ptr & ~mask) | ((value << bit_offset) & mask);
-  } else {
-    // Spans 9 bytes
-    uint64_t *low_ptr = (uint64_t *)(dst + start_byte);
-    uint8_t *high_ptr = dst + start_byte + 8;
-    size_t bits_in_low = 64 - bit_offset;
-    size_t bits_in_high = n_bits - bits_in_low;
-    uint64_t low_mask = ((1ULL << bits_in_low) - 1) << bit_offset;
-    uint64_t low_value = (value & ((1ULL << bits_in_low) - 1)) << bit_offset;
-    *low_ptr = (*low_ptr & ~low_mask) | low_value;
-    if (bits_in_high > 0) {
-      uint8_t high_mask = ((1 << bits_in_high) - 1);
-      uint8_t high_value = (value >> bits_in_low) & ((1 << bits_in_high) - 1);
-      *high_ptr = (*high_ptr & ~high_mask) | high_value;
-    }
-  }
+  /* Read 128 bits at unit boundary */
+  __uint128_t block = *(__uint128_t *)((uint64_t *)dst + unit_offset);
+
+  /* Create mask for bits being replaced */
+  __uint128_t mask = ((n_bits < 64) ? ((__uint128_t)((1ULL << n_bits) - 1)) : (__uint128_t)~0ULL) << bit_shift;
+
+  /* Clear old bits, insert new (shifted by bit_shift) */
+  block = (block & ~mask) | (((__uint128_t)value << bit_shift) & mask);
+
+  /* Write back 128 bits */
+  *(__uint128_t *)((uint64_t *)dst + unit_offset) = block;
 }
 
 /**
- * Read data for a UDC at a specified bit position.
+ * Read data for a UDC at a specified bit position (128-bit optimized).
  *
  * @param src       Source buffer
  * @param src_bit   Starting bit position in source (0 = LSB of byte 0)
  * @param n_bits    Number of bits to read (0-64)
  * @return Value with bits right-aligned (LSBs contain the data)
+ *
+ * Uses 128-bit load when possible for faster data extraction from aligned buffers.
+ * Falls back to 64-bit + 8-bit for small reads.
  */
 static inline uint64_t
 bb_fetch_fl_block(const uint8_t *src, size_t src_bit, uint8_t n_bits)
 {
-  // NOTE: This function handles up to 64 bits, potentially spanning 9 bytes.
-  // Fixed-length CDUs use this for safe bit-aligned reads.
-
   assert(n_bits <= 64);
 
-  size_t start_byte = src_bit / 8;
-  size_t bit_offset = src_bit % 8;
-  size_t end_bit = src_bit + n_bits - 1;
-  size_t end_byte = end_bit / 8;
-  size_t num_bytes = end_byte - start_byte + 1;
+  /* Work in 64-bit units: read 128 bits starting at the 64-bit unit containing src_bit */
+  uint64_t unit_offset = src_bit / 64;
+  unsigned int bit_shift = src_bit % 64;
 
-  uint64_t result = 0;
+  /* Single 128-bit read covers two 64-bit units */
+  __uint128_t block = *(__uint128_t *)((uint64_t *)src + unit_offset);
 
-  if (num_bytes <= 8) {
-    // Fits in 8 bytes
-    uint64_t block = *(uint64_t *)(src + start_byte);
-    if (n_bits == 64) {
-      result = block >> bit_offset;
-    } else {
-      result = (block >> bit_offset) & ((1ULL << n_bits) - 1);
-    }
-  } else {
-    // Spans 9 bytes
-    uint64_t low = *(uint64_t *)(src + start_byte);
-    uint8_t high_byte = src[start_byte + 8];
-    uint64_t high = (uint64_t)high_byte << 56;  // Position high_byte at bits 56-63 of the 72-bit span
-    uint64_t combined = low | high;
-    if (n_bits == 64) {
-      result = combined >> bit_offset;
-    } else {
-      result = (combined >> bit_offset) & ((1ULL << n_bits) - 1);
-    }
-  }
+  /* Shift entire register by bit offset within the 64-bit unit */
+  block >>= bit_shift;
+
+  /* Extract and mask to requested bit count */
+  uint64_t result = (uint64_t)block;
+  if (n_bits < 64)
+    result &= (1ULL << n_bits) - 1;
 
   return result;
 }
+
 
 
 /**
@@ -496,8 +434,8 @@ bb_copy_bits(const uint8_t *src, size_t src_bit,
     /* Copy in 64-bit chunks where possible */
     while (n_bits >= 64)
     {
-        uint64_t block = bb_extract_bits(src, src_bit, 64);
-        bb_insert_bits(dst, dst_bit, block, 64);
+        uint64_t block = bb_read_bits(src, src_bit, 64);
+        bb_write_bits(dst, dst_bit, block, 64);
         src_bit += 64;
         dst_bit += 64;
         n_bits -= 64;
@@ -506,8 +444,8 @@ bb_copy_bits(const uint8_t *src, size_t src_bit,
     /* Handle remaining bits */
     if (n_bits > 0)
     {
-        uint64_t block = bb_extract_bits(src, src_bit, (uint8_t)n_bits);
-        bb_insert_bits(dst, dst_bit, block, (uint8_t)n_bits);
+        uint64_t block = bb_read_bits(src, src_bit, (uint8_t)n_bits);
+        bb_write_bits(dst, dst_bit, block, (uint8_t)n_bits);
     }
 }
 
@@ -824,5 +762,7 @@ bb_trailing_dominant(uint64_t block, uint8_t n_bits, int dominant)
     int last = bb_last_rare(block, n_bits, dominant);
     return (last < 0) ? n_bits : (n_bits - 1 - last);
 }
+
+#endif // (NON) TRIVIAL
 
 #endif /* BITBLOCKS_H */

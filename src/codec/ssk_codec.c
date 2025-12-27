@@ -10,64 +10,88 @@
  * Real implementations use CDU, combinadic, and chunk modules.
  */
 
-#include "ssk.h"
-#include "ssk_format.h"
-#include "bitblocks.h"
-
+/* Environment setup: PostgreSQL or standalone */
 #ifdef USE_PG
 #include "postgres.h"
 #define ALLOC(size) palloc(size)
 #define FREE(ptr) pfree(ptr)
 #else
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #define ALLOC(size) malloc(size)
 #define FREE(ptr) free(ptr)
 #endif
 
+#include <assert.h>
+
+/* Project headers */
+#include "ssk.h"
+#include "cdu.h"
+
 #ifdef TRIVIAL 
+
+#include <stdlib.h>
 
 // ============================================================================
 // TRIVIAL REFERENCE: Format 1023 (IDs 1..64)
 // ============================================================================
 
-int ssk_encode(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size, uint16_t target_format)
+extern int 
+ssk_encode(const AbV abv, uint8_t *buffer, size_t buffer_size, uint16_t target_format)
 {
-    // Trivial: 1 byte format + 8 bytes AbV
-    if (buffer_size < 9) return -1;
-    buffer[0] = 1023;
-    *(uint64_t *)(buffer + 1) = *ssk;  // ssk IS the AbV in trivial mode
-    return 9;
+  memset(buffer, 0, buffer_size);
+  uint64_t block = (uint64_t)SSK_FORMAT;
+  int bits_used = cdu_encode(block, CDU_TYPE_DEFAULT, buffer, 0, buffer_size * 8);
+  block = 0;
+  assert(SSK_PADDING_BITS == 3);
+  bits_used += 3;
+  // bits_used += cdu_encode(block, CDU_TYPE_RAW1, buffer, bits_used, buffer_size * 8);
+  // bits_used += cdu_encode(block, CDU_TYPE_RAW2, buffer, bits_used, buffer_size * 8);
+  assert(bits_used == 16);
+  bits_used += cdu_encode(abv, CDU_TYPE_RAW64, buffer, bits_used, buffer_size * 8);
+  return bits_used;
 }
 
-int ssk_decode(const uint8_t *buffer, size_t buffer_size, SSKDecoded *out)
+extern int 
+ssk_decode(const uint8_t *buffer, size_t buffer_size, AbV *out)
 {
-    // Trivial: read 1 byte format + 8 bytes AbV
-    if (buffer_size < 9) return -1;
-    if (buffer[0] != 1023) return -1;
-    *out = *(uint64_t *)(buffer + 1);
-    return 9;
+  uint64_t block;
+  int bits_used = cdu_decode(buffer, 0, buffer_size * 8, CDU_TYPE_DEFAULT, &block);
+  if (block == (uint64_t)SSK_FORMAT) {
+    assert(bits_used == 13);
+    bits_used += 3;
+    bits_used += cdu_decode(buffer, bits_used, buffer_size * 8, CDU_TYPE_RAW64, &block);
+    *out = block;
+  } else {
+    bits_used = -1;
+  }
+  return bits_used;
 }
 
 #else // NON TRIVIAL
+
+#include "bitblocks.h"
+
+extern int ssk_encode(const AbV abv, uint8_t *buffer, size_t buffer_size, uint16_t target_format);
+extern int ssk_decode(const uint8_t *buffer, size_t buffer_size, AbV *out);
 
 // ============================================================================
 // SCALE IMPLEMENTATION: Format 0 (IDs 1..2^64)
 // ============================================================================
 
 /* Forward declarations */
-int ssk_encode_impl(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size, 
+int ssk_encode_impl(const AbV abv, uint8_t *buffer, size_t buffer_size, 
                    uint16_t target_format, FILE *debug_log, char *mock_output, 
                    size_t mock_output_size, size_t *mock_output_used);
 
-int ssk_encode(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size, uint16_t target_format)
+int ssk_encode(const AbV abv, uint8_t *buffer, size_t buffer_size, uint16_t target_format)
 {
     // Current implementation (hierarchical, CDU, etc.)
-    return ssk_encode_impl(ssk, buffer, buffer_size, target_format, NULL, NULL, 0, NULL);
+    return ssk_encode_impl(abv, buffer, buffer_size, target_format, NULL, NULL, 0, NULL);
 }
 
-int ssk_decode(const uint8_t *buffer, size_t buffer_size, SSKDecoded **out)
+int ssk_decode(const uint8_t *buffer, size_t buffer_size, AbV *out)
 {
     // TODO: Implement Format 0 decoding (blocked on partition strategy)
     return -1;
@@ -75,7 +99,7 @@ int ssk_decode(const uint8_t *buffer, size_t buffer_size, SSKDecoded **out)
 
 /* Internal implementation with debug/audit support */
 int
-ssk_encode_impl(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size, 
+ssk_encode_impl(const AbV abv, uint8_t *buffer, size_t buffer_size, 
                uint16_t target_format, FILE *debug_log, char *mock_output, 
                size_t mock_output_size, size_t *mock_output_used)
 {
@@ -93,13 +117,13 @@ ssk_encode_impl(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size,
 
     /* 1. Encode format_version */
     {
-        size_t bits = cdu_encode(ssk->format_version, SSK_FORMAT, buffer, bit_pos);
+        size_t bits = cdu_encode(abv->format_version, SSK_FORMAT, buffer, bit_pos);
         if (bits == 0) return -1;
         bit_pos += bits;
 
-        if (debug_log) fprintf(debug_log, "format_version=%u (%zu bits)\n", ssk->format_version, bits);
+        if (debug_log) fprintf(debug_log, "format_version=%u (%zu bits)\n", abv->format_version, bits);
         if (mock_output) {
-            int len = snprintf(mock_output + mock_pos, mock_output_size - mock_pos, "%u/%u|", ssk->format_version, SSK_FORMAT);
+            int len = snprintf(mock_output + mock_pos, mock_output_size - mock_pos, "%u/%u|", abv->format_version, SSK_FORMAT);
             if (len < 0 || (size_t)len >= mock_output_size - mock_pos) return -1;
             mock_pos += len;
         }
@@ -107,12 +131,12 @@ ssk_encode_impl(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size,
 
     /* 2. Encode global rare_bit */
     {
-        bb_write_bits(buffer, bit_pos, ssk->rare_bit, 1);
+        bb_write_bits(buffer, bit_pos, abv->rare_bit, 1);
         bit_pos += 1;
 
-        if (debug_log) fprintf(debug_log, "global_rare_bit=%u (1 bit)\n", ssk->rare_bit);
+        if (debug_log) fprintf(debug_log, "global_rare_bit=%u (1 bit)\n", abv->rare_bit);
         if (mock_output) {
-            int len = snprintf(mock_output + mock_pos, mock_output_size - mock_pos, "0b%u|", ssk->rare_bit);
+            int len = snprintf(mock_output + mock_pos, mock_output_size - mock_pos, "0b%u|", abv->rare_bit);
             if (len < 0 || (size_t)len >= mock_output_size - mock_pos) return -1;
             mock_pos += len;
         }
@@ -120,21 +144,21 @@ ssk_encode_impl(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size,
 
     /* 3. Encode n_partitions */
     {
-        size_t bits = cdu_encode(ssk->n_partitions, SSK_PARTITIONS, buffer, bit_pos);
+        size_t bits = cdu_encode(abv->n_partitions, SSK_PARTITIONS, buffer, bit_pos);
         if (bits == 0) return -1;
         bit_pos += bits;
 
-        if (debug_log) fprintf(debug_log, "n_partitions=%u (%zu bits)\n", ssk->n_partitions, bits);
+        if (debug_log) fprintf(debug_log, "n_partitions=%u (%zu bits)\n", abv->n_partitions, bits);
         if (mock_output) {
-            int len = snprintf(mock_output + mock_pos, mock_output_size - mock_pos, "%u/%u|", ssk->n_partitions, SSK_PARTITIONS);
+            int len = snprintf(mock_output + mock_pos, mock_output_size - mock_pos, "%u/%u|", abv->n_partitions, SSK_PARTITIONS);
             if (len < 0 || (size_t)len >= mock_output_size - mock_pos) return -1;
             mock_pos += len;
         }
     }
 
     /* 4. Encode each partition */
-    for (uint32_t p = 0; p < ssk->n_partitions; p++) {
-        SSKPartition *part = decoded_partition((SSKDecoded *)ssk, p);
+    for (uint32_t p = 0; p < abv->n_partitions; p++) {
+        AbVPartition *part = decoded_partition(abv, p);
         uint32_t partition_delta = part->partition_id - prev_partition_id;
         prev_partition_id = part->partition_id;
 
@@ -181,7 +205,7 @@ ssk_encode_impl(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size,
 
         /* 4d. Encode each segment */
         for (uint32_t s = 0; s < part->n_segments; s++) {
-            SSKSegment *seg = partition_segment(part, s);
+            AbVSegment *seg = partition_segment(part, s);
 
             /* 4d.i. Encode seg_kind (0=RLE, 1=MIX) */
             {
@@ -347,10 +371,10 @@ ssk_encode_impl(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size,
 
 /* Stub: Free decoded SSK */
 void
-ssk_free_decoded(SSKDecoded *ssk)
+abv_free(AbV abv)
 {
-if (ssk)
-FREE(ssk);
+  if (abv)
+    FREE(abv);
 }
 
 /**

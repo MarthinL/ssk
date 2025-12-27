@@ -3,6 +3,15 @@
  * All rights reserved. See LICENSE for details.
  */
 
+#ifdef TRIVIAL
+
+/*
+ * None of what is defined in this file plays a role in the TRIVIAL case.
+ * It purely addresses issues arising from upscaling the ID domain to BIGINT scale.
+ */
+
+#else // NON TRIVIAL
+
 /*
  * src/codec/segment.c
  *
@@ -287,3 +296,5 @@ should_use_rle(uint64_t length_bits, const SSKFormatSpec *spec)
 {
     return length_bits >= spec->rare_run_threshold;
 }
+
+#endif // (NON) TRIVIAL

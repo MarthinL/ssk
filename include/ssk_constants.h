@@ -6,6 +6,15 @@
 #ifndef SSK_CONSTANTS_H
 #define SSK_CONSTANTS_H
 
+#ifdef TRIVIAL
+
+/*
+ * None of what is defined in this header plays a role in the TRIVIAL case.
+ * It purely addresses issues arising from upscaling the ID domain to BIGINT scale.
+ */
+
+#else // NON TRIVIAL
+
 /**
  * @file ssk_constants.h
  * @brief Canonical SSK constants and thresholds
@@ -223,5 +232,7 @@ typedef enum {
 #else
 #define SSK_VALIDATE_DEFAULT  SSK_VALIDATE_ALL
 #endif
+
+#endif // (NON) TRIVIAL
 
 #endif // SSK_CONSTANTS_H

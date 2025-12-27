@@ -53,11 +53,11 @@ The encoding is controlled by the **Encoding Specification (Format 0, CDU)** con
 
 ## The Problem
 
-Representing a subset of 64-bit integer IDs requires an **abstract bit vector (AbV)**—a logical construct: one bit per possible ID (0 to 2^64-1 ≈ 18.4 exabits), where each bit indicates presence (1) or absence (0) in the subset. The AbV is independent of implementation; `SSKDecoded` is its concrete C representation.
+Representing a subset of 64-bit integer IDs requires an **abstract bit vector (AbV)**—a logical construct: one bit per possible ID (0 to 2^64-1 ≈ 18.4 exabits), where each bit indicates presence (1) or absence (0) in the subset. The AbV is independent of implementation; struct AbV  or uint64_t is its concrete C representation.
 
-**In code:** Variable and parameter names use `abv` to denote actual AbV values. The type is always `SSKDecoded`, whose meaning depends on context:
-- **Trivial domain (IDs 1..64):** `SSKDecoded` = `uint64_t` — single 64-bit AbV
-- **Scale domain (IDs 1..2^64):** `SSKDecoded` = hierarchical structure (partitions → segments → chunks → tokens)
+**In code:** Variable and parameter names use abv to denote actual AbV values. The type is always AbV, whose meaning depends on context:
+- **Trivial domain (IDs 1..64):** AbV = uint64_t — single 64-bit AbV
+- **Scale domain (IDs 1..2^64):** AbV = struct AbV *, pointer to hierarchical structure (partitions → segments → chunks → tokens)
 
 Storing an AbV literally (as a single bit per ID) requires **2,048 petabytes** per SSK. Impossible.
 
@@ -79,7 +79,7 @@ $$\text{Subset of IDs} \longleftrightarrow \text{Encoded Bytes}$$
 
 Without canonical bijection, SSKs would be useless:
 
-- **Equality**: Two SSKs with same members encode to identical bytes (enables `memcmp` equality)
+- **Equality**: Two SSKs with same members encode to identical bytes (enables memcmp equality)
 - **Hashing**: SSKs can be used as hash keys or database indexes (no collisions)
 - **Determinism**: Encoding is reproducible across systems and time
 - **Production Safety**: Data stored in Format 0 can be reliably read forever
@@ -109,7 +109,7 @@ Domain (2^64 possible IDs)
 
 ### Level 1: Partitions
 
-**64-bit ID** = `(partition_num: 32 bits high, offset: 32 bits low)`
+**64-bit ID** = (partition_num: 32 bits high, offset: 32 bits low)
 
 - Partition 0: IDs 0 to 2^32-1
 - Partition 1: IDs 2^32 to 2^64-1
@@ -180,7 +180,7 @@ For each partition (ascending order):
           [rank]                    variable: combinadic rank (once, repeated)
 ```
 
-### Example: Encoding `{5, 10, 15}`
+### Example: Encoding {5, 10, 15}
 
 All IDs in partition 0 (high 32 bits = 0):
 
@@ -206,23 +206,23 @@ Result: ~10 bytes instead of 2,048 petabytes.
 
 ### Rule 1: Partition Ordering
 - Partitions are encoded in **strictly ascending** order by partition ID
-- Gap encoding: `partition_delta = (H_i - H_{i-1} - 1)`
+- Gap encoding: partition_delta = (H_i - H_{i-1} - 1)
 - Empty partitions are **never encoded** (skipped entirely)
 
 **Canon requirement:** If encoder could choose partition order, same subset might encode differently. Strict ascending order + gap encoding ensures one encoding per subset.
 
 ### Rule 2: Segment Ordering
 - Segments within partitions are encoded in **strictly ascending** order by initial offset
-- Gap encoding: `initial_delta = (initial_i - (prev_initial + prev_length))`
+- Gap encoding: initial_delta = (initial_i - (prev_initial + prev_length))
 
 **Canon requirement:** Reordering segments would produce different bytes for same abvector. Strict order ensures bijection.
 
 ### Rule 3: Segment Boundaries (Mandatory Split Points)
 
-Segments are split at **dominant-bit gaps** ≥ `DOMINANT_RUN_THRESHOLD`.
+Segments are split at **dominant-bit gaps** ≥ DOMINANT_RUN_THRESHOLD.
 
 **Algorithm:**
-```c
+```
 for (offset = 0; offset < partition_size; offset++) {
     // Identify next contiguous span with mixed bits
     span_start = find_next_mixed_region(offset);
@@ -257,7 +257,7 @@ for (offset = 0; offset < partition_size; offset++) {
 
 ### Rule 4: Segment Kind Selection (RLE vs MIX)
 
-```c
+```
 uint64_t popcount = count_ones(segment_abits);
 uint8_t dominant_bit = (popcount > segment_length / 2) ? 1 : 0;
 uint8_t rare_bit = ~dominant_bit & 1;
@@ -290,7 +290,7 @@ if (rare_run_length >= RARE_RUN_THRESHOLD &&
 
 Segments are divided into fixed-size **64-bit chunks** (final chunk may be partial):
 
-```c
+```
 for (offset = segment_start; offset < segment_end; offset += CHUNK_BITS) {
     chunk_nbits = min(CHUNK_BITS, segment_end - offset);
     process_chunk(chunk_bits, chunk_nbits);
@@ -301,13 +301,13 @@ for (offset = segment_start; offset < segment_end; offset += CHUNK_BITS) {
 
 **Last chunk handling:**
 - May be 1-63 bits
-- Derivable from `length_bits % 64` (0 means 64)
+- Derivable from length_bits % 64 (0 means 64)
 - NOT stored separately to prevent inconsistency
 - Still processed with same token rules
 
 ### Rule 6: Token Kind Selection (ENUM vs RAW)
 
-```c
+```
 uint8_t k = popcount(chunk);
 
 if (k <= K_CHUNK_ENUM_MAX) {
@@ -325,7 +325,7 @@ if (k <= K_CHUNK_ENUM_MAX) {
 ```
 
 **Canon requirement:**
-- Threshold `K_CHUNK_ENUM_MAX = 18` is **immutable** per format
+- Threshold K_CHUNK_ENUM_MAX = 18 is **immutable** per format
 - If encoder could choose the threshold, same chunk might encode differently
 - Combinadic encoding is space-efficient for k ≤ 18; raw bits for k > 18
 - Fixed threshold ensures deterministic choice
@@ -344,7 +344,7 @@ if (k <= K_CHUNK_ENUM_MAX) {
 1. **RAW_RUN**: Two or more consecutive RAW tokens → single RAW_RUN
 2. **ENUM_RUN**: Two or more consecutive ENUM tokens with identical k and rank → single ENUM_RUN
 
-```c
+```
 i = 0;
 while (i < n_chunks) {
     uint8_t k = popcount(chunks[i]);
@@ -411,7 +411,7 @@ Mandatory coalescing ensures only the coalesced form is valid.
 
 Every CDU encoded value must use the **minimum number of continuation bits** required:
 
-```c
+```
 // Example: stage_bits = {2, 5, 8}
 value = 3;
 max_stage_0 = 2^2 - 1 = 3;        // Fits in stage 0
@@ -428,7 +428,7 @@ max_stage_1 = 2^(2+5) - 1 = 127;  // Fits in stage 1
 ```
 
 **Decoder validation:**
-```c
+```
 bool is_minimal(cdu_bytes, value, cdu_params) {
     // Check if value would fit in fewer stages
     for (stage = 0; stage < stages_used - 1; stage++) {
@@ -461,7 +461,7 @@ Chunk covering IDs [N, N+63]:
 
 Decoders **MUST** validate all canon rules and reject violations:
 
-```c
+```
 bool validate_canon(encoded_bytes, len, format_spec) {
     // 1. Partition ordering
     prev_partition_num = -1;
@@ -522,8 +522,8 @@ bool validate_canon(encoded_bytes, len, format_spec) {
 ```
 
 **Error handling:**
-- Canon violations → `ERRCODE_DATA_CORRUPTED` (indicates corruption or tampering)
-- Not a format error (that would be `ERRCODE_INVALID_BINARY_REPRESENTATION`)
+- Canon violations → ERRCODE_DATA_CORRUPTED (indicates corruption or tampering)
+- Not a format error (that would be ERRCODE_INVALID_BINARY_REPRESENTATION)
 - SSKs are immutable; non-canonical encodings should never occur in practice
 
 ## Format Identification and Versioning
@@ -532,7 +532,7 @@ bool validate_canon(encoded_bytes, len, format_spec) {
 
 Every encoded SSK begins with a **format version** encoded as CDU:
 
-```c
+```
 [format_version]  CDU using CDU_DEFAULT parameters
 ```
 
@@ -545,7 +545,7 @@ This enables:
 
 1. **Decode all supported formats**: Implementation can read any format version it knows about
 2. **Encode to specified format**: Can re-encode to original format or different supported format
-3. **Default encoding format**: New SSKs are encoded using `SSK_DEFAULT_ENCODING_FORMAT`
+3. **Default encoding format**: New SSKs are encoded using SSK_DEFAULT_ENCODING_FORMAT
 4. **Format changes are rare**: Only during major upgrades with bulk re-encoding strategy
 
 ### Format 0 Status
@@ -556,7 +556,7 @@ This enables:
 
 When introducing Format 1+ (if needed after production data emerges):
 
-1. Define new canon parameters in new `SSKFormatSpec` structure
+1. Define new canon parameters in new SSKFormatSpec structure
 2. Document new format specification with all 9 rules applied to new parameters
 3. Implement separate encode/decode paths for new format
 4. **Never mix formats in operations** (equality, hashing, etc.)
@@ -564,7 +564,7 @@ When introducing Format 1+ (if needed after production data emerges):
 
 **Cross-format comparison:**
 
-```c
+```
 bool ssk_equals(SSK *a, SSK *b) {
     // Require same format (or convert first)
     if (a->format_version != b->format_version) {
@@ -587,9 +587,9 @@ SSK uses **Canonical Data Unit** (CDU) as sole inner codec, i.e for both fixed l
 
 ### CDU Type Structure
 
-Each CDU type is defined by a `CDUParam` structure:
+Each CDU type is defined by a CDUParam structure:
 
-```c
+```
 typedef struct {
     uint8_t  base_bits;        // Total domain size in bits (for validation)
     uint8_t  first : 7;        // Bits in first segment (0 = special zero case)
@@ -602,18 +602,18 @@ typedef struct {
 
 ### Fixed-Length Encoding
 
-For `fixed = 1` types (RAW1, RAW2, RAW64):
-- Write exactly `base_bits` bits directly to the bit stream
+For fixed = 1 types (RAW1, RAW2, RAW64):
+- Write exactly base_bits bits directly to the bit stream
 - No continuation overhead
 - Used for raw data blocks and flags
 
 ### Variable-Length Encoding
 
-For `fixed = 0` types:
+For fixed = 0 types:
 - Types are defined by base_bits, first, step_size and max_steps, but those parameters are reflected in a steps array to speed up the codec.
 - Every step has a continuation bit including the last, where it is set to 0, as a reliable sentinel.
 - Encoding stops when a 0 contination bit is encountered
-- Special case: `first = 0` allows value 0 to encode in 1 bit - just the obligatory 0 continuation bit
+- Special case: first = 0 allows value 0 to encode in 1 bit - just the obligatory 0 continuation bit
 
 
 **Encoding Algorithm** (simplified):
@@ -638,20 +638,20 @@ write encoded to bit stream (bits_used bits)
 
 **Critical rule for variable-length types:** The final step (remainder) of a CDU type **MUST be >= step_size**. This ensures:
 
-1. **Canonality**: Without this constraint, the same value could encode in multiple ways (e.g., value 10 with `first=4, step_size=6` could use 1 step of 4 bits + remainder of 6, OR 1 step of 4 bits + remainder of 4 + extra continuation). Requiring remainder >= step_size eliminates ambiguity.
+1. **Canonality**: Without this constraint, the same value could encode in multiple ways (e.g., value 10 with first=4, step_size=6 could use 1 step of 4 bits + remainder of 6, OR 1 step of 4 bits + remainder of 4 + extra continuation). Requiring remainder >= step_size eliminates ambiguity.
 
 2. **No waste**: Prevents tiny final steps (1-2 bits) that would waste space relative to the extra continuation bit they require.
 
 3. **Deterministic decoding**: Ensures the decoder can unambiguously reconstruct the value without needing to try multiple step combinations.
 
-**Implementation rule:** When calculating `middle_steps` from `base_bits`, `first`, and `step_size`:
-- Calculate `bits_after_first = base_bits - first`
-- Calculate `max_possible_middles = bits_after_first / step_size`
-- Calculate `remainder = bits_after_first - (max_possible_middles * step_size)`
-- If `remainder < step_size`, decrement `middle_steps` until remainder is sufficient
-- This ensures the final step always satisfies: `final_step = remainder >= step_size`
+**Implementation rule:** When calculating middle_steps from base_bits, first, and step_size:
+- Calculate bits_after_first = base_bits - first
+- Calculate max_possible_middles = bits_after_first / step_size
+- Calculate remainder = bits_after_first - (max_possible_middles * step_size)
+- If remainder < step_size, decrement middle_steps until remainder is sufficient
+- This ensures the final step always satisfies: final_step = remainder >= step_size
 
-**Example:** For `base_bits=20, first=6, step_size=7`:
+**Example:** For base_bits=20, first=6, step_size=7:
 - bits_after_first = 14
 - max_possible_middles = 14 / 7 = 2
 - remainder = 14 - (2 * 7) = 0
@@ -677,29 +677,29 @@ Format 0 defines these CDU types with frozen parameters:
 | ENUM_COMBINED | No | 56 | 8 | {8,12,14,18} | Combined enum data |
 
 **Field Assignments** (frozen for Format 0):
-- `format_version` → `DEFAULT` 1 bit for 0, more bits when format > 0
-- `rare_bit` → `RAW1` (0 or 1)
-- `n_partitions` → `SMALL_INT`
-- `partition_delta` → `LARGE_INT`
-- `n_segments` → `SMALL_INT`
-- `segment_kind` → `RAW1` (0=RLE, 1=MIX)
-- `initial_delta` → `INITIAL_DELTA`
-- `length_bits` → `MEDIUM_INT`
-- `enum_k` → `ENUM_K`
-- `enum_rank` → `ENUM_RANK`
-- `enum_combined` → `ENUM_COMBINED`
-- Raw data blocks → `RAW64`
+- format_version → DEFAULT 1 bit for 0, more bits when format > 0
+- rare_bit → RAW1 (0 or 1)
+- n_partitions → SMALL_INT
+- partition_delta → LARGE_INT
+- n_segments → SMALL_INT
+- segment_kind → RAW1 (0=RLE, 1=MIX)
+- initial_delta → INITIAL_DELTA
+- length_bits → MEDIUM_INT
+- enum_k → ENUM_K
+- enum_rank → ENUM_RANK
+- enum_combined → ENUM_COMBINED
+- Raw data blocks → RAW64
 
 ### Example: SMALL_INT Encoding
 
-Parameters: `first=4`, `steps={4,6,6}`, `max_steps=3`
+Parameters: first=4, steps={4,6,6}, max_steps=3
 
 | Value | Segments | Bits | Encoding |
 |-------|----------|------|----------|
-| 0 | 1 (special) | 5 | `00000` (4 bits + cont=0) |
-| 5 | 1 | 5 | `00101 0` (4+1) |
-| 20 | 2 | 11 | `0100 1 0100 0` (4+1 + 6+1) |
-| 1000 | 3 | 17 | `0100 1 100100 1 010000 0` (4+1 + 6+1 + 6+1) |
+| 0 | 1 (special) | 5 | 00000 (4 bits + cont=0) |
+| 5 | 1 | 5 | 00101 0 (4+1) |
+| 20 | 2 | 11 | 0100 1 0100 0 (4+1 + 6+1) |
+| 1000 | 3 | 17 | 0100 1 100100 1 010000 0 (4+1 + 6+1 + 6+1) |
 
 ### Migration from VLQ-P
 
@@ -716,13 +716,13 @@ This change improves compression ratios and simplifies the codec implementation.
 These parameters define Format 0 encoding rules. They are **IMMUTABLE** and captured in code:
 
 ### Structural Parameters
-```c
+```
 #define PARTITION_SIZE_BITS     32      // 2^32 IDs per partition
 #define CHUNK_BITS              64      // Fixed chunk size
 ```
 
 ### Encoding Decision Parameters
-```c
+```
 #define K_CHUNK_ENUM_MAX        18      // Max popcount for combinadic encoding
 #define DOMINANT_RUN_THRESHOLD  96      // Min bits to split at dominant gap
 #define RARE_RUN_THRESHOLD      64      // Min bits for RLE segment
@@ -730,13 +730,13 @@ These parameters define Format 0 encoding rules. They are **IMMUTABLE** and capt
 ```
 
 ### Rank Encoding
-```c
+```
 #define N_BITS_FOR_K            6       // Bits to encode k in ENUM
 // RANK_BITS[n][k] = ceil(log2(C(n,k)))  // Precomputed table (65 × 19 array)
 ```
 
 ### Bit Ordering
-```c
+```
 #define CHUNK_BIT_ORDER         LSB_FIRST  // Least significant bit = lowest ID
 ```
 
@@ -770,8 +770,8 @@ These values are **educated guesses**, refined during development. Once frozen f
 
 Encoded SSKs are decoded into memory structures optimized for lookup and modification:
 
-```c
-typedef struct SSKDecoded {
+```
+typedef struct AbV {
     uint16_t format_version;        // Format identifier
     uint8_t  rare_bit;              // Global rare bit (0 or 1)
     uint8_t  _pad1;
@@ -782,7 +782,7 @@ typedef struct SSKDecoded {
     uint32_t _pad2;
     uint64_t cardinality;           // Total count of set bits
     uint32_t partition_offs[];      // Flexible array member (offsets to partitions)
-} SSKDecoded;
+} * AbV;
 ```
 
 **Why offsets, not pointers?**
@@ -793,13 +793,13 @@ typedef struct SSKDecoded {
 **Memory layout:**
 ```
 [Single contiguous allocation]
-  ├─ SSKDecoded header (32 bytes)
+  ├─ AbV header (32 bytes)
   ├─ partition_offs[n_partitions] offset array (FAM)
   └─ Variable-length partition/segment/chunk data
-      ├─ SSKPartition[n_partitions]
+      ├─ AbVPartition[n_partitions]
       │   ├─ Partition header (28 bytes)
       │   ├─ segment_offs[n_segments] offset array (FAM)
-      │   └─ SSKSegment[n_segments]
+      │   └─ AbVSegment[n_segments]
       │       ├─ Segment header (24 bytes)
       │       └─ data[] (FAM) - contains chunk metadata and block bitmaps
 ```
@@ -810,7 +810,7 @@ Offset arrays enable O(1) access and realloc-safe growth; contiguous layout impr
 
 Canon must be verified through testing:
 
-```c
+```
 void test_canon_bijection() {
     // Create subset via different construction paths
     SSK *ssk1 = create_from_ids({5, 10, 15, 20});

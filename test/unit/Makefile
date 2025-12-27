@@ -3,6 +3,9 @@
 
 CC ?= gcc
 CFLAGS ?= -std=c99 -Wall -Wextra -g -O2
+ifeq ($(TRIVIAL),1)
+CFLAGS += -DTRIVIAL
+endif
 INCLUDES = -I../../include
 
 TEST_RUNNER_OBJS = \

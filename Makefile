@@ -21,6 +21,9 @@ EXTENSION = ssk
 DATA = sql/ssk--1.0.sql
 
 PG_CPPFLAGS = -Iinclude -fno-lto -DUSE_PG
+ifeq ($(TRIVIAL),1)
+PG_CPPFLAGS += -DTRIVIAL
+endif
 SHLIB_LINK = -fno-lto
 
 override CFLAGS := -fPIC $(filter-out -flto=auto -ffat-lto-objects, $(CFLAGS))

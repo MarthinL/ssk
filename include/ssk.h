@@ -6,10 +6,22 @@
 #ifndef SSK_H
 #define SSK_H
 
+#ifdef TRIVIAL
+
+#include "ssk_format.h" // FOR TRIVIAL, essentially bakes "Format 1023" into the code
+
+/*
+ * The TRIVIAL implenentation of SSK operates in a constrained domain of IDs 1..64.
+ * In this mode, the Abstract bit Vector is represented directly as a single
+ * uint64_t value, where each bit corresponds directly to an ID in the domain.
+ */
+
+#else // NON TRIVIAL
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include "ssk_format.h"
+#include "ssk_format.h" // For NON TRIVIAL, bakes "Format 0" into the code
 #include "cdu.h"
 
 /**
@@ -55,7 +67,7 @@
  * If target_format is 0, encodes using the format the SSK was decoded from.
  * Otherwise, converts to the specified format (if supported).
  */
-int ssk_encode(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size, uint16_t target_format);
+int ssk_encode(const AbV abv, uint8_t *buffer, size_t buffer_size, uint16_t target_format);
 
 /**
  * Decode a binary SSK into memory structures.
@@ -68,7 +80,7 @@ int ssk_encode(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size, uint1
  * Caller must free returned SSK with ssk_free_decoded().
  * Supports decoding any known format version.
  */
-int ssk_decode(const uint8_t *buffer, size_t buffer_size, SSKDecoded **ssk);
+int ssk_decode(const uint8_t *buffer, size_t buffer_size, AbV *abv);
 
 // ============================================================================
 // CDU CODEC
@@ -139,28 +151,28 @@ bool ssk_combinadic_rank_valid(uint64_t rank, uint8_t n, uint8_t k);
 /**
  * Set a bit (add an ID) in decoded SSK.
  *
- * @param ssk Decoded SSK (may be reallocated)
+ * @param abv Decoded SSK (may be reallocated)
  * @param id ID to add
  * @return Updated SSK pointer (may differ from input), or NULL on error
  */
-SSKDecoded *ssk_set_bit(SSKDecoded *ssk, uint64_t id);
+AbV abv_set_bit(AbV abv, uint64_t id);
 
 /**
  * Get a bit (check if ID is present) in decoded SSK.
  *
- * @param ssk Decoded SSK
+ * @param abv Decoded SSK
  * @param id ID to check
  * @return 1 if present, 0 if absent
  */
-int ssk_get_bit(const SSKDecoded *ssk, uint64_t id);
+int abv_get_bit(const AbV abv, uint64_t id);
 
 /**
  * Count set bits (cardinality) of decoded SSK.
  *
- * @param ssk Decoded SSK
+ * @param abv Decoded SSK
  * @return Number of IDs in the subset
  */
-uint64_t ssk_popcount(const SSKDecoded *ssk);
+uint64_t abv_popcount(const AbV abv);
 
 // ============================================================================
 // CACHE/STORE (Stubbed for v0.1)
@@ -169,34 +181,34 @@ uint64_t ssk_popcount(const SSKDecoded *ssk);
 /**
  * Retrieve cached decoded SSK from keystore.
  *
- * @param key Encoded SSK (Datum representation)
+ * @param ssk Encoded SSK (Datum representation)
  * @return Cached decoded SSK, or NULL if not cached
  *
  * PostgreSQL only: session-local cache to avoid repeated decoding.
  * v0.1: Always returns NULL (stub).
  */
-SSKDecoded *ssk_cache_get(void *key);
+AbV abv_cache_get(void *ssk);
 
 /**
  * Store decoded SSK in keystore.
  *
- * @param key Encoded SSK (Datum representation)
- * @param obj Decoded SSK to cache
+ * @param ssk Encoded SSK (Datum representation)
+ * @param abv Decoded SSK to cache
  *
  * PostgreSQL only: caches decoded SSK for session lifetime.
  * v0.1: No-op (stub).
  */
-void ssk_cache_put(void *key, SSKDecoded *obj);
+void abv_cache_put(void *ssk, AbV abv);
 
 /**
  * Adopt decoded SSK from aggregate context into cache.
  * Called by aggregate finalize to enable future sharing.
  *
- * @param obj Decoded SSK from aggregate state
+ * @param abv Decoded SSK from aggregate state
  *
  * v0.1: No-op (stub).
  */
-void ssk_cache_adopt_from_aggregate(SSKDecoded *obj);
+void abv_cache_adopt_from_aggregate(AbV abv);
 
 // ============================================================================
 // ORDINALITY CODEC (Legacy - may be superseded by CDU)
@@ -221,5 +233,7 @@ int ordinality_encode(const uint32_t *ordinality, int length, uint8_t *buffer);
  * @return Bytes read, or -1 on error
  */
 int ordinality_decode(const uint8_t *buffer, uint32_t *ordinality, int *length);
+
+#endif // (NON) TRIVIAL
 
 #endif // SSK_H

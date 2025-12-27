@@ -19,6 +19,10 @@ regression.diffs
 Thumbs.db
 
 # Editor files
-# .vscode/  # Uncomment if you don't want to commit VS Code config
+.vscode/
 *.swp
 *.swo
+
+# Python virtual environments
+.venv/
+venv/

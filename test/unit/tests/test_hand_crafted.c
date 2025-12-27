@@ -1,7 +1,7 @@
 /*
  * tests/test_hand_crafted.c
  *
- * Hand-crafted SSKDecoded test structures for codec validation.
+ * Hand-crafted AbV test structures for codec validation.
  *
  * Each test case is laid out with:
  *   - Fields ordered in encoding sequence
@@ -29,10 +29,21 @@
  *       [token_stream]     token_tag(2) + token_data
  *
  * STRUCTURE SIZES:
- *   SSKDecoded:   32 bytes, partition_offs[] FAM at offset 32
- *   SSKPartition: 28 bytes, segment_offs[] FAM at offset 28
- *   SSKSegment:   24 bytes, data[] FAM at offset 24
+ *   struct AbV:   32 bytes, partition_offs[] FAM at offset 32
+ *   AbVPartition: 28 bytes, segment_offs[] FAM at offset 28
+ *   AbVSegment:   24 bytes, data[] FAM at offset 24
  */
+
+#ifdef TRIVIAL
+
+/*
+ * Hand-crafted tests for TRIVIAL implementation.
+ * TODO: Implement trivial hand-crafted tests
+ */
+
+int run_hand_crafted_tests(void) { return 0; }
+
+#else // NON TRIVIAL
 
 #include <stdio.h>
 #include <stdint.h>
@@ -41,7 +52,7 @@
 #include "../include/ssk_decoded.h"
 
 /* Forward declaration for testing */
-int ssk_encode_impl(const SSKDecoded *ssk, uint8_t *buffer, size_t buffer_size, 
+int ssk_encode_impl(const AbV abv, uint8_t *buffer, size_t buffer_size, 
                    uint16_t target_format, FILE *debug_log, char *mock_output, 
                    size_t mock_output_size, size_t *mock_output_used);
 
@@ -70,12 +81,12 @@ build_test_single_42(uint8_t *buf, size_t bufsize)
 {
     memset(buf, 0, bufsize);
 
-    SSKDecoded   *ssk       = (SSKDecoded *)buf;
-    SSKPartition *partition = (SSKPartition *)(buf + 36);
-    SSKSegment   *segment   = (SSKSegment *)(buf + 68);
+    AbV           abv       = (AbV)buf;
+    AbVPartition *partition = (AbVPartition *)(buf + 36);
+    AbVSegment   *segment   = (AbVSegment *)(buf + 68);
 
-    /* --- SSKDecoded --- */
-    *ssk = (SSKDecoded){
+    /* --- AbV --- */
+    *abv = (struct AbV){
         .format_version     = 0,            // ??? CDU: bits
         .rare_bit           = 1,            // ??? (global rare bit)
         .n_partitions       = 1,            // ??? (implies 1 partition follows)
@@ -84,10 +95,10 @@ build_test_single_42(uint8_t *buf, size_t bufsize)
         .var_data_used      = 56,           // ---
         .var_data_allocated = bufsize - 36, // ---
     };
-    ssk->partition_offs[0]  = 4;            // --- (partition at buf+36)
+    abv->partition_offs[0]  = 4;            // --- (partition at buf+36)
 
-    /* --- SSKPartition --- */
-    *partition = (SSKPartition){
+    /* --- AbVPartition --- */
+    *partition = (AbVPartition){
         .partition_id       = 0,            // ??? delta=0: CDU bits
         .n_segments         = 1,            // ??? CDU: bits
         .rare_bit           = 1,            // ??? (partition rare bit)
@@ -98,8 +109,8 @@ build_test_single_42(uint8_t *buf, size_t bufsize)
     };
     partition->segment_offs[0] = 4;         // --- (segment at buf+68)
 
-    /* --- SSKSegment (RLE) --- */
-    *segment = (SSKSegment){
+    /* --- AbVSegment (RLE) --- */
+    *segment = (AbVSegment){
         .segment_type       = SEG_TYPE_RLE, // ??? 1 bit: 0
         .start_bit          = 42,           // ??? delta=42: CDU bits
         .n_bits             = 1,            // ??? CDU: bits
@@ -143,11 +154,11 @@ build_test_sparse_3(uint8_t *buf, size_t bufsize)
 {
     memset(buf, 0, bufsize);
 
-    SSKDecoded   *ssk       = (SSKDecoded *)buf;
-    SSKPartition *partition = (SSKPartition *)(buf + 36);
-    SSKSegment   *segment   = (SSKSegment *)(buf + 68);
+    AbV           abv       = (AbV)buf;
+    AbVPartition *partition = (AbVPartition *)(buf + 36);
+    AbVSegment   *segment   = (AbVSegment *)(buf + 68);
 
-    *ssk = (SSKDecoded){
+    *abv = (struct AbV){
         .format_version     = 0,            // ??? CDU: bits
         .rare_bit           = 1,            // ???
         .n_partitions       = 1,            // ???
@@ -156,9 +167,9 @@ build_test_sparse_3(uint8_t *buf, size_t bufsize)
         .var_data_used      = 72,           // ---
         .var_data_allocated = bufsize - 36, // ---
     };
-    ssk->partition_offs[0]  = 4;            // ---
+    abv->partition_offs[0]  = 4;            // ---
 
-    *partition = (SSKPartition){
+    *partition = (AbVPartition){
         .partition_id       = 0,            // ??? delta=0
         .n_segments         = 1,            // ??? CDU: bits
         .rare_bit           = 1,            // ???
@@ -169,7 +180,7 @@ build_test_sparse_3(uint8_t *buf, size_t bufsize)
     };
     partition->segment_offs[0] = 4;         // ---
 
-    *segment = (SSKSegment){
+    *segment = (AbVSegment){
         .segment_type       = SEG_TYPE_MIX, // ??? 1 bit: 1
         .start_bit          = 9,            // ??? delta=9: CDU bits
         .n_bits             = 21,           // ??? CDU: bits
@@ -222,11 +233,11 @@ build_test_raw_30(uint8_t *buf, size_t bufsize)
 {
     memset(buf, 0, bufsize);
 
-    SSKDecoded   *ssk       = (SSKDecoded *)buf;
-    SSKPartition *partition = (SSKPartition *)(buf + 36);
-    SSKSegment   *segment   = (SSKSegment *)(buf + 68);
+    AbV           abv       = (AbV)buf;
+    AbVPartition *partition = (AbVPartition *)(buf + 36);
+    AbVSegment   *segment   = (AbVSegment *)(buf + 68);
 
-    *ssk = (SSKDecoded){
+    *abv = (struct AbV){
         .format_version     = 0,            // ??? CDU: bits
         .rare_bit           = 1,            // ??? (1s are rare: 30/63 < 50%)
         .n_partitions       = 1,            // ???
@@ -235,9 +246,9 @@ build_test_raw_30(uint8_t *buf, size_t bufsize)
         .var_data_used      = 72,           // ---
         .var_data_allocated = bufsize - 36, // ---
     };
-    ssk->partition_offs[0]  = 4;            // ---
+    abv->partition_offs[0]  = 4;            // ---
 
-    *partition = (SSKPartition){
+    *partition = (AbVPartition){
         .partition_id       = 0,            // ??? delta=0
         .n_segments         = 1,            // ???
         .rare_bit           = 1,            // ???
@@ -248,7 +259,7 @@ build_test_raw_30(uint8_t *buf, size_t bufsize)
     };
     partition->segment_offs[0] = 4;         // ---
 
-    *segment = (SSKSegment){
+    *segment = (AbVSegment){
         .segment_type       = SEG_TYPE_MIX, // ??? 1 bit: 1
         .start_bit          = 1,            // ??? delta=1: CDU bits
         .n_bits             = 63,           // ??? CDU: bits
@@ -290,11 +301,11 @@ build_test_rle_64(uint8_t *buf, size_t bufsize)
 {
     memset(buf, 0, bufsize);
 
-    SSKDecoded   *ssk       = (SSKDecoded *)buf;
-    SSKPartition *partition = (SSKPartition *)(buf + 36);
-    SSKSegment   *segment   = (SSKSegment *)(buf + 68);
+    AbV           abv       = (AbV)buf;
+    AbVPartition *partition = (AbVPartition *)(buf + 36);
+    AbVSegment   *segment   = (AbVSegment *)(buf + 68);
 
-    *ssk = (SSKDecoded){
+    *abv = (struct AbV){
         .format_version     = 0,            // ??? CDU: bits
         .rare_bit           = 1,            // ???
         .n_partitions       = 1,            // ???
@@ -303,9 +314,9 @@ build_test_rle_64(uint8_t *buf, size_t bufsize)
         .var_data_used      = 56,           // ---
         .var_data_allocated = bufsize - 36, // ---
     };
-    ssk->partition_offs[0]  = 4;            // ---
+    abv->partition_offs[0]  = 4;            // ---
 
-    *partition = (SSKPartition){
+    *partition = (AbVPartition){
         .partition_id       = 0,            // ??? delta=0
         .n_segments         = 1,            // ???
         .rare_bit           = 1,            // ???
@@ -316,7 +327,7 @@ build_test_rle_64(uint8_t *buf, size_t bufsize)
     };
     partition->segment_offs[0] = 4;         // ---
 
-    *segment = (SSKSegment){
+    *segment = (AbVSegment){
         .segment_type       = SEG_TYPE_RLE, // ??? 1 bit: 0
         .start_bit          = 0,            // ??? delta=0: CDU bits
         .n_bits             = 64,           // ??? length=64
@@ -354,26 +365,26 @@ print_set_bits(uint64_t bitmap)
 static void
 print_decoded(const uint8_t *buf, const char *name)
 {
-    const SSKDecoded *ssk = (const SSKDecoded *)buf;
+    const AbV abv = (AbV)buf;
 
     printf("\n=== %s ===\n", name);
     printf("  format=%u, rare_bit=%u, n_partitions=%u, cardinality=%lu\n",
-           ssk->format_version, ssk->rare_bit, ssk->n_partitions,
-           (unsigned long)ssk->cardinality);
+           abv->format_version, abv->rare_bit, abv->n_partitions,
+           (unsigned long)abv->cardinality);
 
-    if (ssk->n_partitions == 0) {
+    if (abv->n_partitions == 0) {
         printf("  (empty set)\n");
         return;
     }
 
-    for (uint32_t p = 0; p < ssk->n_partitions; p++) {
-        SSKPartition *part = decoded_partition((SSKDecoded *)ssk, p);
+    for (uint32_t p = 0; p < abv->n_partitions; p++) {
+        AbVPartition *part = decoded_partition((AbV)abv, p);
         printf("\n  Partition %u: id=%u, rare_bit=%u, n_segments=%u, card=%u\n",
                p, part->partition_id, part->rare_bit, part->n_segments,
                part->cardinality);
 
         for (uint32_t s = 0; s < part->n_segments; s++) {
-            SSKSegment *seg = partition_segment(part, s);
+            AbVSegment *seg = partition_segment(part, s);
             uint32_t n_chunks = segment_n_chunks(seg->n_bits);
             const char *stype = (seg->segment_type == SEG_TYPE_RLE) ? "RLE" : "MIX";
 
@@ -432,22 +443,22 @@ run_vector(const TestVector *v)
 
     v->build(buf, sizeof(buf));
 
-    const SSKDecoded *ssk = (const SSKDecoded *)buf;
+    const AbV abv = (AbV)buf;
 
     /* Verify cardinality */
-    if (ssk->cardinality != v->expected_card) {
+    if (abv->cardinality != v->expected_card) {
         printf("FAIL: %s - cardinality mismatch (got %lu, expected %lu)\n",
-               v->name, (unsigned long)ssk->cardinality,
+               v->name, (unsigned long)abv->cardinality,
                (unsigned long)v->expected_card);
         tests_failed++;
         return;
     }
 
     /* Verify traversal */
-    if (ssk->n_partitions > 0) {
-        SSKPartition *part = decoded_partition((SSKDecoded *)ssk, 0);
+    if (abv->n_partitions > 0) {
+        AbVPartition *part = decoded_partition((AbV)abv, 0);
         if (part->n_segments > 0) {
-            SSKSegment *seg = partition_segment(part, 0);
+            AbVSegment *seg = partition_segment(part, 0);
             if (seg->segment_type != SEG_TYPE_MIX &&
                 seg->segment_type != SEG_TYPE_RLE) {
                 printf("FAIL: %s - invalid segment type %u\n",
@@ -465,7 +476,7 @@ run_vector(const TestVector *v)
     char audit_buf[1024];
     size_t audit_used;
     
-    int encoded_bytes = ssk_encode_impl((const SSKDecoded *)buf, encoded_buf, sizeof(encoded_buf), 0, 
+    int encoded_bytes = ssk_encode_impl((const AbV)buf, encoded_buf, sizeof(encoded_buf), 0, 
                                        NULL, audit_buf, sizeof(audit_buf), &audit_used);
     
     if (encoded_bytes < 0) {
@@ -485,7 +496,7 @@ int
 run_hand_crafted_tests(void)
 {
     printf("\n========================================\n");
-    printf("Hand-Crafted SSKDecoded Test Vectors\n");
+    printf("Hand-Crafted AbV Test Vectors\n");
     printf("========================================\n");
 
     for (size_t i = 0; i < N_VECTORS; i++) {
@@ -498,6 +509,8 @@ run_hand_crafted_tests(void)
     return tests_failed;
 }
 
+#endif // NON TRIVIAL
+
 /* Allow standalone execution */
 #ifdef STANDALONE_TEST
 int main(void)
@@ -505,4 +518,5 @@ int main(void)
     run_hand_crafted_tests();
     return tests_failed > 0 ? 1 : 0;
 }
-#endif
+#endif // (NON) TRIVIAL
+

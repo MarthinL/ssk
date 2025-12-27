@@ -355,7 +355,7 @@ And so concludes the rules to divide (and ignore most of) the data by which to i
 │ Illustration 7: Hierarchical Structure Overview                     │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
-│  SSKDecoded (root)                                                  │
+│  AbV (root)                                                         │
 │  │                                                                  │
 │  ├─ Partition 0 (IDs: 0x0000_0000_xxxx_xxxx)                        │
 │  │  ├─ Segment 0 (RLE: offset=100, len=50)                          │

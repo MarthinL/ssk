@@ -19,15 +19,15 @@ For SSK: n ∈ [1..64] (chunk size), k ∈ [0..18] (popcount threshold)
 ## Precomputation
 
 Tables computed once at extension load using Pascal's triangle:
-- `binomial_coeff[n][k]`: C(n,k) values
-- `rank_bits[n][k]`: ceil(log2(C(n,k))) - bits needed to encode rank
+- binomial_coeff[n][k]: C(n,k) values
+- rank_bits[n][k]: ceil(log2(C(n,k))) - bits needed to encode rank
 
 ## Files
 
-- `combinadic_init.c`: Table initialization (Pascal's triangle)
-- `combinadic_rank.c`: Rank operation (bit pattern → rank)
-- `combinadic_unrank.c`: Unrank operation (rank → bit pattern)
+- combinadic_init.c: Table initialization (Pascal's triangle)
+- combinadic_rank.c: Rank operation (bit pattern → rank)
+- combinadic_unrank.c: Unrank operation (rank → bit pattern)
 
 ## Related Concerns
 
-- `../chunks/`: Uses combinadic for ENUM token encoding
+- ../chunks/: Uses combinadic for ENUM token encoding

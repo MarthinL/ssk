@@ -92,24 +92,24 @@ Do not conflate these. When you're debugging a complex encoding issue, you're in
 
 | IDEF0 Activity | Directory | Purpose | Key Files |
 |----------------|-----------|---------|-----------|
-| **IMP/A0** | `src/udt/` | PostgreSQL integration | Type definitions, I/O functions |
-| **IMP/A1** Decoder | `src/codec/` | Value decoding | `decode.c`, Format 0 parsing |
-| **IMP/A11-A14** | `src/keystore/` | AbV caching | Cache management |
+| **IMP/A0** | src/udt/ | PostgreSQL integration | Type definitions, I/O functions |
+| **IMP/A1** Decoder | src/codec/ | Value decoding | decode.c, Format 0 parsing |
+| **IMP/A11-A14** | src/keystore/ | AbV caching | Cache management |
 | **IMP/A2** Processor | *Distributed* | Set operations | Needs consolidation |
-| **IMP/A21** | `src/agg/` | Aggregates | Aggregate function handlers |
-| **IMP/A3** Encoder | `src/codec/` | Value encoding | `encode.c`, CDU serialization |
-| **CDU** (Mechanism) | `src/codec/`, `include/cdu.h` | Variable-length encoding | Canonical Data Unit |
-| **Format 0** (Control) | `include/ssk_format.h` | Encoding specification | Hierarchical structure |
+| **IMP/A21** | src/agg/ | Aggregates | Aggregate function handlers |
+| **IMP/A3** Encoder | src/codec/ | Value encoding | encode.c, CDU serialization |
+| **CDU** (Mechanism) | src/codec/, include/cdu.h | Variable-length encoding | Canonical Data Unit |
+| **Format 0** (Control) | include/ssk_format.h | Encoding specification | Hierarchical structure |
 
 ### Project Concerns → Artifacts
 
 | IDEF0 Activity | Artifact Type | Location |
 |----------------|---------------|----------|
-| **PRJ/A1** Formulation | Formal definitions | `SPECIFICATION.md`, `SSK_INTRO.md` |
-| **PRJ/A2** Exposition | Examples, tutorials | `README.md`, `examples/` |
-| **PRJ/A3** Implementation | Core extension code | Early commits, `src/udt/` |
-| **PRJ/A4** Expansion | Scale engineering | Most of `src/`, `include/` |
-| **PRJ/A5** Vitalisation | Future directions | `TODO-LIST.md`, issues |
+| **PRJ/A1** Formulation | Formal definitions | SPECIFICATION.md, SSK_INTRO.md |
+| **PRJ/A2** Exposition | Examples, tutorials | README.md, examples/ |
+| **PRJ/A3** Implementation | Core extension code | Early commits, src/udt/ |
+| **PRJ/A4** Expansion | Scale engineering | Most of src/, include/ |
+| **PRJ/A5** Vitalisation | Future directions | TODO-LIST.md, issues |
 
 ---
 
@@ -131,11 +131,12 @@ SSK is NOT compression, NOT hashing. It's a bijection:
 
 **Definition:**
 - **AbV (Abstract Bit Vector):** Logical construct representing subset membership—one bit per ID in the domain.
-- **SSKDecoded:** Concrete C representation of the AbV. Its internal structure depends on domain and implementation:
-  - **Trivial domain (IDs 1..64):** `SSKDecoded` = `uint64_t` — single 64-bit AbV (no hierarchy, pure and simple)
-  - **Scale domain (IDs 1..2^64):** `SSKDecoded` = hierarchical struct with partitions → segments → chunks → tokens
+- **AbV:** Concrete C representation of the AbV. Its internal structure depends on domain and implementation:
+  - **Trivial domain (IDs 1..64):** AbV = uint64_t — single 64-bit AbV (no hierarchy, pure and simple)
+  - **Scale domain (IDs 1..2^64):** AbV = pointer to a struct AbV - a hierarchical structure with partitions → segments → chunks → tokens
 
-**In code:** Variables and parameters use the name `abv` to denote actual AbV values. Always of type `SSKDecoded` (or `SSKDecoded*`), but the implementation swaps via `#ifdef TRIVIAL_IMPL`.
+**In code:** Variables and parameters use the name abv to denote actual AbV values, while in the encoded
+form, variables carry the name ssk, which is always a variable length byte array.
 
 **Benefit:** 
 - IMP/A1 (Decoder) and IMP/A3 (Encoder) manage the format boundary (bytes ↔ AbV)

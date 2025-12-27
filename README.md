@@ -34,7 +34,7 @@ SSK is tailored for database subsets (e.g., IDs in a table), not arbitrary mathe
 
 ### Practical Application in Databases
 
-SSK is designed for tables with auto-generated `BIGINT` primary keys, though applicable to other key types. In SQL, selections define subsets of rows based on attributes via `SELECT` statements. These subsets are dynamic: rows are added, modified, or deleted, requiring re-evaluation of complex queries each time.
+SSK is designed for tables with auto-generated BIGINT primary keys, though applicable to other key types. In SQL, selections define subsets of rows based on attributes via SELECT statements. These subsets are dynamic: rows are added, modified, or deleted, requiring re-evaluation of complex queries each time.
 
 Traditionally, subsets lack stable identities:
 - Views or materialized views can persist results but require DBA intervention for naming and updates.
@@ -44,7 +44,7 @@ SSK transforms this by assigning each possible subset of a table's primary keys 
 
 - **Stable Subset Storage**: Capture complex selections as indexable SSKs, avoiding repeated query execution.
 - **Efficient Operations**: Perform set unions, intersections, and differences directly on SSKs; add/remove IDs without re-querying.
-- **Optimized Retrieval**: Read table attributes via primary key lookups instead of re-running intricate `SELECT` statements.
+- **Optimized Retrieval**: Read table attributes via primary key lookups instead of re-running intricate SELECT statements.
 - **Semantic Clarity**: SSKs represent predictable, updatable subsets for data that evolves predictably, complementing SQL's strength in handling unpredictable changes.
 
 By embodying subsets as scalars, SSK empowers databases to treat selections as first-class, manipulable objects, reducing redundant computation and enhancing relational analytics.
@@ -175,9 +175,9 @@ The encoding is partitioned for 64-bit ID spaces, with segments ordered by parti
 ### Example Structure
 - **Header**: Format version and partition metadata.
 - **Segments**: Alternating raw bits and RLE blocks, each with CDU encoded parameters.
-- **Canonical Property**: The encoding is deterministic, ensuring `encode(set A) == encode(set B)` iff `A == B`.
+- **Canonical Property**: The encoding is deterministic, ensuring encode(set A) == encode(set B) iff A == B.
 
-For detailed encoding specifications and format registry, see `ENCODING.md`.
+For detailed encoding specifications and format registry, see ENCODING.md.
 
 ## PostgreSQL Integration
 
@@ -193,14 +193,14 @@ SSK is designed as a PostgreSQL User-Defined Type (UDT), presenting externally a
 
 SSK uses PostgreSQL's PGXS build system:
 
-```bash
+```
 make
 sudo make install
 ```
 
 ### Windows
 
-SSK was developed and tested on Unix-like systems where `make` is native and PGXS is fully supported. PostgreSQL extension development on Windows has unique challenges due to toolchain differences (MSVC vs. GCC, header compatibility, etc.).
+SSK was developed and tested on Unix-like systems where make is native and PGXS is fully supported. PostgreSQL extension development on Windows has unique challenges due to toolchain differences (MSVC vs. GCC, header compatibility, etc.).
 
 If your daily work involves building PostgreSQL extensions on Windows, you likely have established toolchains and workflows. Adapt the build process to your environment as needed—whether using MinGW/MSYS2, Cygwin, or custom MSVC setups. The source code is portable C and should compile with appropriate PostgreSQL headers and libraries.
 
@@ -225,15 +225,15 @@ This project represents a critical component of a larger vision for advanced rel
 SSK uses PostgreSQL's standard testing frameworks: **pg_regress** for SQL tests and **TAP** for complex scenarios.
 
 **Quick start:**
-```bash
+```
 make USE_PGXS=1
 sudo make install USE_PGXS=1
 cd test && make installcheck USE_PGXS=1
 ```
 
-(Requires PostgreSQL superuser privileges to create test databases. See `TESTING.md` for alternatives.)
+(Requires PostgreSQL superuser privileges to create test databases. See TESTING.md for alternatives.)
 
-**For complete testing documentation**, see `TESTING.md` which covers:
+**For complete testing documentation**, see TESTING.md which covers:
 - How PostgreSQL's testing frameworks work (pg_regress, TAP, make check vs installcheck)
 - What tests exist and their purposes
 - How to run specific tests
@@ -243,7 +243,7 @@ cd test && make installcheck USE_PGXS=1
 
 ## Contributing
 
-Contributions are welcome! Please adhere to the project's style guide (`STYLE-GUIDE.md`). Technical decisions are documented in `DECISION_LOG.md`.
+Contributions are welcome! Please adhere to the project's style guide (STYLE-GUIDE.md). Technical decisions are documented in DECISION_LOG.md.
 
 ## License
 

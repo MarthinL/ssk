@@ -3,6 +3,27 @@
  * All rights reserved. See LICENSE for details.
  */
 
+#ifndef SSK_CDU_H
+#define SSK_CDU_H
+
+#ifdef TRIVIAL
+#define SAFE_BLOCKS
+/*
+ * CDU works the same in TRIVIAL and NON TRIVIAL cases.
+ * with one non-funcitonal exception: SAFE_BLOCKS is defined in TRIVIAL
+ * to enable extra safety checks in bitblock accesses, and the original
+ * NON TRIVIAL code still runs without it as it does not receive the block
+ * lengths as parameters yet. 
+ * When TRIVIAL code if being ported back to the NON TRIVIAL block, the
+ * intention would be to keep SAFE_BLOCKS enabled there as well, and 
+ * implement the upstream calculation of the buffer bits as it should be.
+ */
+
+#else // NON TRIVIAL
+// #define SAFE_BLOCKS
+#endif // (NON) TRIVIAL
+
+
 /*
  * include/cdu.h
  *
@@ -25,9 +46,6 @@
  * Format 0 defines WHAT data to encode (hierarchy structure).
  * CDU defines HOW to encode each data unit (bit packing).
  */
-
-#ifndef SSK_CDU_H
-#define SSK_CDU_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -132,7 +150,11 @@ extern CDUParam cdu_params[CDU_NUM_SUBTYPES];
  * @param bit_pos  Starting bit position
  * @return Bits written
  */
+#ifdef SAFE_BLOCKS
+size_t cdu_encode(uint64_t value, CDUtype type, uint8_t *buf, size_t bit_pos, size_t buf_bits);
+#else
 size_t cdu_encode(uint64_t value, CDUtype type, uint8_t *buf, size_t bit_pos);
+#endif //SAFE_BLOCKS
 
 /**
  * cdu_decode - Decode a CDU encoded value.

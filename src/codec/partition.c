@@ -3,6 +3,15 @@
  * All rights reserved. See LICENSE for details.
  */
 
+#ifdef TRIVIAL
+
+/*
+ * None of what is defined in this file plays a role in the TRIVIAL case.
+ * It purely addresses issues arising from upscaling the ID domain to BIGINT scale.
+ */
+
+#else // NON TRIVIAL
+
 /*
  * src/codec/partition.c
  *
@@ -296,3 +305,5 @@ partition_delta(uint32_t prev_partition, uint32_t curr_partition)
     /* Delta is gap minus 1 (consecutive partitions have delta 0) */
     return curr_partition - prev_partition - 1;
 }
+
+#endif // (NON) TRIVIAL

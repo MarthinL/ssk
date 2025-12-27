@@ -6,6 +6,24 @@
 #ifndef SSK_FORMAT_H
 #define SSK_FORMAT_H
 
+#ifdef TRIVIAL
+
+/*
+ * FOR THE TRIVIAL CASE, THIS HEADER BAKES IN "FORMAT 1023"
+ * WHICH IS THE SIMPLE 1..64 ID DOMAIN WITH DIRECT BITVECTOR MAPPING.
+ */
+
+#include "ssk_decoded.h"
+
+#define SSK_FORMAT 1023
+#define SSK_MIN_ID 1
+#define SSK_MAX_ID 64
+#define SSK_AbV_BITS 64
+
+#define SSK_PADDING_BITS 3
+
+#else // NON TRIVIAL
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
@@ -287,28 +305,28 @@ typedef struct SSKMixPayload {
     uint32_t tokens_off;        // Offset to SSKToken array
 } SSKMixPayload;
 
-// Note: SSKSegment, SSKPartition, SSKDecoded are defined in ssk_decoded.h
+// Note: AbVSegment, AbVPartition, AbV are defined in ssk_decoded.h
 
 // ============================================================================
 // MEMORY MANAGEMENT
 // ============================================================================
 
 /**
- * Allocate decoded SSK with initial capacity.
+ * Allocate AbV with initial capacity.
  * Memory layout calculated during decoding; may need realloc as decoding progresses.
  */
-SSKDecoded *ssk_alloc_decoded(uint16_t format_version, size_t initial_size);
+AbV abv_alloc(uint16_t format_version, size_t initial_size);
 
 /**
- * Grow decoded SSK memory if needed.
+ * Grow AbV memory if needed.
  * Returns new pointer (may differ from old due to realloc).
  */
-SSKDecoded *ssk_grow_decoded(SSKDecoded *ssk, size_t additional_size);
+AbV abv_grow(AbV abv, size_t additional_size);
 
 /**
- * Free decoded SSK and all associated memory.
+ * Free AbV and all associated memory.
  */
-void ssk_free_decoded(SSKDecoded *ssk);
+void abv_free(AbV abv);
 
 // Note: Use decoded_partition() and partition_segment() from ssk_decoded.h
 // for traversing the decoded structure.
@@ -397,5 +415,7 @@ const SSKFormatSpec *ssk_get_format_spec(uint16_t version);
 bool ssk_cdu_is_minimal(const uint8_t *encoded_bytes, 
                         CDUtype cdu_type,
                         uint64_t value);
+
+#endif // (NON) TRIVIAL
 
 #endif // SSK_FORMAT_H

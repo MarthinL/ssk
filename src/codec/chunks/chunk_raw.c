@@ -3,6 +3,15 @@
  * All rights reserved. See LICENSE for details.
  */
 
+#ifdef TRIVIAL
+
+/*
+ * None of what is defined in this file plays a role in the TRIVIAL case.
+ * It purely addresses issues arising from upscaling the ID domain to BIGINT scale.
+ */
+
+#else // NON TRIVIAL
+
 /*
  * src/codec/chunks/chunk_raw.c
  *
@@ -209,3 +218,6 @@ raw_run_encode(const uint8_t *src_bits, size_t src_bit_pos,
     
     return dst_bit_pos - start_pos;
 }
+
+#endif // (NON) TRIVIAL
+

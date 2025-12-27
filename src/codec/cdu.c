@@ -182,14 +182,22 @@ void cdu_init(void) {
  * 
  */
 size_t
+#ifdef SAFE_BLOCKS
+cdu_encode(uint64_t value, CDUtype type, uint8_t *buf, size_t bit_pos, size_t buf_bits)
+#else
 cdu_encode(uint64_t value, CDUtype type, uint8_t *buf, size_t bit_pos)
+#endif //SAFE_BLOCKS
 {
     const CDUParam *p = &cdu_params[type];
     int bits_used  = 0;
 
     if (p->fixed) {      // Fixed encoding: write base_bits, one block, no continuation bit overhead
 
+#ifdef SAFE_BLOCKS
+        bb_place_fl_block(buf, bit_pos, value, p->base_bits, buf_bits);   // write the raw block, one time!
+#else
         bb_place_fl_block(buf, bit_pos, value, p->base_bits);   // write the raw block, one time!
+#endif
         bits_used = p->base_bits;                               // set bits_used for return value              
         assert(bits_used <= 64);
 
@@ -210,7 +218,11 @@ cdu_encode(uint64_t value, CDUtype type, uint8_t *buf, size_t bit_pos)
       //************************************** CORE variable length encoding algorithm complete
 
       assert(bits_used <= 64);
+#ifdef SAFE_BLOCKS
+      bb_place_vl_encoding(buf, bit_pos, encoded, bits_used, buf_bits);
+#else
       bb_place_vl_encoding(buf, bit_pos, encoded, bits_used);
+#endif
     }
 
     return bits_used;
@@ -230,13 +242,21 @@ cdu_decode(const uint8_t *buf, size_t bit_pos, size_t buf_bits,
     size_t bits_used = 0;
 
     if (p->fixed) {      // Fixed decoding: read base_bits directly
+#ifdef SAFE_BLOCKS
+        *value_out = bb_fetch_fl_block(buf, bit_pos, p->base_bits, buf_bits);
+#else
         *value_out = bb_fetch_fl_block(buf, bit_pos, p->base_bits);
+#endif
         bits_used += p->base_bits;
     } else {             // Variable decoding: read in steps until continuation == 0 (sentinel semantics) 
       int         shift     = 0;
       uint8_t   * step      = (uint8_t *)p->steps;
       uint64_t    morebit   = 1ULL << *step;
+#ifdef SAFE_BLOCKS
+      uint64_t    buffer    = bb_fetch_vl_block(buf, bit_pos, buf_bits);  // preload buffer, done once;
+#else
       uint64_t    buffer    = bb_fetch_vl_block(buf, bit_pos);  // preload buffer, done once;
+#endif
       uint64_t    value     = 0ULL;
 
       //************************************** CORE variable length decoding algorithm starts here
