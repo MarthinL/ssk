@@ -8,8 +8,9 @@
 /*
  * include/ssk_decoded.h
  *
- * In-memory decoded representation of SSK values.
- *
+ * In-memory representation of abstract bit vectors (AbV).
+ * Defines C structures for both TRIVIAL (uint64_t) and NON-TRIVIAL (hierarchical)
+ * domains, plus operations to construct and manipulate them.
  */
 #ifdef TRIVIAL
 
@@ -33,7 +34,7 @@ typedef uint64_t AbV;
 /*
  * Design Principles:
  * ==================
- * 1. Single contiguous allocation - entire SSK lives in one memory block
+ * 1. Single contiguous allocation - entire AbV lives in one memory block
  * 2. No pointers - only offsets relative to defined bases (realloc-safe)
  * 3. Hierarchical offset arrays - each level has FAM for offsets to children
  * 4. Separated metadata from payload - chunk bitmaps are contiguous for SIMD/memcpy

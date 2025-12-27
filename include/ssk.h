@@ -56,31 +56,33 @@
 // ============================================================================
 
 /**
- * Encode a decoded SSK into binary format.
+ * Encode an abstract bit vector (AbV) into binary SSK format.
  * 
- * @param ssk Decoded SSK structure
- * @param buffer Output buffer for encoded data
+ * @param abv Abstract bit vector to encode
+ * @param buffer Output buffer for encoded SSK bytes
  * @param buffer_size Size of output buffer
- * @param target_format Format version to encode as (0 = use SSK's current format)
+ * @param target_format Format version to encode as (0 = Format 0)
  * @return Bytes written, or -1 on error
  *
- * If target_format is 0, encodes using the format the SSK was decoded from.
- * Otherwise, converts to the specified format (if supported).
+ * Transforms an in-memory AbV into a canonical byte sequence suitable for
+ * storage as an SSK value. The encoding is deterministic: same AbV always
+ * produces identical bytes (bijection property).
  */
-int ssk_encode(const AbV abv, uint8_t *buffer, size_t buffer_size, uint16_t target_format);
+int abv_encode(const AbV abv, uint8_t *buffer, size_t buffer_size, uint16_t target_format);
 
 /**
- * Decode a binary SSK into memory structures.
+ * Decode SSK bytes into an abstract bit vector (AbV) for manipulation.
  *
- * @param buffer Input buffer containing encoded SSK
+ * @param buffer Input buffer containing encoded SSK bytes
  * @param buffer_size Size of input buffer
- * @param ssk Output pointer for decoded SSK (allocated by this function)
+ * @param abv Output pointer for decoded AbV (allocated by this function)
  * @return Bytes read, or -1 on error
  *
- * Caller must free returned SSK with ssk_free_decoded().
- * Supports decoding any known format version.
+ * Transforms a byte sequence into an in-memory AbV structure for operations
+ * like set membership queries or modifications. Caller must free returned AbV
+ * with abv_free(). Supports decoding any known format version.
  */
-int ssk_decode(const uint8_t *buffer, size_t buffer_size, AbV *abv);
+int abv_decode(const uint8_t *buffer, size_t buffer_size, AbV *abv);
 
 // ============================================================================
 // CDU CODEC
@@ -149,27 +151,27 @@ bool ssk_combinadic_rank_valid(uint64_t rank, uint8_t n, uint8_t k);
 // ============================================================================
 
 /**
- * Set a bit (add an ID) in decoded SSK.
+ * Set a bit (add an ID) in an abstract bit vector.
  *
- * @param abv Decoded SSK (may be reallocated)
+ * @param abv Abstract bit vector (may be reallocated)
  * @param id ID to add
- * @return Updated SSK pointer (may differ from input), or NULL on error
+ * @return Updated AbV pointer (may differ from input), or NULL on error
  */
 AbV abv_set_bit(AbV abv, uint64_t id);
 
 /**
- * Get a bit (check if ID is present) in decoded SSK.
+ * Get a bit (check if ID is present) in an abstract bit vector.
  *
- * @param abv Decoded SSK
+ * @param abv Abstract bit vector
  * @param id ID to check
  * @return 1 if present, 0 if absent
  */
 int abv_get_bit(const AbV abv, uint64_t id);
 
 /**
- * Count set bits (cardinality) of decoded SSK.
+ * Count set bits (cardinality) of an abstract bit vector.
  *
- * @param abv Decoded SSK
+ * @param abv Abstract bit vector
  * @return Number of IDs in the subset
  */
 uint64_t abv_popcount(const AbV abv);
@@ -179,32 +181,32 @@ uint64_t abv_popcount(const AbV abv);
 // ============================================================================
 
 /**
- * Retrieve cached decoded SSK from keystore.
+ * Retrieve cached abstract bit vector from session keystore.
  *
- * @param ssk Encoded SSK (Datum representation)
- * @return Cached decoded SSK, or NULL if not cached
+ * @param ssk Encoded SSK bytes (Datum representation)
+ * @return Cached AbV, or NULL if not cached
  *
- * PostgreSQL only: session-local cache to avoid repeated decoding.
+ * PostgreSQL only: session-local cache to avoid repeated abv_decode() calls.
  * v0.1: Always returns NULL (stub).
  */
 AbV abv_cache_get(void *ssk);
 
 /**
- * Store decoded SSK in keystore.
+ * Store abstract bit vector in session keystore.
  *
- * @param ssk Encoded SSK (Datum representation)
- * @param abv Decoded SSK to cache
+ * @param ssk Encoded SSK bytes (Datum representation)
+ * @param abv Abstract bit vector to cache
  *
- * PostgreSQL only: caches decoded SSK for session lifetime.
- * v0.1: No-op (stub).
+ * PostgreSQL only: caches AbV for session lifetime to avoid re-decoding
+ * the same SSK value repeatedly. v0.1: No-op (stub).
  */
 void abv_cache_put(void *ssk, AbV abv);
 
 /**
- * Adopt decoded SSK from aggregate context into cache.
- * Called by aggregate finalize to enable future sharing.
+ * Adopt abstract bit vector from aggregate context into session cache.
+ * Called by aggregate finalfunc to enable future sharing across queries.
  *
- * @param abv Decoded SSK from aggregate state
+ * @param abv Abstract bit vector from aggregate state
  *
  * v0.1: No-op (stub).
  */

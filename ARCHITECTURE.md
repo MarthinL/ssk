@@ -133,7 +133,7 @@ SSK is NOT compression, NOT hashing. It's a bijection:
 - **AbV (Abstract Bit Vector):** Logical construct representing subset membership—one bit per ID in the domain.
 - **AbV:** Concrete C representation of the AbV. Its internal structure depends on domain and implementation:
   - **Trivial domain (IDs 1..64):** AbV = uint64_t — single 64-bit AbV (no hierarchy, pure and simple)
-  - **Scale domain (IDs 1..2^64):** AbV = pointer to a struct AbV - a hierarchical structure with partitions → segments → chunks → tokens
+  - **Scale domain (IDs 1..2^64):** AbV = pointer to a struct AbVRoot - a hierarchical structure with partitions → segments → chunks → tokens
 
 **In code:** Variables and parameters use the name abv to denote actual AbV values, while in the encoded
 form, variables carry the name ssk, which is always a variable length byte array.

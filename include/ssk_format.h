@@ -32,19 +32,19 @@
 
 /**
  * @file ssk_format.h
- * @brief Format 0 parameters and structures
+ * @brief Format 0 parameters and encoding specifications
  *
- * CONCERN: Persistence Layer (IMP/A1:Value Decoder, IMP/A3:Value Encoder)
+ * CONCERN: Persistence Layer (IMP/A1:AbV Decoder, IMP/A3:AbV Encoder)
  *
  * This header defines Format 0 encoding parameters. These values are
  * IMMUTABLE after production freeze. Any change requires Format 1+.
  *
  * WHAT IS FORMAT 0:
- * The canonical encoding that translates abstract bit vector representation
- * into storable bytes. Preserves bijection: same subset → identical bytes.
+ * The canonical encoding that serializes abstract bit vectors into storable
+ * bytes for SSK values. Preserves bijection: same AbV → identical bytes.
  *
  * WHAT IS NOT HERE:
- * - Representation semantics (controlled by Formal SSK Type Definition)
+ * - Representation semantics (controlled by ssk_decoded.h AbV definitions)
  * - Set operations (see IMP/A2:Function Processor)
  * - PostgreSQL integration (see IMP/A0:The SSK Extension)
  *
@@ -312,19 +312,37 @@ typedef struct SSKMixPayload {
 // ============================================================================
 
 /**
- * Allocate AbV with initial capacity.
- * Memory layout calculated during decoding; may need realloc as decoding progresses.
+ * Allocate an abstract bit vector with initial capacity.
+ *
+ * @param format_version Format version to use (0 for Format 0)
+ * @param initial_size Initial memory allocation size in bytes
+ * @return Allocated AbV root, or NULL on failure
+ *
+ * Allocates a contiguous block for the AbV, initializing header fields
+ * and preparing space for partitions/segments to be added during decoding
+ * or construction.
  */
 AbV abv_alloc(uint16_t format_version, size_t initial_size);
 
 /**
- * Grow AbV memory if needed.
- * Returns new pointer (may differ from old due to realloc).
+ * Grow an abstract bit vector's memory allocation if needed.
+ *
+ * @param abv Existing AbV (may be reallocated)
+ * @param additional_size Additional bytes needed
+ * @return New AbV (may differ from input due to reallocation)
+ *
+ * Allocates new memory if current allocation is exhausted. All internal
+ * offsets remain valid after growth (realloc-safe offset model), so only
+ * the returned AbV pointer needs updating.
  */
 AbV abv_grow(AbV abv, size_t additional_size);
 
 /**
- * Free AbV and all associated memory.
+ * Free an abstract bit vector and all associated memory.
+ *
+ * @param abv Abstract bit vector to deallocate (may be NULL)
+ *
+ * Deallocates the contiguous memory block. Safe to call with NULL.
  */
 void abv_free(AbV abv);
 

@@ -53,11 +53,11 @@ The encoding is controlled by the **Encoding Specification (Format 0, CDU)** con
 
 ## The Problem
 
-Representing a subset of 64-bit integer IDs requires an **abstract bit vector (AbV)**—a logical construct: one bit per possible ID (0 to 2^64-1 ≈ 18.4 exabits), where each bit indicates presence (1) or absence (0) in the subset. The AbV is independent of implementation; AbVRoot or uint64_t is its concrete C representation.
+Representing a subset of 64-bit integer IDs requires an abstract bit vector (AbV)—a logical construct: one bit per possible ID (0 to 2^64-1 ≈ 18.4 exabits), where each bit indicates presence (1) or absence (0) in the subset. The AbV is independent of implementation; uint64_t (TRIVIAL) or struct AbVRoot * (NON-TRIVIAL) is its concrete C representation.
 
-**In code:** Variable and parameter names use abv to denote actual AbV values. The type is always AbV, whose meaning depends on context:
+In code: Variable and parameter names use abv to denote actual AbV values. The type is always AbV, whose meaning depends on context:
 - **Trivial domain (IDs 1..64):** AbV = uint64_t — single 64-bit AbV
-- **Scale domain (IDs 1..2^64):** AbV = ABVRoot *, pointer to hierarchical structure (partitions → segments → chunks → tokens)
+- **Scale domain (IDs 1..2^64):** AbV = struct AbVRoot *, pointer to hierarchical structure (partitions → segments → chunks → tokens)
 
 Storing an AbV literally (as a single bit per ID) requires **2,048 petabytes** per SSK. Impossible.
 
