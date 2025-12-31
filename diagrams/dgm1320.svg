@@ -186,25 +186,25 @@
      <line x1="524" y1="395" x2="524" y2="468" />
      <polygon points="520, 464 528, 464 524, 468" />
     <text x="472" y="277"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Token Value</text>
-    <path d="M 444,273 L 441,277 L 443,277 L 441,281" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 444,273 L 441,277 L 443,277 L 441,281" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="362" y="185"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Decoded AbV</text>
-    <path d="M 332,181 L 329,185 L 331,185 L 329,189" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 332,181 L 329,185 L 331,185 L 329,189" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="360" y="205"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Token Type</text>
-    <path d="M 332,201 L 329,205 L 331,205 L 329,209" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 332,201 L 329,205 L 331,205 L 329,209" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="360" y="225"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Value Buffer</text>
-    <path d="M 332,221 L 329,225 L 331,225 L 329,229" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 332,221 L 329,225 L 331,225 L 329,229" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="78" y="120"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Given Value</text>
-    <path d="M 51,116 L 48,120 L 50,120 L 48,124" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 51,116 L 48,120 L 50,120 L 48,124" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="230" y="146"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Value Bytes</text>
-    <path d="M 204,142 L 201,146 L 203,146 L 201,150" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 204,142 L 201,146 L 203,146 L 201,150" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="557" y="120"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Given as AbV</text>
-    <path d="M 588,116 L 590,120 L 588,120 L 591,124" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 588,116 L 590,120 L 588,120 L 591,124" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="447" y="244"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >CDU Types</text>
-    <path d="M 420,239 L 416,242 L 416,244 L 412,247" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 420,239 L 416,242 L 416,244 L 412,247" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="352" y="55"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Encoding Specification (Format 0, CDU)</text>
-    <path d="M 292,50 L 288,48 L 288,50 L 284,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 292,50 L 288,48 L 288,50 L 284,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="205" y="457"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgreSQL Server</text>
-    <path d="M 162,452 L 158,450 L 158,452 L 154,450" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 162,452 L 158,450 L 158,452 L 154,450" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="561" y="457"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Model/A*33</text>
-    <path d="M 532,452 L 528,450 L 528,452 L 524,450" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 532,452 L 528,450 L 528,452 L 524,450" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
 </svg>

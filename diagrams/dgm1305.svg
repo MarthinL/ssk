@@ -201,33 +201,33 @@
      <path fill="none" d="M175, 199 Q175, 209 183, 209" />
   </g>
     <text x="580" y="297"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Resulting Value</text>
-    <path d="M 546,293 L 542,298 L 542,296 L 538,301" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 546,293 L 542,298 L 542,296 L 538,301" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="475" y="225"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Resulting BIGINT</text>
-    <path d="M 434,221 L 430,226 L 430,224 L 426,229" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 434,221 L 430,226 L 430,224 L 426,229" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="483" y="205"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Resulting BOOLEAN</text>
-    <path d="M 434,201 L 430,206 L 430,204 L 426,209" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 434,201 L 430,206 L 430,204 L 426,209" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="479" y="185"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Resulting BIGINT[]</text>
-    <path d="M 434,181 L 430,186 L 430,184 L 426,189" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 434,181 L 430,186 L 430,184 L 426,189" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="483" y="245"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Canonical Result AbV</text>
-    <path d="M 434,241 L 430,246 L 430,244 L 426,249" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 434,241 L 430,246 L 430,244 L 426,249" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="296" y="205"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Given BIGINT</text>
-    <path d="M 330,201 L 331,205 L 329,205 L 330,209" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 330,201 L 331,205 L 329,205 L 330,209" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="292" y="225"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Given BIGINT[]</text>
-    <path d="M 330,221 L 331,225 L 329,225 L 330,229" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 330,221 L 331,225 L 329,225 L 330,229" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="599" y="185"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Call Return Value</text>
-    <path d="M 639,181 L 641,185 L 639,185 L 642,189" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 639,181 L 641,185 L 639,185 L 642,189" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="336" y="133"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Given as AbV</text>
-    <path d="M 306,129 L 302,134 L 302,132 L 298,137" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 306,129 L 302,134 L 302,132 L 298,137" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="91" y="133"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Call Parameter(s)</text>
-    <path d="M 51,129 L 48,133 L 50,133 L 48,137" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 51,129 L 48,133 L 50,133 L 48,137" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="175" y="133"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Given Value</text>
-    <path d="M 202,129 L 203,133 L 201,133 L 202,137" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 202,129 L 203,133 L 201,133 L 202,137" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="430" y="55"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Formal SSK Type Definition</text>
-    <path d="M 370,50 L 366,48 L 366,50 L 362,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 370,50 L 366,48 L 366,50 L 362,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="458" y="72"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Extension Function Call</text>
-    <path d="M 402,67 L 398,65 L 398,67 L 394,65" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 402,67 L 398,65 L 398,67 L 394,65" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="318" y="73"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Encoding Specification (Format 0, CDU)</text>
-    <path d="M 258,68 L 254,66 L 254,68 L 250,66" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 258,68 L 254,66 L 254,68 L 250,66" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="301" y="389"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgreSQL Server</text>
-    <path d="M 258,384 L 254,382 L 254,384 L 250,382" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 258,384 L 254,382 L 254,384 L 250,382" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
 </svg>

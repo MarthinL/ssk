@@ -457,73 +457,73 @@
      <path fill="none" d="M425, 211 Q425, 221 433, 221" />
   </g>
     <text x="1233" y="684"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Changes Enabling Opportunities</text>
-    <path d="M 1173,680 L 1170,684 L 1172,684 L 1170,688" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 1173,680 L 1170,684 L 1172,684 L 1170,688" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="1075" y="585"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Opportunities</text>
-    <path d="M 1043,581 L 1040,585 L 1042,585 L 1040,589" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 1043,581 L 1040,585 L 1042,585 L 1040,589" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="1097" y="545"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >SSK for Target Domain</text>
-    <path d="M 1043,541 L 1040,545 L 1042,545 L 1040,549" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 1043,541 L 1040,545 L 1042,545 L 1040,549" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="1084" y="605"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Calculated Results</text>
-    <path d="M 1043,601 L 1040,605 L 1042,605 L 1040,609" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 1043,601 L 1040,605 L 1042,605 L 1040,609" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="883" y="605"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >McCaffrey: combinadics</text>
-    <path d="M 939,601 L 940,605 L 938,605 L 939,609" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 939,601 L 940,605 L 938,605 L 939,609" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="923" y="429"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Opportunities</text>
-    <path d="M 891,425 L 888,429 L 890,429 L 888,433" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 891,425 L 888,429 L 890,429 L 888,433" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="946" y="449"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >SSK for Trivial Domain</text>
-    <path d="M 891,445 L 888,449 L 890,449 L 888,453" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 891,445 L 888,449 L 890,449 L 888,453" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="932" y="469"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Calculated Results</text>
-    <path d="M 891,465 L 888,469 L 890,469 L 888,473" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 891,465 L 888,469 L 890,469 L 888,473" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="779" y="353"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Definition Issues</text>
-    <path d="M 741,349 L 738,353 L 740,353 L 738,357" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 741,349 L 738,353 L 740,353 L 738,357" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="765" y="273"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >User Guide</text>
-    <path d="M 741,269 L 738,273 L 740,273 L 738,277" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 741,269 L 738,273 L 740,273 L 738,277" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="773" y="313"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Opportunities</text>
-    <path d="M 741,309 L 738,313 L 740,313 L 738,317" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 741,309 L 738,313 L 740,313 L 738,317" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="801" y="333"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Audited Expected Test Results</text>
-    <path d="M 741,329 L 738,333 L 740,333 L 738,337" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 741,329 L 738,333 L 740,333 L 738,337" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="1323" y="293"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Proven Correctness</text>
-    <path d="M 1369,289 L 1371,293 L 1369,293 L 1372,297" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 1369,289 L 1371,293 L 1369,293 L 1372,297" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="111" y="197"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Prior Art in Mathematics, Scients and Technology</text>
-    <path d="M 51,193 L 48,197 L 50,197 L 48,201" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 51,193 L 48,197 L 50,197 L 48,201" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="111" y="117"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Limitations of Database Technology</text>
-    <path d="M 51,113 L 48,117 L 50,117 L 48,121" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 51,113 L 48,117 L 50,117 L 48,121" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="111" y="137"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Structure of Data Imposed by Databases</text>
-    <path d="M 51,133 L 48,137 L 50,137 L 48,141" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 51,133 L 48,137 L 50,137 L 48,141" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="637" y="177"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Formal SSK Type Definition</text>
-    <path d="M 577,173 L 574,177 L 576,177 L 574,181" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 577,173 L 574,177 L 576,177 L 574,181" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="609" y="157"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Opportunities</text>
-    <path d="M 577,153 L 574,157 L 576,157 L 574,161" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 577,153 L 574,157 L 576,157 L 574,161" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="609" y="137"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Project Ethos</text>
-    <path d="M 577,133 L 574,137 L 576,137 L 574,141" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 577,133 L 574,137 L 576,137 L 574,141" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="1325" y="117"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >SQL Compatibility</text>
-    <path d="M 1369,113 L 1371,117 L 1369,117 L 1372,121" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 1369,113 L 1371,117 L 1369,117 L 1372,121" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="1311" y="197"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Functional SSK Bijection</text>
-    <path d="M 1369,193 L 1371,197 L 1369,197 L 1372,201" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 1369,193 L 1371,197 L 1369,197 L 1372,201" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="399" y="197"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Knuth: set + bit vector</text>
-    <path d="M 452,193 L 453,197 L 451,197 L 452,201" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 452,193 L 453,197 L 451,197 L 452,201" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="408" y="217"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Bourbaki: bijection</text>
-    <path d="M 452,213 L 453,217 L 451,217 L 452,221" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 452,213 L 453,217 L 451,217 L 452,221" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="1059" y="516"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Target Domain: BIGINT DBID</text>
-    <path d="M 999,511 L 996,521 L 994,521 L 991,531" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 999,511 L 996,521 L 994,521 L 991,531" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="1067" y="492"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Scalar Requirement</text>
-    <path d="M 1023,487 L 1020,509 L 1018,509 L 1015,531" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 1023,487 L 1020,509 L 1018,509 L 1015,531" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="915" y="634"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgreSQL Server</text>
-    <path d="M 959,629 L 963,627 L 963,629 L 967,627" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 959,629 L 963,627 L 963,629 L 967,627" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="905" y="400"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Scalar Requirement</text>
-    <path d="M 861,395 L 857,394 L 857,396 L 853,395" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 861,395 L 857,394 L 857,396 L 853,395" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="758" y="498"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgreSQL Server</text>
-    <path d="M 802,493 L 806,491 L 806,493 L 810,491" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 802,493 L 806,491 L 806,493 L 810,491" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="734" y="256"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Example Problems</text>
-    <path d="M 691,251 L 687,254 L 687,256 L 683,259" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 691,251 L 687,254 L 687,256 L 683,259" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="631" y="382"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgreSQL Server</text>
-    <path d="M 675,377 L 679,375 L 679,377 L 683,375" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 675,377 L 679,375 L 679,377 L 683,375" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="559" y="55"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Original M:N OLTP Requirement</text>
-    <path d="M 499,50 L 495,48 L 495,50 L 491,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 499,50 L 495,48 L 495,50 L 491,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="559" y="803"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Modern Computing and Database Platform</text>
-    <path d="M 499,798 L 495,796 L 495,798 L 491,796" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 499,798 L 495,796 L 495,798 L 491,796" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="559" y="100"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Target Domain: BIGINT DBID</text>
-    <path d="M 499,95 L 495,98 L 495,100 L 491,103" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 499,95 L 495,98 L 495,100 L 491,103" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="407" y="246"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >64-bit Processor Architecture</text>
-    <path d="M 467,241 L 479,239 L 479,241 L 491,239" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 467,241 L 479,239 L 479,241 L 491,239" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="468" y="265"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgresSQL Extensibility</text>
-    <path d="M 528,255 L 533,247 L 531,247 L 537,239" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 528,255 L 533,247 L 531,247 L 537,239" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
 </svg>

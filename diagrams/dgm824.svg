@@ -66,15 +66,15 @@
      <polygon points="191, 121 199, 121 195, 125" />
   </g>
     <text x="107" y="160"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Extension Function Call</text>
-    <path d="M 51,156 L 48,160 L 50,160 L 48,164" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 51,156 L 48,160 L 50,160 L 48,164" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="91" y="134"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Call Parameter(s)</text>
-    <path d="M 51,130 L 48,134 L 50,134 L 48,138" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 51,130 L 48,134 L 50,134 L 48,138" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="298" y="134"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Call Return Value</text>
-    <path d="M 338,130 L 340,134 L 338,134 L 341,138" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 338,130 L 340,134 L 338,134 L 341,138" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="295" y="72"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Formal SSK Type Definition</text>
-    <path d="M 235,67 L 231,65 L 231,67 L 227,65" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 235,67 L 231,65 L 231,67 L 227,65" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="246" y="236"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgreSQL Server</text>
-    <path d="M 203,231 L 199,229 L 199,231 L 195,229" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 203,231 L 199,229 L 199,231 L 195,229" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="263" y="55"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Encoding Specification (Format 0, CDU)</text>
-    <path d="M 203,50 L 199,48 L 199,50 L 195,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 203,50 L 199,48 L 199,50 L 195,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
 </svg>

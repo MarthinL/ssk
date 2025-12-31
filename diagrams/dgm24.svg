@@ -86,19 +86,19 @@
      <polygon points="298, 186 306, 186 302, 182" />
   </g>
     <text x="111" y="115"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Limitations of Database Technology</text>
-    <path d="M 51,111 L 48,115 L 50,115 L 48,119" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 51,111 L 48,115 L 50,115 L 48,119" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="111" y="137"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Structure of Data Imposed by Databases</text>
-    <path d="M 51,133 L 48,137 L 50,137 L 48,141" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 51,133 L 48,137 L 50,137 L 48,141" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="394" y="115"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Functional SSK Bijection</text>
-    <path d="M 452,111 L 454,115 L 452,115 L 455,119" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 452,111 L 454,115 L 452,115 L 455,119" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="408" y="137"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >SQL Compatibility</text>
-    <path d="M 452,133 L 454,137 L 452,137 L 455,141" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 452,133 L 454,137 L 452,137 L 455,141" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="406" y="159"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Proven Correctness</text>
-    <path d="M 452,155 L 454,159 L 452,159 L 455,163" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 452,155 L 454,159 L 452,159 L 455,163" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="335" y="55"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Original M:N OLTP Requirement</text>
-    <path d="M 275,50 L 271,48 L 271,50 L 267,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 275,50 L 271,48 L 271,50 L 267,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="335" y="250"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Prior Art in Mathematics, Scients and Technology</text>
-    <path d="M 275,245 L 271,243 L 271,245 L 267,243" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 275,245 L 271,243 L 271,245 L 267,243" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
     <text x="370" y="232"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Modern Computing and Database Platform</text>
-    <path d="M 310,227 L 306,225 L 306,227 L 302,225" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" />
+    <path d="M 310,227 L 306,225 L 306,227 L 302,225" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
 </svg>
