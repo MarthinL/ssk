@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" width="413" height="309" id="622" >
+  <rect x="0" y="0" width="413" height="309" fill="white"/>
+  <g id="626" >
+  <a href="A0_ The SSK Extension.svg">
+    <rect  x="179"  y="125"  width="64" height="52" fill="none" stroke="rgb(0, 0, 0)"  stroke-width="1"  stroke-dasharray="0,0"  />
+    <text x="210" y="142"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >The SSK</text>
+    <text x="210" y="156"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > Extension</text>
+    <text x="233" y="174"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >A0</text>
+     <polygon points="243, 133 251, 133 251, 185 243, 185 243, 133" />
+     <polygon points="187, 177 251, 177 243, 185 187, 185 187, 177" />
+  </a>
+  </g>
+  <g id="630"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="144" y1="138" x2="163" y2="138" />
+     <line x1="43" y1="138" x2="144" y2="138" />
+  </g>
+  <g id="630.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="144" y1="138" x2="163" y2="138" />
+     <line x1="163" y1="138" x2="179" y2="138" />
+     <polygon points="175, 134 175, 142 179, 138" />
+  </g>
+  <g id="633"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="144" y1="164" x2="163" y2="164" />
+     <line x1="43" y1="164" x2="144" y2="164" />
+  </g>
+  <g id="633.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="144" y1="164" x2="163" y2="164" />
+     <line x1="163" y1="164" x2="179" y2="164" />
+     <polygon points="175, 160 175, 168 179, 164" />
+  </g>
+  <g id="643"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="259" y1="138" x2="259" y2="138" />
+     <line x1="251" y1="138" x2="259" y2="138" />
+  </g>
+  <g id="643.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="259" y1="138" x2="259" y2="138" />
+     <line x1="259" y1="138" x2="346" y2="138" />
+     <polygon points="342, 134 342, 142 346, 138" />
+  </g>
+  <g id="636"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="195" y1="103" x2="195" y2="117" />
+     <line x1="195" y1="41" x2="195" y2="103" />
+  </g>
+  <g id="636.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="195" y1="103" x2="195" y2="117" />
+     <line x1="195" y1="117" x2="195" y2="125" />
+     <polygon points="191, 121 199, 121 195, 125" />
+  </g>
+  <g id="639"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="227" y1="103" x2="227" y2="117" />
+     <line x1="227" y1="41" x2="227" y2="103" />
+  </g>
+  <g id="639.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="227" y1="103" x2="227" y2="117" />
+     <line x1="227" y1="117" x2="227" y2="125" />
+     <polygon points="223, 121 231, 121 227, 125" />
+  </g>
+  <g id="646"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="195" y1="185" x2="195" y2="185" />
+     <line x1="195" y1="185" x2="195" y2="247" />
+  </g>
+  <g id="646.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="195" y1="185" x2="195" y2="185" />
+     <line x1="195" y1="185" x2="195" y2="185" />
+     <polygon points="191, 189 199, 189 195, 185" />
+  </g>
+    <text x="91" y="134"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Call Parameter(s)</text>
+    <path d="M 51,130 L 48,134 L 50,134 L 48,138" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="107" y="160"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Extension Function Call</text>
+    <path d="M 51,156 L 48,160 L 50,160 L 48,164" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="298" y="134"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Call Return Value</text>
+    <path d="M 338,130 L 340,134 L 338,134 L 341,138" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="263" y="55"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Encoding Specification (Format 0, CDU)</text>
+    <path d="M 203,50 L 199,48 L 199,50 L 195,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="295" y="72"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Formal SSK Type Definition</text>
+    <path d="M 235,67 L 231,65 L 231,67 L 227,65" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="246" y="236"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgreSQL Server</text>
+    <path d="M 203,231 L 199,229 L 199,231 L 195,229" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

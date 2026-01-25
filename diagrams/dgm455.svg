@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" width="1444" height="876" id="455" >
+  <rect x="0" y="0" width="1444" height="876" fill="white"/>
+  <g id="586" >
+    <rect  x="1091"  y="655"  width="66" height="66" fill="none" stroke="rgb(0, 0, 0)"  stroke-width="1"  stroke-dasharray="0,0"  />
+    <text x="1124" y="672"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Vitalisation:</text>
+    <text x="1124" y="686"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > Expanding</text>
+    <text x="1124" y="700"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > Horizons</text>
+    <text x="1147" y="718"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >A5</text>
+  </g>
+  <g id="573" >
+    <rect  x="955"  y="539"  width="72" height="80" fill="none" stroke="rgb(0, 0, 0)"  stroke-width="1"  stroke-dasharray="0,0"  />
+    <text x="991" y="556"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Expansion:</text>
+    <text x="991" y="570"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > Preserving</text>
+    <text x="991" y="584"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > Semantics</text>
+    <text x="991" y="598"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > at BIGINT</text>
+    <text x="991" y="612"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > Scale</text>
+    <text x="1017" y="616"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >A4</text>
+  </g>
+  <g id="560" >
+    <rect  x="789"  y="403"  width="86" height="80" fill="none" stroke="rgb(0, 0, 0)"  stroke-width="1"  stroke-dasharray="0,0"  />
+    <text x="831" y="434"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Implementation:</text>
+    <text x="831" y="448"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > Rubber hits</text>
+    <text x="831" y="462"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > Road</text>
+    <text x="865" y="480"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >A3</text>
+  </g>
+  <g id="535" >
+    <rect  x="641"  y="267"  width="84" height="100" fill="none" stroke="rgb(0, 0, 0)"  stroke-width="1"  stroke-dasharray="0,0"  />
+    <text x="682" y="301"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Exposition:</text>
+    <text x="682" y="315"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > Nothing without</text>
+    <text x="682" y="329"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > Value</text>
+    <text x="715" y="364"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >A2</text>
+  </g>
+  <g id="490" >
+    <rect  x="468"  y="111"  width="93" height="120" fill="none" stroke="rgb(0, 0, 0)"  stroke-width="1"  stroke-dasharray="0,0"  />
+    <text x="514" y="162"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Formulation: The</text>
+    <text x="514" y="176"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" > Bijection Affair</text>
+    <text x="551" y="228"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >A1</text>
+  </g>
+  <g id="582"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1043" y1="549" x2="1173" y2="549" />
+     <line x1="1027" y1="549" x2="1043" y2="549" />
+  </g>
+  <g id="578"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="433" y1="609" x2="939" y2="609" />
+     <line x1="939" y1="609" x2="955" y2="609" />
+     <polygon points="951, 605 951, 613 955, 609" />
+  </g>
+  <g id="548"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="741" y1="277" x2="1173" y2="277" />
+     <line x1="725" y1="277" x2="741" y2="277" />
+  </g>
+  <g id="456"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="369" y1="121" x2="452" y2="121" />
+     <line x1="43" y1="121" x2="369" y2="121" />
+    <text x="24" y="129" font-family="Times New Roman" font-size="11" stroke="black" stroke-width="0" stroke-dasharray="0,0" >I1</text>
+  </g>
+  <g id="456.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="369" y1="121" x2="452" y2="121" />
+     <line x1="452" y1="121" x2="468" y2="121" />
+     <polygon points="464, 117 464, 125 468, 121" />
+  </g>
+  <g id="472"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="577" y1="121" x2="1221" y2="121" />
+     <line x1="561" y1="121" x2="577" y2="121" />
+  </g>
+  <g id="472.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="577" y1="121" x2="1221" y2="121" />
+     <line x1="1221" y1="121" x2="1377" y2="121" />
+     <polygon points="1373, 117 1373, 125 1377, 121" />
+    <text x="1381" y="129" font-family="Times New Roman" font-size="11" stroke="black" stroke-width="0" stroke-dasharray="0,0" >O2</text>
+  </g>
+  <g id="507"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="433" y1="201" x2="452" y2="201" />
+     <line x1="452" y1="201" x2="468" y2="201" />
+     <polygon points="464, 197 464, 205 468, 201" />
+  </g>
+  <g id="476"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1043" y1="569" x2="1189" y2="569" />
+     <path fill="none" d="M1189, 569 Q1197, 569 1197, 559" />
+     <line x1="1027" y1="569" x2="1043" y2="569" />
+  </g>
+  <g id="476.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="891" y1="413" x2="1189" y2="413" />
+     <path fill="none" d="M1189, 413 Q1197, 413 1197, 403" />
+     <line x1="875" y1="413" x2="891" y2="413" />
+  </g>
+  <g id="476.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="741" y1="297" x2="1221" y2="297" />
+     <line x1="725" y1="297" x2="741" y2="297" />
+  </g>
+  <g id="476.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="741" y1="297" x2="1221" y2="297" />
+     <line x1="1221" y1="297" x2="1377" y2="297" />
+     <polygon points="1373, 293 1373, 301 1377, 297" />
+    <text x="1381" y="305" font-family="Times New Roman" font-size="11" stroke="black" stroke-width="0" stroke-dasharray="0,0" >O3</text>
+  </g>
+  <g id="476.4"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1197" y1="307" x2="1197" y2="559" />
+     <path fill="none" d="M1205, 297 Q1197, 297 1197, 307" />
+  </g>
+  <g id="515"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="577" y1="141" x2="1116" y2="141" />
+     <line x1="561" y1="141" x2="577" y2="141" />
+  </g>
+  <g id="515.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="577" y1="141" x2="1116" y2="141" />
+     <path fill="none" d="M1124, 151 Q1124, 141 1116, 141" />
+  </g>
+  <g id="515.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1124" y1="151" x2="1124" y2="647" />
+     <line x1="1124" y1="647" x2="1124" y2="655" />
+     <polygon points="1120, 651 1128, 651 1124, 655" />
+  </g>
+  <g id="519"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1075" y1="688" x2="1075" y2="688" />
+     <line x1="1075" y1="688" x2="1091" y2="688" />
+     <polygon points="1087, 684 1087, 692 1091, 688" />
+  </g>
+  <g id="519.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1043" y1="589" x2="1059" y2="589" />
+     <path fill="none" d="M1067, 599 Q1067, 589 1059, 589" />
+     <line x1="1027" y1="589" x2="1043" y2="589" />
+  </g>
+  <g id="519.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="891" y1="433" x2="1059" y2="433" />
+     <path fill="none" d="M1067, 443 Q1067, 433 1059, 433" />
+     <line x1="875" y1="433" x2="891" y2="433" />
+  </g>
+  <g id="519.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="741" y1="317" x2="1059" y2="317" />
+     <path fill="none" d="M1067, 327 Q1067, 317 1059, 317" />
+     <line x1="725" y1="317" x2="741" y2="317" />
+  </g>
+  <g id="519.4"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="577" y1="161" x2="1059" y2="161" />
+     <path fill="none" d="M1067, 171 Q1067, 161 1059, 161" />
+     <line x1="561" y1="161" x2="577" y2="161" />
+  </g>
+  <g id="519.5"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1067" y1="151" x2="1067" y2="678" />
+  </g>
+  <g id="519.6"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1067" y1="151" x2="1067" y2="678" />
+     <path fill="none" d="M1067, 678 Q1067, 688 1075, 688" />
+  </g>
+  <g id="569"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="923" y1="569" x2="939" y2="569" />
+     <line x1="939" y1="569" x2="955" y2="569" />
+     <polygon points="951, 565 951, 573 955, 569" />
+  </g>
+  <g id="569.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="891" y1="453" x2="1173" y2="453" />
+     <path fill="none" d="M915, 463 Q915, 453 907, 453" />
+     <line x1="875" y1="453" x2="891" y2="453" />
+  </g>
+  <g id="569.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="915" y1="463" x2="915" y2="559" />
+     <path fill="none" d="M915, 559 Q915, 569 923, 569" />
+  </g>
+  <g id="565"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="999" y1="521" x2="1007" y2="521" />
+     <path fill="none" d="M1015, 531 Q1015, 521 1007, 521" />
+  </g>
+  <g id="565.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1015" y1="531" x2="1015" y2="531" />
+     <line x1="1015" y1="531" x2="1015" y2="539" />
+     <polygon points="1011, 535 1019, 535 1015, 539" />
+  </g>
+  <g id="565.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="853" y1="89" x2="853" y2="395" />
+     <line x1="853" y1="395" x2="853" y2="403" />
+     <polygon points="849, 399 857, 399 853, 403" />
+  </g>
+  <g id="552"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="939" y1="549" x2="939" y2="549" />
+     <line x1="939" y1="549" x2="955" y2="549" />
+     <polygon points="951, 545 951, 553 955, 549" />
+  </g>
+  <g id="552.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="773" y1="413" x2="773" y2="413" />
+     <line x1="773" y1="413" x2="789" y2="413" />
+     <polygon points="785, 409 785, 417 789, 413" />
+  </g>
+  <g id="552.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="741" y1="337" x2="923" y2="337" />
+     <path fill="none" d="M765, 347 Q765, 337 757, 337" />
+     <line x1="725" y1="337" x2="741" y2="337" />
+  </g>
+  <g id="552.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="741" y1="337" x2="923" y2="337" />
+     <path fill="none" d="M931, 347 Q931, 337 923, 337" />
+  </g>
+  <g id="552.4"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="931" y1="347" x2="931" y2="539" />
+     <path fill="none" d="M931, 539 Q931, 549 939, 549" />
+  </g>
+  <g id="552.5"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="765" y1="347" x2="765" y2="403" />
+     <path fill="none" d="M765, 403 Q765, 413 773, 413" />
+  </g>
+  <g id="544"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="683" y1="89" x2="683" y2="259" />
+     <line x1="683" y1="259" x2="683" y2="267" />
+     <polygon points="679, 263 687, 263 683, 267" />
+  </g>
+  <g id="556"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="967" y1="627" x2="967" y2="729" />
+     <line x1="967" y1="619" x2="967" y2="627" />
+     <polygon points="963, 623 971, 623 967, 619" />
+  </g>
+  <g id="556.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="810" y1="491" x2="810" y2="729" />
+     <line x1="810" y1="483" x2="810" y2="491" />
+     <polygon points="806, 487 814, 487 810, 483" />
+  </g>
+  <g id="556.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="683" y1="375" x2="683" y2="729" />
+     <line x1="683" y1="367" x2="683" y2="375" />
+     <polygon points="679, 371 687, 371 683, 367" />
+  </g>
+  <g id="523"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="609" y1="277" x2="625" y2="277" />
+     <line x1="625" y1="277" x2="641" y2="277" />
+     <polygon points="637, 273 637, 281 641, 277" />
+  </g>
+  <g id="523.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="577" y1="181" x2="959" y2="181" />
+     <path fill="none" d="M601, 191 Q601, 181 593, 181" />
+     <path fill="none" d="M617, 191 Q617, 181 609, 181" />
+     <line x1="561" y1="181" x2="577" y2="181" />
+  </g>
+  <g id="523.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="577" y1="181" x2="959" y2="181" />
+     <path fill="none" d="M810, 191 Q810, 181 802, 181" />
+     <path fill="none" d="M967, 191 Q967, 181 959, 181" />
+  </g>
+  <g id="523.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="967" y1="191" x2="967" y2="531" />
+     <line x1="967" y1="531" x2="967" y2="539" />
+     <polygon points="963, 535 971, 535 967, 539" />
+  </g>
+  <g id="523.4"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="810" y1="191" x2="810" y2="395" />
+     <line x1="810" y1="395" x2="810" y2="403" />
+     <polygon points="806, 399 814, 399 810, 403" />
+  </g>
+  <g id="523.5"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="601" y1="191" x2="601" y2="267" />
+     <path fill="none" d="M601, 267 Q601, 277 609, 277" />
+  </g>
+  <g id="540"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="593" y1="637" x2="1043" y2="637" />
+     <path fill="none" d="M585, 627 Q585, 637 593, 637" />
+  </g>
+  <g id="540.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1043" y1="609" x2="1043" y2="609" />
+     <path fill="none" d="M1051, 619 Q1051, 609 1043, 609" />
+     <line x1="1027" y1="609" x2="1043" y2="609" />
+  </g>
+  <g id="540.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="593" y1="501" x2="891" y2="501" />
+     <path fill="none" d="M585, 491 Q585, 501 593, 501" />
+  </g>
+  <g id="540.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="891" y1="473" x2="891" y2="473" />
+     <path fill="none" d="M899, 483 Q899, 473 891, 473" />
+     <line x1="875" y1="473" x2="891" y2="473" />
+  </g>
+  <g id="540.4"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="593" y1="297" x2="625" y2="297" />
+     <line x1="625" y1="297" x2="641" y2="297" />
+     <polygon points="637, 293 637, 301 641, 297" />
+  </g>
+  <g id="540.5"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1051" y1="619" x2="1051" y2="627" />
+     <path fill="none" d="M1043, 637 Q1051, 637 1051, 627" />
+  </g>
+  <g id="540.6"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="899" y1="483" x2="899" y2="491" />
+     <path fill="none" d="M891, 501 Q899, 501 899, 491" />
+  </g>
+  <g id="540.7"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="585" y1="307" x2="585" y2="627" />
+  </g>
+  <g id="540.8"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="585" y1="307" x2="585" y2="627" />
+     <path fill="none" d="M593, 297 Q585, 297 585, 307" />
+  </g>
+  <g id="468"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1043" y1="549" x2="1173" y2="549" />
+     <path fill="none" d="M1173, 549 Q1181, 549 1181, 539" />
+  </g>
+  <g id="468.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="891" y1="453" x2="1173" y2="453" />
+     <path fill="none" d="M1173, 453 Q1181, 453 1181, 443" />
+  </g>
+  <g id="468.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="741" y1="277" x2="1173" y2="277" />
+     <path fill="none" d="M1173, 277 Q1181, 277 1181, 267" />
+  </g>
+  <g id="468.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="625" y1="201" x2="1221" y2="201" />
+  </g>
+  <g id="468.4"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="625" y1="201" x2="1221" y2="201" />
+     <line x1="1221" y1="201" x2="1377" y2="201" />
+     <polygon points="1373, 197 1373, 205 1377, 201" />
+    <text x="1381" y="209" font-family="Times New Roman" font-size="11" stroke="black" stroke-width="0" stroke-dasharray="0,0" >O1</text>
+  </g>
+  <g id="468.5"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1181" y1="211" x2="1181" y2="579" />
+     <path fill="none" d="M1189, 201 Q1181, 201 1181, 211" />
+  </g>
+  <g id="468.6"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="617" y1="191" x2="617" y2="191" />
+     <path fill="none" d="M617, 191 Q617, 201 625, 201" />
+  </g>
+  <g id="464"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="499" y1="79" x2="983" y2="79" />
+     <path fill="none" d="M991, 89 Q991, 79 983, 79" />
+     <path fill="none" d="M683, 89 Q683, 79 675, 79" />
+     <path fill="none" d="M853, 89 Q853, 79 845, 79" />
+  </g>
+  <g id="464.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="991" y1="89" x2="991" y2="531" />
+     <path fill="none" d="M991, 511 Q991, 521 999, 521" />
+     <line x1="991" y1="531" x2="991" y2="539" />
+     <polygon points="987, 535 995, 535 991, 539" />
+  </g>
+  <g id="464.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="491" y1="69" x2="491" y2="103" />
+     <line x1="491" y1="41" x2="491" y2="69" />
+    <text x="491" y="41" font-family="Times New Roman" font-size="11" stroke="black" stroke-width="0" stroke-dasharray="0,0" >C1</text>
+  </g>
+  <g id="464.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="491" y1="69" x2="491" y2="103" />
+     <path fill="none" d="M491, 69 Q491, 79 499, 79" />
+  </g>
+  <g id="511"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="491" y1="69" x2="491" y2="103" />
+     <line x1="491" y1="103" x2="491" y2="111" />
+     <polygon points="487, 107 495, 107 491, 111" />
+  </g>
+  <g id="484"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="499" y1="739" x2="959" y2="739" />
+     <path fill="none" d="M675, 739 Q683, 739 683, 729" />
+     <path fill="none" d="M802, 739 Q810, 739 810, 729" />
+     <path fill="none" d="M959, 739 Q967, 739 967, 729" />
+  </g>
+  <g id="484.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="491" y1="239" x2="491" y2="769" />
+     <line x1="491" y1="769" x2="491" y2="814" />
+    <text x="491" y="831" font-family="Times New Roman" font-size="11" stroke="black" stroke-width="0" stroke-dasharray="0,0" >M2</text>
+  </g>
+  <g id="484.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="491" y1="239" x2="491" y2="769" />
+     <path fill="none" d="M499, 739 Q491, 739 491, 749" />
+  </g>
+  <g id="484.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="491" y1="239" x2="491" y2="769" />
+     <path fill="none" d="M499, 249 Q491, 249 491, 259" />
+     <line x1="491" y1="231" x2="491" y2="239" />
+     <polygon points="487, 235 495, 235 491, 231" />
+  </g>
+  <g id="531"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="499" y1="249" x2="529" y2="249" />
+     <path fill="none" d="M529, 249 Q537, 249 537, 239" />
+  </g>
+  <g id="531.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="537" y1="239" x2="537" y2="239" />
+     <line x1="537" y1="231" x2="537" y2="239" />
+     <polygon points="533, 235 541, 235 537, 231" />
+  </g>
+  <g id="460"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="401" y1="589" x2="939" y2="589" />
+     <line x1="939" y1="589" x2="955" y2="589" />
+     <polygon points="951, 585 951, 593 955, 589" />
+  </g>
+  <g id="460.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="369" y1="221" x2="452" y2="221" />
+     <path fill="none" d="M393, 231 Q393, 221 385, 221" />
+     <line x1="43" y1="221" x2="369" y2="221" />
+    <text x="24" y="229" font-family="Times New Roman" font-size="11" stroke="black" stroke-width="0" stroke-dasharray="0,0" >I2</text>
+  </g>
+  <g id="460.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="369" y1="221" x2="452" y2="221" />
+     <line x1="452" y1="221" x2="468" y2="221" />
+     <polygon points="464, 217 464, 225 468, 221" />
+  </g>
+  <g id="460.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="393" y1="231" x2="393" y2="579" />
+     <path fill="none" d="M393, 579 Q393, 589 401, 589" />
+  </g>
+  <g id="495"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="385" y1="759" x2="1205" y2="759" />
+     <path fill="none" d="M377, 749 Q377, 759 385, 759" />
+  </g>
+  <g id="495.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1173" y1="688" x2="1205" y2="688" />
+     <path fill="none" d="M1213, 698 Q1213, 688 1205, 688" />
+     <line x1="1157" y1="688" x2="1173" y2="688" />
+  </g>
+  <g id="495.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="385" y1="141" x2="452" y2="141" />
+     <line x1="452" y1="141" x2="468" y2="141" />
+     <polygon points="464, 137 464, 145 468, 141" />
+  </g>
+  <g id="495.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="1213" y1="698" x2="1213" y2="749" />
+     <path fill="none" d="M1205, 759 Q1213, 759 1213, 749" />
+  </g>
+  <g id="495.4"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="377" y1="151" x2="377" y2="749" />
+     <path fill="none" d="M385, 141 Q377, 141 377, 151" />
+  </g>
+  <g id="499"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="417" y1="385" x2="741" y2="385" />
+     <path fill="none" d="M409, 375 Q409, 385 417, 385" />
+  </g>
+  <g id="499.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="741" y1="357" x2="741" y2="357" />
+     <path fill="none" d="M749, 367 Q749, 357 741, 357" />
+     <line x1="725" y1="357" x2="741" y2="357" />
+  </g>
+  <g id="499.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="417" y1="161" x2="452" y2="161" />
+     <line x1="452" y1="161" x2="468" y2="161" />
+     <polygon points="464, 157 464, 165 468, 161" />
+  </g>
+  <g id="499.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="749" y1="367" x2="749" y2="375" />
+     <path fill="none" d="M741, 385 Q749, 385 749, 375" />
+  </g>
+  <g id="499.4"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="409" y1="171" x2="409" y2="375" />
+     <path fill="none" d="M417, 161 Q409, 161 409, 171" />
+  </g>
+  <g id="480"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="369" y1="181" x2="452" y2="181" />
+     <line x1="43" y1="181" x2="369" y2="181" />
+    <text x="24" y="189" font-family="Times New Roman" font-size="11" stroke="black" stroke-width="0" stroke-dasharray="0,0" >M1</text>
+  </g>
+  <g id="480.1"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="369" y1="181" x2="452" y2="181" />
+     <path fill="none" d="M425, 191 Q425, 181 417, 181" />
+  </g>
+  <g id="480.2"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="369" y1="181" x2="452" y2="181" />
+     <path fill="none" d="M425, 191 Q425, 181 417, 181" />
+     <line x1="452" y1="181" x2="468" y2="181" />
+     <polygon points="464, 177 464, 185 468, 181" />
+  </g>
+  <g id="480.3"  stroke="rgb(0, 0, 0)" stroke-width="1" stroke-dasharray="0,0" >
+     <line x1="425" y1="191" x2="425" y2="599" />
+     <path fill="none" d="M425, 191 Q425, 201 433, 201" />
+     <path fill="none" d="M425, 599 Q425, 609 433, 609" />
+  </g>
+    <text x="1233" y="684"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Changes Enabling Opportunities</text>
+    <path d="M 1173,680 L 1170,684 L 1172,684 L 1170,688" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="1075" y="585"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Opportunities</text>
+    <path d="M 1043,581 L 1040,585 L 1042,585 L 1040,589" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="1084" y="605"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Calculated Results</text>
+    <path d="M 1043,601 L 1040,605 L 1042,605 L 1040,609" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="1097" y="545"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >SSK for Target Domain</text>
+    <path d="M 1043,541 L 1040,545 L 1042,545 L 1040,549" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="883" y="605"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >McCaffrey: combinadics</text>
+    <path d="M 939,601 L 940,605 L 938,605 L 939,609" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="923" y="429"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Opportunities</text>
+    <path d="M 891,425 L 888,429 L 890,429 L 888,433" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="932" y="469"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Calculated Results</text>
+    <path d="M 891,465 L 888,469 L 890,469 L 888,473" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="946" y="449"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >SSK for Trivial Domain</text>
+    <path d="M 891,445 L 888,449 L 890,449 L 888,453" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="779" y="353"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Definition Issues</text>
+    <path d="M 741,349 L 738,353 L 740,353 L 738,357" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="773" y="313"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Opportunities</text>
+    <path d="M 741,309 L 738,313 L 740,313 L 738,317" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="765" y="273"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >User Guide</text>
+    <path d="M 741,269 L 738,273 L 740,273 L 738,277" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="801" y="333"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Audited Expected Test Results</text>
+    <path d="M 741,329 L 738,333 L 740,333 L 738,337" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="1323" y="293"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Proven Correctness</text>
+    <path d="M 1369,289 L 1371,293 L 1369,293 L 1372,297" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="111" y="117"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Limitations of Database Technology</text>
+    <path d="M 51,113 L 48,117 L 50,117 L 48,121" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="111" y="217"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Structure of Data Imposed by Databases</text>
+    <path d="M 51,213 L 48,217 L 50,217 L 48,221" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="111" y="177"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Prior Art in Mathematics, Scients and Technology</text>
+    <path d="M 51,173 L 48,177 L 50,177 L 48,181" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="609" y="137"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Project Ethos</text>
+    <path d="M 577,133 L 574,137 L 576,137 L 574,141" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="609" y="157"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Opportunities</text>
+    <path d="M 577,153 L 574,157 L 576,157 L 574,161" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="637" y="177"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Formal SSK Type Definition</text>
+    <path d="M 577,173 L 574,177 L 576,177 L 574,181" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="1325" y="117"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >SQL Compatibility</text>
+    <path d="M 1369,113 L 1371,117 L 1369,117 L 1372,121" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="1311" y="197"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Functional SSK Bijection</text>
+    <path d="M 1369,193 L 1371,197 L 1369,197 L 1372,201" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="399" y="177"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Knuth: set + bit vector</text>
+    <path d="M 452,173 L 453,177 L 451,177 L 452,181" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="408" y="197"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Bourbaki: bijection</text>
+    <path d="M 452,193 L 453,197 L 451,197 L 452,201" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="1059" y="516"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Target Domain: BIGINT DBID</text>
+    <path d="M 999,511 L 996,521 L 994,521 L 991,531" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="915" y="634"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgreSQL Server</text>
+    <path d="M 959,629 L 963,627 L 963,629 L 967,627" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="1067" y="492"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Scalar Requirement</text>
+    <path d="M 1023,487 L 1020,509 L 1018,509 L 1015,531" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="758" y="498"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgreSQL Server</text>
+    <path d="M 802,493 L 806,491 L 806,493 L 810,491" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="905" y="400"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Scalar Requirement</text>
+    <path d="M 861,395 L 857,394 L 857,396 L 853,395" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="734" y="256"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Example Problems</text>
+    <path d="M 691,251 L 687,254 L 687,256 L 683,259" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="631" y="382"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgreSQL Server</text>
+    <path d="M 675,377 L 679,375 L 679,377 L 683,375" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="559" y="55"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Original M:N OLTP Requirement</text>
+    <path d="M 499,50 L 495,48 L 495,50 L 491,48" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="559" y="803"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Modern Computing and Database Platform</text>
+    <path d="M 499,798 L 495,796 L 495,798 L 491,796" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="559" y="100"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >Target Domain: BIGINT DBID</text>
+    <path d="M 499,95 L 495,98 L 495,100 L 491,103" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="407" y="246"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >64-bit Processor Architecture</text>
+    <path d="M 467,241 L 479,239 L 479,241 L 491,239" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="468" y="265"  text-anchor = "middle" font-family="Times New Roman"  font-size="11"  fill ="rgb(0, 0, 0)" >PostgresSQL Extensibility</text>
+    <path d="M 528,255 L 533,247 L 531,247 L 537,239" fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-dasharray="0,0" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
