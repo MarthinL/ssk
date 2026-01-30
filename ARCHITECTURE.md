@@ -92,12 +92,12 @@ Do not conflate these. When you're debugging a complex encoding issue, you're in
 
 | IDEF0 Activity | Directory | Purpose | Key Files |
 |----------------|-----------|---------|-----------|
-| **IMP/A0** | src/udt/ | PostgreSQL integration | Type definitions, I/O functions |
+| **IMP/A0** | src/pgext/ | PostgreSQL integration | Type definitions, I/O functions |
 | **IMP/A1** Decoder | src/codec/ | Value decoding | decode.c, Format 0 parsing |
 | **IMP/A11-A14** | src/keystore/ | AbV caching | Cache management |
 | **IMP/A2** Processor | *Distributed* | Set operations | Needs consolidation |
-| **IMP/A21** | src/agg/ | Aggregates | Aggregate function handlers |
-| **IMP/A3** Encoder | src/codec/ | Value encoding | encode.c, CDU serialization |
+| **IMP/A21** | src/pgext/ | Aggregates | Aggregate function handlers |
+| **IMP/A3** Encoder | src/codec/ + src/pgext/ | Value encoding | encode.c (generic), ssk_abv.c (PostgreSQL wrapper) |
 | **CDU** (Mechanism) | src/codec/, include/cdu.h | Variable-length encoding | Canonical Data Unit |
 | **Format 0** (Control) | include/ssk_format.h | Encoding specification | Hierarchical structure |
 
@@ -107,7 +107,7 @@ Do not conflate these. When you're debugging a complex encoding issue, you're in
 |----------------|---------------|----------|
 | **PRJ/A1** Formulation | Formal definitions | SPECIFICATION.md, SSK_INTRO.md |
 | **PRJ/A2** Exposition | Examples, tutorials | README.md, examples/ |
-| **PRJ/A3** Implementation | Core extension code | Early commits, src/udt/ |
+| **PRJ/A3** Implementation | Core extension code | Early commits, src/pgext/ |
 | **PRJ/A4** Expansion | Scale engineering | Most of src/, include/ |
 | **PRJ/A5** Vitalisation | Future directions | TODO-LIST.md, issues |
 

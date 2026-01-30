@@ -47,7 +47,7 @@ The CDU implementation in [src/codec/cdu.c](src/codec/cdu.c) is tested and ready
 **Implication:** Codec integration requires only calling existing cdu_encode() and cdu_decode() functions.
 
 ### Assumption 4: PostgreSQL Integration is Scaffolded
-The UDT stubs in [src/udt/ssk_udt.c](src/udt/ssk_udt.c) and aggregate stubs in [src/agg/ssk_agg.c](src/agg/ssk_agg.c) are sufficient; only the core logic needs implementation.
+The UDT stubs in [src/pgext/ssk_udt.c](src/pgext/ssk_udt.c) and aggregate stubs in [src/pgext/ssk_agg.c](src/pgext/ssk_agg.c) are sufficient; only the core logic needs implementation.
 
 **Implication:** No need to rewrite I/O signatures or PostgreSQL boilerplate.
 
@@ -169,7 +169,7 @@ bytea *ssk_keystore_encode(AbV abV);
 
 ### Task 3: Integrate Hierarchy into Aggregate
 
-**Files:** src/agg/ssk_agg.c (replace stubs) + hierarchy helper functions in src/codec/hierarchy.c (new)
+**Files:** src/pgext/ssk_agg.c (replace stubs) + hierarchy helper functions in src/codec/hierarchy.c (new)
 
 **Scope:** ~200 lines of C code
 

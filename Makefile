@@ -14,8 +14,9 @@ OBJS = \
 	src/codec/chunks/chunk_raw.o \
 	src/codec/chunks/chunk_enum.o \
 	src/keystore/ssk_keystore.o \
-	src/udt/ssk_udt.o \
-	src/agg/ssk_agg.o
+	src/pgext/ssk_udt.o \
+	src/pgext/ssk_agg.o \
+	src/pgext/ssk_abv.o
 
 EXTENSION = ssk
 DATA = sql/ssk--1.0.sql

@@ -6,8 +6,7 @@ This directory contains the SSK implementation, organized by concern.
 
 | Directory | Concern | IDEF0 Reference | Purpose |
 |-----------|---------|-----------------|---------|
-| udt/ | Integration | IMP/A0:The SSK Extension (PostgreSQL UDT interface) | PostgreSQL type registration, I/O functions, operators |
-| agg/ | Integration | IMP/A21:SSK/AGG Function Exec | Aggregate functions for SSK construction |
+| pgext/ | Integration | IMP/A0:The SSK Extension (PostgreSQL UDT/AGG interface) | PostgreSQL type registration, I/O functions, operators, aggregates |
 | codec/ | Persistence | IMP/A1:Value Decoder, IMP/A3:Value Encoder | Encode/decode between bytes and abstract bit vector |
 | keystore/ | Caching | Support for AbV caching | Transaction-scoped abstract bit vector cache |
 
@@ -15,15 +14,17 @@ This directory contains the SSK implementation, organized by concern.
 
 ### Integration Layer (IMP/A0)
 
-**Purpose**: Adapt SSK functionality to PostgreSQL's type system.
+**Purpose**: Adapt SSK functionality to PostgreSQL's type system and aggregate framework.
 
 **Responsibilities**:
 - Type registration (ssk_udt.c)
 - Input/output functions (ssk_in, ssk_out)
 - Comparison operators (ssk_eq, ssk_lt, etc.)
 - Set operations SQL interface (ssk_union, ssk_intersect, etc.)
+- Aggregate functions (ssk_sfunc, ssk_finalfunc)
+- PostgreSQL ↔ SSK codec wrappers (ssk_abv.c)
 
-**Files**: udt/ssk_udt.c, agg/ssk_agg.c
+**Files**: pgext/ssk_udt.c, pgext/ssk_agg.c, pgext/ssk_abv.c
 
 ### Persistence Layer (IMP/A1, IMP/A3)
 
@@ -40,7 +41,7 @@ This directory contains the SSK implementation, organized by concern.
 
 ### Function Processor (IMP/A2)
 
-**Status**: Currently distributed across udt/ and codec/.
+**Status**: Primarily in pgext/ (UDT/aggregate dispatch), with generic operations in codec/.
 
 **Purpose**: Set operations on in-memory AbV representation.
 
