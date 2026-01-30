@@ -62,59 +62,165 @@ ssk_version(PG_FUNCTION_ARGS)
 #endif // (NON) TRIVIAL
 }
 
-/* ssk_in - wrapper to byteain (identical external representation with different type names) */
+/* ssk_in - parse SSK from text representation */
 Datum
 ssk_in(PG_FUNCTION_ARGS)
 {
+#ifdef TRIVIAL
+    /* TRIVIAL: Parse space-separated 8-bit binary groups or raw bytea */
+    char *str = PG_GETARG_CSTRING(0);
+    uint8_t encoded[32];
+    memset(encoded, 0, sizeof(encoded));
+    
+    /* Try to parse as binary format: "00000000 00000000 ... 00000001" (8 bytes, 64 bits) */
+    uint8_t abv_bytes[8];
+    int parsed = 0;
+    
+    /* Count spaces and check if it looks like binary format */
+    int space_count = 0;
+    for (const char *p = str; *p; p++) {
+        if (*p == ' ') space_count++;
+    }
+    
+    /* Binary format has exactly 7 spaces for 8 bytes */
+    if (space_count == 7) {
+        parsed = sscanf(str, "%hhu %hhu %hhu %hhu %hhu %hhu %hhu %hhu",
+            &abv_bytes[0], &abv_bytes[1], &abv_bytes[2], &abv_bytes[3],
+            &abv_bytes[4], &abv_bytes[5], &abv_bytes[6], &abv_bytes[7]);
+    }
+    
+    if (parsed == 8) {
+        /* Valid binary format: reconstruct to 10-byte SSK format */
+        /* Bytes 0-1: Format 1023 (16 bits = 2 bytes) */
+        size_t bits_written = cdu_encode(1023, CDU_TYPE_DEFAULT, encoded, 0, 256);
+        
+        /* Reconstruct uint64_t from parsed bytes (reverse for native byte order) */
+        uint64_t abv = 0;
+        for (int i = 0; i < 8; i++) {
+            abv |= ((uint64_t)abv_bytes[i]) << (8 * (7 - i));
+        }
+        
+        /* Bytes 2-9: AbV in native byte order */
+        *(uint64_t *)&encoded[2] = abv;
+        
+        bytea *result = (bytea *) palloc(VARHDRSZ + 10);
+        SET_VARSIZE(result, VARHDRSZ + 10);
+        memcpy(VARDATA(result), encoded, 10);
+        PG_RETURN_BYTEA_P(result);
+    }
+#endif
+    
+    /* Default: use PostgreSQL's standard bytea input */
     return byteain(fcinfo);
 }
 
-/* ssk_out - wrapper to byteaout (identical external representation with different type names) */
+/* ============================================================================
+ * A3: Value Encoder - Shared encoding of canonical AbV to wire format
+ * ============================================================================
+ */
+
+/* encode_abv(uint64_t abv) - A3 Value Encoder
+ * Takes a canonical 64-bit AbV and produces 10-byte Format 1023 bytea
+ * Format: 2 bytes (format code 1023) + 8 bytes (AbV in native byte order)
+ */
+static bytea *
+encode_abv(uint64_t abv)
+{
+#ifdef TRIVIAL
+    uint8_t encoded[10];
+    memset(encoded, 0, sizeof(encoded));
+    
+    /* Encode format code 1023 using CDU (produces 16 bits = 2 bytes) */
+    size_t bits_written = cdu_encode(1023, CDU_TYPE_DEFAULT, encoded, 0, 256);
+    
+    /* Write 64-bit AbV in native byte order at byte 2 */
+    *(uint64_t *)&encoded[2] = abv;
+    
+    /* Allocate and return 10-byte bytea */
+    bytea *result = (bytea *) palloc(VARHDRSZ + 10);
+    SET_VARSIZE(result, VARHDRSZ + 10);
+    memcpy(VARDATA(result), encoded, 10);
+    return result;
+#else
+    /* NON-TRIVIAL: encode to hierarchical structure */
+    uint8_t encoded[32];
+    memset(encoded, 0, sizeof(encoded));
+    bytea *result = (bytea *) palloc(VARHDRSZ + 8);
+    SET_VARSIZE(result, VARHDRSZ + 8);
+    memcpy(VARDATA(result), encoded, 8);
+    return result;
+#endif
+}
+
+/* ssk_out - format SSK for display */
 Datum
 ssk_out(PG_FUNCTION_ARGS)
 {
+#ifdef TRIVIAL
+    /* TRIVIAL: Display as space-separated 8-bit binary for bitmap visibility */
+    bytea *input = PG_GETARG_BYTEA_P(0);
+    int len = VARSIZE_ANY_EXHDR(input);
+    uint8_t *data = (uint8_t *)VARDATA_ANY(input);
+    
+    if (len == 10) {
+        /* Format 1023: display AbV as 8 space-separated binary bytes */
+        /* Buffer: 8 bytes * 8 bits + 7 spaces + null terminator = 72 bytes */
+        char *result = (char *) palloc(8 * 8 + 7 + 1);
+        char *p = result;
+        
+        /* Extract the 8 AbV bytes from offset 2-9 (native byte order, iterate high to low) */
+        uint64_t abv = *(uint64_t *)&data[2];
+        for (int i = 7; i >= 0; i--) {
+            uint8_t byte = ((uint8_t *)&abv)[i];
+            
+            /* Format each byte as 8 binary digits (MSB first) */
+            for (int bit = 7; bit >= 0; bit--) {
+                *p++ = ((byte >> bit) & 1) ? '1' : '0';
+            }
+            
+            /* Add space separator between bytes */
+            if (i < 7) {
+                *p++ = ' ';
+            }
+        }
+        *p = '\0';
+        
+        PG_RETURN_CSTRING(result);
+    }
+#endif
+    
+    /* Default: use PostgreSQL's standard bytea output */
     return byteaout(fcinfo);
 }
 
 /* Constructor: ssk() - returns empty SSK (zero bitvector) */
-
+/* A2: Function Processor - Calculate AbV, hand to A3 Encoder */
 Datum
 ssk_new(PG_FUNCTION_ARGS)
 {
-#ifdef TRIVIAL
-    uint64_t bits = 0;
-#else
-    /* NON-TRIVIAL: create empty hierarchical structure */
-    uint64_t bits = 0;
-#endif
+    /* A2: Calculate canonical result AbV (empty set = all bits 0) */
+    uint64_t abv = 0;
     
-    bytea *result = (bytea *) palloc(VARHDRSZ + 8);
-    SET_VARSIZE(result, VARHDRSZ + 8);
-    memcpy(VARDATA(result), &bits, 8);
+    /* A3: Hand off to Value Encoder for wire format */
+    bytea *result = encode_abv(abv);
     PG_RETURN_BYTEA_P(result);
 }
 
 /* Constructor: ssk(bigint) - returns SSK with single element (set bit at position id-1) */
-
+/* A2: Function Processor - Calculate AbV from ID, hand to A3 Encoder */
 Datum
 ssk_new_single(PG_FUNCTION_ARGS)
 {
     int64 id = PG_GETARG_INT64(0);
     
-#ifdef TRIVIAL
-    uint64_t bits = 0;
-    /* IDs 1-64 map to bits 0-63 */
+    /* A2: Calculate canonical result AbV (set bit at position id-1 for valid IDs) */
+    uint64_t abv = 0;
     if (id >= 1 && id <= 64) {
-        bits = 1UL << (id - 1);
+        abv = 1ULL << (id - 1);
     }
-#else
-    /* NON-TRIVIAL: create single-element hierarchical structure */
-    uint64_t bits = 0;
-#endif
     
-    bytea *result = (bytea *) palloc(VARHDRSZ + 8);
-    SET_VARSIZE(result, VARHDRSZ + 8);
-    memcpy(VARDATA(result), &bits, 8);
+    /* A3: Hand off to Value Encoder for wire format */
+    bytea *result = encode_abv(abv);
     PG_RETURN_BYTEA_P(result);
 }
 
@@ -132,7 +238,7 @@ ssk_add(PG_FUNCTION_ARGS)
         memcpy(&bits, VARDATA_ANY(input), 8);
     
     if (id >= 1 && id <= 64)
-        bits |= (1UL << (id - 1));
+        bits |= (1ULL << (id - 1));
 #else
     /* NON-TRIVIAL: add element */
     uint64_t bits = 0;
@@ -158,7 +264,7 @@ ssk_remove(PG_FUNCTION_ARGS)
         memcpy(&bits, VARDATA_ANY(input), 8);
     
     if (id >= 1 && id <= 64)
-        bits &= ~(1UL << (id - 1));
+        bits &= ~(1ULL << (id - 1));
 #else
     /* NON-TRIVIAL: remove element with id */
     uint64_t bits = 0;
@@ -184,7 +290,7 @@ ssk_contains(PG_FUNCTION_ARGS)
         memcpy(&bits, VARDATA_ANY(input), 8);
     
     if (id >= 1 && id <= 64)
-        PG_RETURN_BOOL((bits & (1UL << (id - 1))) != 0);
+        PG_RETURN_BOOL((bits & (1ULL << (id - 1))) != 0);
     PG_RETURN_BOOL(false);
 #else
     /* NON-TRIVIAL: test if element is in hierarchical structure */
@@ -206,7 +312,7 @@ ssk_is_contained(PG_FUNCTION_ARGS)
         memcpy(&bits, VARDATA_ANY(input), 8);
     
     if (id >= 1 && id <= 64)
-        PG_RETURN_BOOL((bits & (1UL << (id - 1))) != 0);
+        PG_RETURN_BOOL((bits & (1ULL << (id - 1))) != 0);
     PG_RETURN_BOOL(false);
 #else
     /* NON-TRIVIAL: test if element is in hierarchical structure */
@@ -359,7 +465,7 @@ ssk_unnest(PG_FUNCTION_ARGS)
         
         int idx = 0;
         for (int bit = 0; bit < 64; bit++) {
-            if (bits & (1UL << bit)) {
+            if (bits & (1ULL << bit)) {
                 bit_positions[idx++] = bit + 1;
             }
         }
@@ -425,7 +531,7 @@ ssk_from_array(PG_FUNCTION_ARGS)
             if (!nulls[i]) {
                 int64 id = DatumGetInt64(values[i]);
                 if (id >= 1 && id <= 64) {
-                    bits |= (1UL << (id - 1));
+                    bits |= (1ULL << (id - 1));
                 }
             }
         }
@@ -461,7 +567,7 @@ ssk_to_array(PG_FUNCTION_ARGS)
     }
     
     for (int bit = 0; bit < 64; bit++) {
-        if (bits & (1UL << bit)) {
+        if (bits & (1ULL << bit)) {
             astate = accumArrayResult(astate, Int64GetDatum(bit + 1), false, 
                                      INT8OID, CurrentMemoryContext);
         }

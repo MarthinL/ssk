@@ -38,10 +38,212 @@
 
 /*
  * Hand-crafted tests for TRIVIAL implementation.
- * TODO: Implement trivial hand-crafted tests
+ * Directly test Format 1023 encoding with hand-verified bit patterns.
  */
 
-int run_hand_crafted_tests(void) { return 0; }
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include "cdu.h"
+
+static int tests_run = 0;
+static int tests_passed = 0;
+static int test_result = 0;
+
+#define TEST(name) static void name(void)
+#define RUN_TEST(name) do { \
+    printf("  %-40s", #name); \
+    tests_run++; \
+    test_result = 0; \
+    name(); \
+    if (test_result == 0) { \
+        tests_passed++; \
+        printf("PASS\n"); \
+    } \
+} while(0)
+
+#define ASSERT(cond) do { \
+    if (!(cond)) { \
+        printf("FAIL\n    Assertion failed: %s\n    at %s:%d\n", #cond, __FILE__, __LINE__); \
+        test_result = 1; \
+        return; \
+    } \
+} while(0)
+
+#define ASSERT_EQ(a, b) do { \
+    if ((a) != (b)) { \
+        printf("FAIL\n    Expected %llu == %llu\n    at %s:%d\n", \
+               (unsigned long long)(a), (unsigned long long)(b), __FILE__, __LINE__); \
+        test_result = 1; \
+        return; \
+    } \
+} while(0)
+
+/* ============================================================================
+ * HAND-CRAFTED FORMAT 1023 TESTS
+ *
+ * Test encoding/decoding Format 1023 (trivial): two CDU calls in sequence.
+ * - Call 1: Encode format code 1023 with CDU_TYPE_DEFAULT → get bits written
+ * - Call 2: Encode 64-bit AbV value with CDU_TYPE_RAW64 starting at returned bit offset
+ * Decode reverses the process.
+ * ============================================================================
+ */
+
+TEST(test_format_1023_empty_set)
+{
+    /* Hand-crafted test: Empty set (no IDs selected)
+     * Format Code: 1023 (via CDU_TYPE_DEFAULT)
+     * AbV Bits: 0 (via CDU_TYPE_RAW64)
+     */
+    uint8_t buf[32] = {0};
+    size_t bit_pos = 0;
+    size_t bits_written;
+    size_t buf_bits = sizeof(buf) * 8;  /* Total bits in buffer */
+    
+    uint64_t format_code = 1023;
+    uint64_t abv_bits = 0;
+    
+    /* Encode: format code + AbV bits */
+    bits_written = cdu_encode(format_code, CDU_TYPE_DEFAULT, buf, bit_pos, buf_bits);
+    ASSERT(bits_written > 0);
+    bit_pos += bits_written;
+    
+    bits_written = cdu_encode(abv_bits, CDU_TYPE_RAW64, buf, bit_pos, buf_bits);
+    ASSERT(bits_written > 0);
+    bit_pos += bits_written;
+    
+    /* Decode: read back format code and AbV */
+    uint64_t decoded_format = 0;
+    uint64_t decoded_abv = 0;
+    size_t bits_read;
+    
+    bits_read = cdu_decode(buf, 0, bit_pos, CDU_TYPE_DEFAULT, &decoded_format);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded_format, format_code);
+    
+    bits_read = cdu_decode(buf, bits_read, bit_pos, CDU_TYPE_RAW64, &decoded_abv);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded_abv, abv_bits);
+}
+
+TEST(test_format_1023_id_1_only)
+{
+    /* Hand-crafted test: Only ID 1 selected
+     * Format Code: 1023
+     * AbV Bits: 0x0000000000000001 (bit 0 set for ID 1)
+     */
+    uint8_t buf[32] = {0};
+    size_t bit_pos = 0;
+    size_t bits_written;
+    size_t buf_bits = sizeof(buf) * 8;
+    
+    uint64_t format_code = 1023;
+    uint64_t abv_bits = 1ULL;  /* Bit 0 set (ID 1) */
+    
+    bits_written = cdu_encode(format_code, CDU_TYPE_DEFAULT, buf, bit_pos, buf_bits);
+    ASSERT(bits_written > 0);
+    bit_pos += bits_written;
+    
+    bits_written = cdu_encode(abv_bits, CDU_TYPE_RAW64, buf, bit_pos, buf_bits);
+    ASSERT(bits_written > 0);
+    bit_pos += bits_written;
+    
+    uint64_t decoded_format = 0;
+    uint64_t decoded_abv = 0;
+    size_t bits_read;
+    
+    bits_read = cdu_decode(buf, 0, bit_pos, CDU_TYPE_DEFAULT, &decoded_format);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded_format, format_code);
+    
+    bits_read = cdu_decode(buf, bits_read, bit_pos, CDU_TYPE_RAW64, &decoded_abv);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded_abv, abv_bits);
+}
+
+TEST(test_format_1023_full_set)
+{
+    /* Hand-crafted test: All IDs 1-64 selected
+     * Format Code: 1023
+     * AbV Bits: 0xFFFFFFFFFFFFFFFF (all bits set)
+     */
+    uint8_t buf[32] = {0};
+    size_t bit_pos = 0;
+    size_t bits_written;
+    size_t buf_bits = sizeof(buf) * 8;
+    
+    uint64_t format_code = 1023;
+    uint64_t abv_bits = 0xFFFFFFFFFFFFFFFFULL;  /* All bits set */
+    
+    bits_written = cdu_encode(format_code, CDU_TYPE_DEFAULT, buf, bit_pos, buf_bits);
+    ASSERT(bits_written > 0);
+    bit_pos += bits_written;
+    
+    bits_written = cdu_encode(abv_bits, CDU_TYPE_RAW64, buf, bit_pos, buf_bits);
+    ASSERT(bits_written > 0);
+    bit_pos += bits_written;
+    
+    uint64_t decoded_format = 0;
+    uint64_t decoded_abv = 0;
+    size_t bits_read;
+    
+    bits_read = cdu_decode(buf, 0, bit_pos, CDU_TYPE_DEFAULT, &decoded_format);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded_format, format_code);
+    
+    bits_read = cdu_decode(buf, bits_read, bit_pos, CDU_TYPE_RAW64, &decoded_abv);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded_abv, abv_bits);
+}
+
+TEST(test_format_1023_sparse_pattern)
+{
+    /* Hand-crafted test: Sparse pattern (selected IDs: 1, 4, 16, 32, 64)
+     * Format Code: 1023
+     * AbV Bits: Bits 0, 3, 15, 31, 63 set
+     */
+    uint8_t buf[32] = {0};
+    size_t bit_pos = 0;
+    size_t bits_written;
+    size_t buf_bits = sizeof(buf) * 8;
+    
+    uint64_t format_code = 1023;
+    uint64_t abv_bits = (1ULL << 0) | (1ULL << 3) | (1ULL << 15) | (1ULL << 31) | (1ULL << 63);
+    
+    bits_written = cdu_encode(format_code, CDU_TYPE_DEFAULT, buf, bit_pos, buf_bits);
+    ASSERT(bits_written > 0);
+    bit_pos += bits_written;
+    
+    bits_written = cdu_encode(abv_bits, CDU_TYPE_RAW64, buf, bit_pos, buf_bits);
+    ASSERT(bits_written > 0);
+    bit_pos += bits_written;
+    
+    uint64_t decoded_format = 0;
+    uint64_t decoded_abv = 0;
+    size_t bits_read;
+    
+    bits_read = cdu_decode(buf, 0, bit_pos, CDU_TYPE_DEFAULT, &decoded_format);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded_format, format_code);
+    
+    bits_read = cdu_decode(buf, bits_read, bit_pos, CDU_TYPE_RAW64, &decoded_abv);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded_abv, abv_bits);
+}
+
+int run_hand_crafted_tests(void) {
+    printf("Running TRIVIAL hand-crafted Format 1023 tests...\n");
+    RUN_TEST(test_format_1023_empty_set);
+    RUN_TEST(test_format_1023_id_1_only);
+    RUN_TEST(test_format_1023_full_set);
+    RUN_TEST(test_format_1023_sparse_pattern);
+    
+    printf("Hand-crafted tests: %d/%d passed\n", tests_passed, tests_run);
+    
+    return (tests_run - tests_passed);
+}
 
 #else // NON TRIVIAL
 
@@ -518,5 +720,5 @@ int main(void)
     run_hand_crafted_tests();
     return tests_failed > 0 ? 1 : 0;
 }
-#endif // (NON) TRIVIAL
+#endif // STANDALONE_TEST
 

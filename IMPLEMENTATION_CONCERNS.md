@@ -2,6 +2,9 @@
 
 ## Context Diagram
 
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:29:30*
+
 ![A0: The SSK Extension](./diagrams/dgm622.svg)
 
 ### Area A0: The SSK Extension
@@ -68,9 +71,12 @@
 ### Constituent Areas
 
 #### A1: Value Decoder
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
-|  | Impetus    |    | Given Value                            | Type of I1: Call Parameter(s)         |
+|  | Impetus    |    | Given Value                            | Part of I1: Call Parameter(s)         |
 |  |            |    |                                        |                                       |
 |  |            |                                        |                                       |
 |  | Constraint | C1 | Encoding Specification (Format 0, CDU) | From A0: The SSK Extension            |
@@ -83,13 +89,16 @@
 |  |            |    |                                        |                                       |
 
 #### A2: Function Processor
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Given as AbV                           | Outcome of A1: Value Decoder          |
 |  |            |    |                                        |                                       |
-|  | Impetus    |    | Given BIGINT                           | Type of I1: Call Parameter(s)         |
+|  | Impetus    |    | Given BIGINT                           | Part of I1: Call Parameter(s)         |
 |  |            |    |                                        |                                       |
-|  | Impetus    |    | Given BIGINT[]                         | Type of I1: Call Parameter(s)         |
+|  | Impetus    |    | Given BIGINT[]                         | Part of I1: Call Parameter(s)         |
 |  |            |    |                                        |                                       |
 |  |            |                                        |                                       |
 |  | Constraint | C2 | Formal SSK Type Definition             | From A0: The SSK Extension            |
@@ -97,11 +106,11 @@
 |  | Constraint | I2 | Extension Function Call                | From A0: The SSK Extension            |
 |  |            |    |                                        |                                       |
 |  |            |                                        |                                       |
-|  | Outcome    |    | Resulting BIGINT                       | Type of O1: Call Return Value         |
+|  | Outcome    |    | Resulting BIGINT                       | Part of O1: Call Return Value         |
 |  |            |    |                                        |                                       |
-|  | Outcome    |    | Resulting BOOLEAN                      | Type of O1: Call Return Value         |
+|  | Outcome    |    | Resulting BOOLEAN                      | Part of O1: Call Return Value         |
 |  |            |    |                                        |                                       |
-|  | Outcome    |    | Resulting BIGINT[]                     | Type of O1: Call Return Value         |
+|  | Outcome    |    | Resulting BIGINT[]                     | Part of O1: Call Return Value         |
 |  |            |    |                                        |                                       |
 |  | Outcome    |    | Canonical Result AbV                   | Impetus of A3: Value Encoder          |
 |  |            |    |                                        |                                       |
@@ -110,6 +119,9 @@
 |  |            |    |                                        |                                       |
 
 #### A3: Value Encoder
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Canonical Result AbV                   | Outcome of A2: Function Processor     |
@@ -118,7 +130,7 @@
 |  | Constraint | C1 | Encoding Specification (Format 0, CDU) | From A0: The SSK Extension            |
 |  |            |    |                                        |                                       |
 |  |            |                                        |                                       |
-|  | Outcome    |    | Resulting Value                        | Type of O1: Call Return Value         |
+|  | Outcome    |    | Resulting Value                        | Part of O1: Call Return Value         |
 |  |            |    |                                        |                                       |
 |  |            |                                        |                                       |
 |  | Means      | M1 | PostgreSQL Server                      | From A0: The SSK Extension            |
@@ -135,15 +147,26 @@
 | :---------  |:---:| :------------------------------------- | ------------------------------------- |
 | Impetus     | I1  | Given Value                            | Impetus on A11: Use existing AbV      |
 |             |     |                                        |                                       |
-| Constraint  | C1  | Encoding Specification (Format 0, CDU) | Constraint on A12: Decode AbV         |
+<a id="back-3"></a>
+| Constraint  | C1  | Encoding Specification (Format 0, CDU) | Structure, see [3](#note-3)           |
 |             |     |                                        |                                       |
 | Outcome     | O1  | Given as AbV                           | Outcome on A11: Use existing AbV; Outcome on A14: Remember AbV |
 |             |     |                                        |                                       |
 | Means       | M1  | PostgreSQL Server                      | Means on A11: Use existing AbV; Means on A12: Decode AbV; Means on A13: Decode Token |
 
+
+### Notes
+<a id="note-3"></a>
+**[3]** [C1: Encoding Specification (Format 0, CDU)](#back-3) has parts:
+- **CDU Types**
+  - Constraint on A13: Decode Token
+
 ### Constituent Areas
 
 #### A11: Use existing AbV
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Given Value                            |                                       |
@@ -158,6 +181,9 @@
 |  |            |    |                                        |                                       |
 
 #### A12: Decode AbV
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Value Bytes                            | Outcome of A11: Use existing AbV      |
@@ -179,6 +205,9 @@
 |  |            |    |                                        |                                       |
 
 #### A13: Decode Token
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Value Buffer                           | Outcome of A12: Decode AbV            |
@@ -186,7 +215,7 @@
 |  |            |                                        |                                       |
 |  | Constraint |    | Token Type                             | Outcome of A12: Decode AbV            |
 |  |            |    |                                        |                                       |
-|  | Constraint |    | CDU Types                              |                                       |
+|  | Constraint |    | CDU Types                              | Part of C1: Encoding Specification (Format 0, CDU) |
 |  |            |    |                                        |                                       |
 |  |            |                                        |                                       |
 |  | Outcome    |    | Token Value                            | Impetus of A12: Decode AbV            |
@@ -196,6 +225,9 @@
 |  |            |    |                                        |                                       |
 
 #### A14: Remember AbV
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Decoded AbV                            | Outcome of A12: Decode AbV            |
@@ -230,6 +262,9 @@
 ### Constituent Areas
 
 #### A21: SSK/AGG Function Exec
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Given as AbV                           |                                       |
@@ -250,11 +285,11 @@
 |  |            |    |                                        |                                       |
 |  | Outcome    |    | Resulting BIGINT[]                     | Outcome of A22: Determine output by AvB |
 |  |            |    |                                        |                                       |
-|  | Outcome    |    | AbV Param2                             | Impetus of A23: Fragment Input(s)     |
+|  | Outcome    |    | Second AbV Parameter                   | Impetus of A23: Fragment Input(s)     |
 |  |            |    |                                        |                                       |
 |  | Outcome    |    | BIGINT[] Param                         | Impetus of A23: Fragment Input(s)     |
 |  |            |    |                                        |                                       |
-|  | Outcome    |    | AbV Param                              | Impetus of A22: Determine output by AvB |
+|  | Outcome    |    | AbV Parameter                          | Impetus of A22: Determine output by AvB |
 |  |            |    |                                        |                                       |
 |  | Outcome    |    | Function Callback                      | Constraint on A22: Determine output by AvB |
 |  |            |    |                                        |                                       |
@@ -265,11 +300,14 @@
 |  |            |    |                                        |                                       |
 
 #### A22: Determine output by AvB
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | BIGINT Param                           | Outcome of A21: SSK/AGG Function Exec |
 |  |            |    |                                        |                                       |
-|  | Impetus    |    | AbV Param                              | Outcome of A21: SSK/AGG Function Exec |
+|  | Impetus    |    | AbV Parameter                          | Outcome of A21: SSK/AGG Function Exec |
 |  |            |    |                                        |                                       |
 |  |            |                                        |                                       |
 |  | Constraint |    | Function Callback                      | Outcome of A21: SSK/AGG Function Exec |
@@ -288,13 +326,16 @@
 |  |            |    |                                        |                                       |
 
 #### A23: Fragment Input(s)
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
-|  | Impetus    |    | AbV Param2                             | Outcome of A21: SSK/AGG Function Exec |
+|  | Impetus    |    | Second AbV Parameter                   | Outcome of A21: SSK/AGG Function Exec |
 |  |            |    |                                        |                                       |
 |  | Impetus    |    | BIGINT[] Param                         | Outcome of A21: SSK/AGG Function Exec |
 |  |            |    |                                        |                                       |
-|  | Impetus    |    | AbV Param                              | Outcome of A21: SSK/AGG Function Exec |
+|  | Impetus    |    | AbV Parameter                          | Outcome of A21: SSK/AGG Function Exec |
 |  |            |    |                                        |                                       |
 |  |            |                                        |                                       |
 |  | Constraint |    | Function Callback                      | Outcome of A21: SSK/AGG Function Exec |
@@ -307,6 +348,9 @@
 |  |            |    |                                        |                                       |
 
 #### A24: Determine Output per Fragment
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Fresh FragmentSet                      | Outcome of A23: Fragment Input(s)     |
@@ -328,6 +372,9 @@
 |  |            |    |                                        |                                       |
 
 #### A25: Normalise (Clean & Defrag)
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Dirty AvB                              | Outcome of A22: Determine output by AvB |
@@ -352,15 +399,26 @@
 | :---------  |:---:| :------------------------------------- | ------------------------------------- |
 | Impetus     | I1  | Canonical Result AbV                   | Impetus on A31: Encode AbV            |
 |             |     |                                        |                                       |
-| Constraint  | C1  | Encoding Specification (Format 0, CDU) | Constraint on A31: Encode AbV         |
+<a id="back-4"></a>
+| Constraint  | C1  | Encoding Specification (Format 0, CDU) | Structure, see [4](#note-4)           |
 |             |     |                                        |                                       |
 | Outcome     | O1  | Resulting Value                        | Outcome on A33: Conditionally Remember AbV |
 |             |     |                                        |                                       |
 | Means       | M1  | PostgreSQL Server                      | Means on A31: Encode AbV; Means on A32: Encode Token; Means on A33: Conditionally Remember AbV |
 
+
+### Notes
+<a id="note-4"></a>
+**[4]** [C1: Encoding Specification (Format 0, CDU)](#back-4) has parts:
+- **CDU Types**
+  - Constraint on A32: Encode Token
+
 ### Constituent Areas
 
 #### A31: Encode AbV
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Canonical Result AbV                   |                                       |
@@ -380,12 +438,15 @@
 |  |            |    |                                        |                                       |
 
 #### A32: Encode Token
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Token to Encode                        | Outcome of A31: Encode AbV            |
 |  |            |    |                                        |                                       |
 |  |            |                                        |                                       |
-|  | Constraint |    | CDU Types                              |                                       |
+|  | Constraint |    | CDU Types                              | Part of C1: Encoding Specification (Format 0, CDU) |
 |  |            |    |                                        |                                       |
 |  |            |                                        |                                       |
 |  | Outcome    |    | Encoded Token                          | Impetus of A31: Encode AbV            |
@@ -395,6 +456,9 @@
 |  |            |    |                                        |                                       |
 
 #### A33: Conditionally Remember AbV
+
+*Created by Marthin Laubscheron 2026-01-02 16:29:29, last modified 2026-01-02 16:35:55*
+
 |  | Role       | *# | Name                                   | Details                               |
 |--| :--------- |:--:| -------------------------------------- | ------------------------------------- |
 |  | Impetus    |    | Encoded Value                          | Outcome of A31: Encode AbV            |

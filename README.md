@@ -8,6 +8,26 @@ SSK (SubSet Key) is a novel scalar type, designed to invert the cornerstone of t
 
 To achieve this, SSK implements a canonical encoding scheme for sparse bit vectors representing sets, designed to efficiently handle subsets of large ID spaces in relational databases. By exploiting unique structural opportunities, SSK overcomes traditional limitations in encoding sparse sets, enabling direct indexing, comparison, and set operations on encoded values without decoding.
 
+## Implementation Modes
+
+SSK uses conditional compilation (`#ifdef TRIVIAL`) to maintain two parallel implementations:
+
+- **Trivial Mode** (`TRIVIAL=1`): Proof-of-concept using Format 1023
+  - Format code: 1023 (`1111111101111111` (16 bits) when encoded as CDU_TYPE_DEFAULT)
+  - Data: Raw 64-bit "abstract" bit vector (AbV)
+  - IDs: Limited to 1–64
+  - Use: Testing, learning, and validation of core operations
+
+- **Scale Mode** (default): Full-scale using Format 0
+  - Format code: 0 (CDU-encoded as `0` (1 bit) in CDU_TYPE_DEFAULT)
+  - Data: Hierarchical partition/segment/chunk/token structure
+  - IDs: Full BIGINT raange
+  - Use: Handling real-world datasets with as many IDs as will fit into a table
+
+Both modes share identical PostgreSQL function signatures and API semantics. The Seperation Of Concerns models ([PROJECT_CONCERNS.md](PROJECT_CONCERNS.md) and [IMPLEMENTATION_CONCERNS.md](IMPLEMENTATION_CONCERNS.md)) describe these as separate refinement paths: PRJ/A3 (trivial Format 1023) → PRJ/A4 (scale Format 0).
+
+For development and testing, build with `make TRIVIAL=1`. For scale engineering, use `make` (default).
+
 ## The Problem and Opportunity
 
 In Donald Knuth's seminal work on combinatorial algorithms, the encoding of sparse bit vectors for large sets is dismissed as impractical due to inefficiency. SSK challenges this by targeting a specific, high-value use case: representing subsets of database primary keys (IDs) as compact, canonical scalars. This allows:

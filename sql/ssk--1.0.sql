@@ -27,7 +27,7 @@ COMMENT ON FUNCTION ssk_version() IS 'Returns the SSK extension version';
 
 -- Constructor and manipulation functions
 CREATE FUNCTION ssk() RETURNS ssk AS 'ssk', 'ssk_new' LANGUAGE C IMMUTABLE;
-CREATE FUNCTION ssk(bigint) RETURNS ssk AS 'ssk', 'ssk_new' LANGUAGE C IMMUTABLE;
+CREATE FUNCTION ssk(bigint) RETURNS ssk AS 'ssk', 'ssk_new_single' LANGUAGE C IMMUTABLE;
 
 CREATE FUNCTION ssk_add(ssk, bigint) RETURNS ssk AS 'ssk', 'ssk_add' LANGUAGE C IMMUTABLE;
 CREATE FUNCTION ssk_remove(ssk, bigint) RETURNS ssk AS 'ssk', 'ssk_remove' LANGUAGE C IMMUTABLE;

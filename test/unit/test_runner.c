@@ -5,9 +5,8 @@
  * Tests will validate basic bijection and correctness properties.
  */
 
-/* TODO: Implement trivial test runner */
-
 #include <stdio.h>
+#include "cdu.h"
 
 // Forward declaration from test_sequences.c
 int run_all_tests(void);
@@ -17,6 +16,7 @@ int run_hand_crafted_tests(void);
 
 int main(void) {
     printf("Running TRIVIAL mode tests...\n");
+    cdu_init();  /* Initialize CDU parameters before running tests */
     int fail1 = run_all_tests();
     int fail2 = run_hand_crafted_tests();
     

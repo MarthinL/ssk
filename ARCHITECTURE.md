@@ -295,6 +295,10 @@ Every AbV has exactly ONE byte representation (bijection):
 - **IMP/A1/A3**: Optimizations (as long as Format 0 compliance maintained)
 - **PRJ/A2**: Examples and documentation (always improvable)
 
+### Format Versioning Strategy
+
+**Format 1023** (Trivial Mode) encodes the format code and 64-bit AbV directly for proof-of-concept and testing. **Format 0** (Scale Mode) uses hierarchical partition/segment/chunk/token encoding for production scalability. See [README.md](README.md)'s Implementation Modes section and [SPECIFICATION.md](SPECIFICATION.md) for details.
+
 ### Future Additions
 
 - **Format 1+**: New encoding formats (IMP/A1/A3 must support both)

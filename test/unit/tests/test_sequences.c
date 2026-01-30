@@ -9,14 +9,202 @@
 
 /*
  * Test sequences for TRIVIAL implementation.
- * Tests bijection and consistency properties.
+ * Hand-crafted tests in test_hand_crafted.c provide Format 1023 validation.
+ * Sequence tests are NON-TRIVIAL only (test hierarchical structures).
  */
 
-/* TODO: Implement trivial sequence tests */
-
-int run_all_tests(void) { return 0; }
+int run_all_tests(void) { return 0; }  /* TRIVIAL: skip sequence tests; see test_hand_crafted.c */
 
 #else // NON TRIVIAL
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include "cdu.h"
+
+static int tests_run = 0;
+static int tests_passed = 0;
+static int test_result = 0;  /* 0 = pass, 1 = fail */
+
+#define TEST(name) static void name(void)
+#define RUN_TEST(name) do { \
+    printf("  %-40s", #name); \
+    tests_run++; \
+    test_result = 0; \
+    name(); \
+    if (test_result == 0) { \
+        tests_passed++; \
+        printf("PASS\n"); \
+    } \
+} while(0)
+
+#define ASSERT(cond) do { \
+    if (!(cond)) { \
+        printf("FAIL\n    Assertion failed: %s\n    at %s:%d\n", #cond, __FILE__, __LINE__); \
+        test_result = 1; \
+        return; \
+    } \
+} while(0)
+
+#define ASSERT_EQ(a, b) do { \
+    if ((a) != (b)) { \
+        printf("FAIL\n    Expected %llu == %llu\n    at %s:%d\n", \
+               (unsigned long long)(a), (unsigned long long)(b), __FILE__, __LINE__); \
+        test_result = 1; \
+        return; \
+    } \
+} while(0)
+
+#define ASSERT_BYTES_EQ(a, b, len) do { \
+    if (memcmp((a), (b), (len)) != 0) { \
+        printf("FAIL\n    Byte sequences differ at %s:%d\n", __FILE__, __LINE__); \
+        test_result = 1; \
+        return; \
+    } \
+} while(0)
+
+/* ============================================================================
+ * CDU TESTS - Format-agnostic codec (works for both TRIVIAL and NON-TRIVIAL)
+ * ============================================================================
+ */
+
+TEST(test_cdu_encode_decode_format_code)
+{
+    /* Test: Encode a small value that fits safely in SMALL_INT */
+    uint8_t buf[16] = {0};
+    uint64_t value = 100;  /* Well within SMALL_INT range */
+    uint64_t decoded;
+    
+    size_t bits_written = cdu_encode(value, CDU_TYPE_SMALL_INT, buf, 0, 128);
+    ASSERT(bits_written > 0);
+    ASSERT(bits_written <= 32);  /* SMALL_INT should be compact */
+    
+    /* Decode and verify */
+    size_t bits_read = cdu_decode(buf, 0, 128, CDU_TYPE_SMALL_INT, &decoded);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded, value);
+    ASSERT_EQ(bits_read, bits_written);
+}
+
+TEST(test_cdu_roundtrip_uint64_zero)
+{
+    /* Test: Encode 0 (empty set), decode back */
+    uint8_t buf[16] = {0};
+    uint64_t value = 0;
+    uint64_t decoded;
+    
+    size_t bits_written = cdu_encode(value, CDU_TYPE_LARGE_INT, buf, 0, 128);
+    ASSERT(bits_written > 0);
+    
+    size_t bits_read = cdu_decode(buf, 0, 128, CDU_TYPE_LARGE_INT, &decoded);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded, value);
+}
+
+TEST(test_cdu_roundtrip_uint64_all_ones)
+{
+    /* Test: Encode 0xFFFFFFFFFFFFFFFF (all IDs 1..64), decode back */
+    uint8_t buf[16] = {0};
+    uint64_t value = 0xFFFFFFFFFFFFFFFFULL;
+    uint64_t decoded;
+    
+    size_t bits_written = cdu_encode(value, CDU_TYPE_LARGE_INT, buf, 0, 128);
+    ASSERT(bits_written > 0);
+    
+    size_t bits_read = cdu_decode(buf, 0, 128, CDU_TYPE_LARGE_INT, &decoded);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded, value);
+}
+
+TEST(test_cdu_roundtrip_uint64_checkerboard)
+{
+    /* Test: Encode checkerboard pattern (alternating bits), decode back */
+    uint8_t buf[16] = {0};
+    uint64_t value = 0xAAAAAAAAAAAAAAAAULL;  /* Alternating bits: 1010... */
+    uint64_t decoded;
+    
+    size_t bits_written = cdu_encode(value, CDU_TYPE_LARGE_INT, buf, 0, 128);
+    ASSERT(bits_written > 0);
+    
+    size_t bits_read = cdu_decode(buf, 0, 128, CDU_TYPE_LARGE_INT, &decoded);
+    ASSERT(bits_read > 0);
+    ASSERT_EQ(decoded, value);
+}
+
+TEST(test_cdu_roundtrip_uint64_single_bit)
+{
+    /* Test: Encode single bit set, decode back */
+    for (int i = 0; i < 64; i++) {
+        uint8_t buf[16] = {0};
+        uint64_t value = 1ULL << i;
+        uint64_t decoded;
+        
+        size_t bits_written = cdu_encode(value, CDU_TYPE_LARGE_INT, buf, 0, 128);
+        ASSERT(bits_written > 0);
+        
+        size_t bits_read = cdu_decode(buf, 0, 128, CDU_TYPE_LARGE_INT, &decoded);
+        ASSERT(bits_read > 0);
+        ASSERT_EQ(decoded, value);
+    }
+}
+
+TEST(test_cdu_roundtrip_known_values)
+{
+    /* Test: Series of known values from practical use */
+    uint8_t buf[16];
+    uint64_t test_values[] = {
+        1,           /* ID 1 only */
+        2,           /* ID 2 only */
+        3,           /* IDs 1-2 */
+        255,         /* IDs 1-8 */
+        256,         /* ID 9 only */
+        65535,       /* IDs 1-16 */
+        65536,       /* ID 17 only */
+        1048575,     /* IDs 1-20 */
+        0x0F0F0F0F0F0F0F0FULL,  /* Pattern */
+    };
+    size_t num_tests = sizeof(test_values) / sizeof(test_values[0]);
+    
+    for (size_t i = 0; i < num_tests; i++) {
+        memset(buf, 0, sizeof(buf));
+        uint64_t value = test_values[i];
+        uint64_t decoded;
+        
+        size_t bits_written = cdu_encode(value, CDU_TYPE_LARGE_INT, buf, 0, 128);
+        ASSERT(bits_written > 0);
+        
+        size_t bits_read = cdu_decode(buf, 0, 128, CDU_TYPE_LARGE_INT, &decoded);
+        ASSERT(bits_read > 0);
+        ASSERT_EQ(decoded, value);
+        ASSERT_EQ(bits_read, bits_written);
+    }
+}
+
+/* ============================================================================
+ * TEST RUNNER FOR TRIVIAL
+ * ============================================================================
+ */
+
+int run_all_tests(void) {
+    printf("Running TRIVIAL SSK codec tests...\n");
+    printf("CDU Tests:\n");
+    RUN_TEST(test_cdu_encode_decode_format_code);
+    RUN_TEST(test_cdu_roundtrip_uint64_zero);
+    RUN_TEST(test_cdu_roundtrip_uint64_all_ones);
+    RUN_TEST(test_cdu_roundtrip_uint64_checkerboard);
+    RUN_TEST(test_cdu_roundtrip_uint64_single_bit);
+    RUN_TEST(test_cdu_roundtrip_known_values);
+    
+    printf("\nCDU Tests: %d/%d passed\n", tests_passed, tests_run);
+    
+    return (tests_run - tests_passed);  /* Return number of failures */
+}
+
+#endif // (NON) TRIVIAL - TRIVIAL test block ends here
+
+#ifndef TRIVIAL
 
 #include <stdio.h>
 #include <stdlib.h>

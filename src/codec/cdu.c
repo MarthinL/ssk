@@ -23,9 +23,24 @@
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 /* CDU parameter table: one entry per type */
 /* Variables use max_mids as input limit; actual middle_steps calculated at init */
+/* The design of CDU_FORMAT_DEFAULT seems odd but it's no accident Since all SSK in this family
+   will need to use one format-id encoding the moment we step away from 0 in production, it makes
+   good sense to design a default type that will be generally useful for format specs but also
+   provide an interim format spec value for the trivial implementation to use that is byte aligned
+   even if it is the only byte aligned value. Outside of the trivial domain, byte alignment serves
+   no purpose in CDU
+   
+    base_bits, first, step_size, max_mids
+           16,     0,         3,        4 --- 0=1, 1..7=5, 8..63=9, 64..511=13, 512..4095=17, 4096..65535=22
+           17,     0,         2,        5 --- 0=1, 1..3=4, 4..15=7, 16..63=10, 64..255=13, 256..1023=16, 1024..131071=24
+           13,     0,         6,        2 --- 0=0, 1..63=8, 64..9191=16
+           21,     0,         6,        1 --- 0=1, 1..63=8, 64..2097151=24
+   
+   */
+
 CDUParam cdu_params[CDU_NUM_SUBTYPES] = {
     //                           base_bits, first, fixed, step_size, max_mids
-    [CDU_TYPE_DEFAULT]       = {        16,     0,     0,         3,        5},  // rem>=3
+    [CDU_TYPE_DEFAULT]       = {        17,     0,     0,         2,        5},  // 0=1, 1..3=4, 4..15=7, 16..63=10, 64..255=13, 256..1023=16, 1024..131071=24
     [CDU_TYPE_SMALL_INT]     = {        32,     4,     0,         6,        2},  // rem>=6
     [CDU_TYPE_MEDIUM_INT]    = {        32,     6,     0,         7,        2},  // rem>=7
     [CDU_TYPE_LARGE_INT]     = {        32,     5,     0,         7,        2},  // rem>=7
